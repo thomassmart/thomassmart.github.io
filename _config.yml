@@ -4,3 +4,20 @@ author: "Thomas Smart"
 google_analytics: UA-122173386-1
 title: Witty IT Title Here
 description: Dive into S2D and Other Cool Techs
+
+url: 'https://thomassmart.github.io'
+baseurl: '/'
+
+author:
+ name: 'Thomas Smart'
+ email: tom@mts.id.au
+ twitter_username: joshgerdes
+ linkedin_username:  thomassmart91
+
+ paginate: 1
+# Gems
+gems:
+  - jekyll-paginate
+
+#Others
+markdown: kramdown
