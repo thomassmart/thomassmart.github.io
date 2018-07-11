@@ -2,8 +2,10 @@ theme: jekyll-theme-cayman
 timezone: Australia/Sydney
 author: "Thomas Smart"
 google_analytics: UA-122173386-1
-title: Witty IT Title Here
-description: Dive into S2D and Other Cool Techs
+title: Tom Blogs
+description: 'A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans'
+url: 'https://thomassmart.github.io'
+baseurl: '/'
 
 url: 'https://thomassmart.github.io'
 baseurl: '/'
