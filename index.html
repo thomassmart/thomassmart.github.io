@@ -4,16 +4,18 @@ layout: default
 
 <div class="home">
 
-  <h1 class="page-heading">Posts</h1>
+  <h1 class="page-heading">Home Page</h1>
 
+  <p>Thanks for dropping by. I doubt that you are on this homepage as you would probably land on the post that you are looking for. I'm not going to try and reinent the wheel by providing a search box. There are many services out there that have already done this, and I'm sure that you are proficient with Google. Anywho, a homepage is needed, and a recently list of posts will do nicely. Please see recent posts below. </p>
+
+ <h2> Recent Post List </h2>
   <ul class="post-list">
     {% for post in site.posts %}
       <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-
-        <h2>
+        <h3>
           <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
+        </h3>
+          {{ post.excerpt }}
       </li>
     {% endfor %}
   </ul>

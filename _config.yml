@@ -1,4 +1,6 @@
-theme: jekyll-theme-cayman
+title: Minimal theme
+logo: /assets/img/logo.png
+
 timezone: Australia/Sydney
 author: "Thomas Smart"
 google_analytics: UA-122173386-1
@@ -7,15 +9,6 @@ description: 'A space for writings about Storage Spaces Direct (S2D), Infrastruc
 url: 'https://thomassmart.github.io'
 baseurl: '/'
 
-url: 'https://thomassmart.github.io'
-baseurl: '/'
-
-author:
- name: 'Thomas Smart'
- email: tom@mts.id.au
- linkedin_username:  thomassmart91
-
- paginate: 1
 # Gems
 gems:
   - jekyll-paginate
