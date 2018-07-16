@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>VVX PIN Authentication Error | Tom Blogs</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="VVX PIN Authentication Error" />
+<meta name="author" content="Thomas Smart" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I was having issues with a desk phone (Specifically a Polycom VVX310 running 5.4.0.10182) signing in to Lync 2013 with Ext/Pin. When attempting auth the phone would simply return “Lync Sign in Failed”. Pin Auth had been previously working and no changes to DNS or DHCP had been made and all certificates were valid." />
+<meta property="og:description" content="I was having issues with a desk phone (Specifically a Polycom VVX310 running 5.4.0.10182) signing in to Lync 2013 with Ext/Pin. When attempting auth the phone would simply return “Lync Sign in Failed”. Pin Auth had been previously working and no changes to DNS or DHCP had been made and all certificates were valid." />
+<link rel="canonical" href="http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error.html" />
+<meta property="og:url" content="http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error.html" />
+<meta property="og:site_name" content="Tom Blogs" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-02-02T12:28:00+11:00" />
+<script type="application/ld+json">
+{"description":"I was having issues with a desk phone (Specifically a Polycom VVX310 running 5.4.0.10182) signing in to Lync 2013 with Ext/Pin. When attempting auth the phone would simply return “Lync Sign in Failed”. Pin Auth had been previously working and no changes to DNS or DHCP had been made and all certificates were valid.","author":{"@type":"Person","name":"Thomas Smart"},"@type":"BlogPosting","url":"http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"Thomas Smart"},"headline":"VVX PIN Authentication Error","dateModified":"2017-02-02T12:28:00+11:00","datePublished":"2017-02-02T12:28:00+11:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=5dee34aabe47e72555356957c960ec02ccb102f0">
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="http://localhost:4000/">Tom Blogs</a></h1>
+        
+        
+          <img src="/assets/img/logo.png" alt="Logo" />
+        
+
+        <p>A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans</p>
+
+        
+        <p class="view"><a href="http://github.com/thomassmart/thomassmart.github.io">View the Project on GitHub <small>thomassmart/thomassmart.github.io</small></a></p>
+        
+
+        
+
+        
+      </header>
+      <section>
+
+      <small>2 February 2017</small>
+<h1>VVX PIN Authentication Error</h1>
+
+<p class="view">by Thomas Smart</p>
+
+<p>I was having issues with a desk phone (Specifically a Polycom VVX310 running 5.4.0.10182) signing in to Lync 2013 with Ext/Pin. When attempting auth the phone would simply return “Lync Sign in Failed”. Pin Auth had been previously working and no changes to DNS or DHCP had been made and all certificates were valid.</p>
+
+<p>I cranked up the logs on the device and still couldn’t see any issues. It was grabbing the CA on boot and would contact Lync and get a webticket, however the following in the log raised an eyebrow.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"> 
+ <span class="mo">0202115</span><span class="mi">811</span><span class="o">|</span><span class="n">tickt</span><span class="o">|*|</span><span class="mo">00</span><span class="o">|</span><span class="n">m_validUntil</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+ <span class="mo">0202115</span><span class="mi">811</span><span class="o">|</span><span class="n">tickt</span><span class="o">|*|</span><span class="mo">00</span><span class="o">|</span><span class="n">m_validityDuration</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+ <span class="mo">0202115</span><span class="mi">811</span><span class="o">|</span><span class="n">tickt</span><span class="o">|*|</span><span class="mo">00</span><span class="o">|</span><span class="n">m_bCertExists</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+ <span class="mo">0202115</span><span class="mi">811</span><span class="o">|</span><span class="n">tickt</span><span class="o">|*|</span><span class="mo">00</span><span class="o">|</span><span class="n">m_bCertExpired</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+ <span class="mo">0202115</span><span class="mi">811</span><span class="o">|</span><span class="n">tickt</span><span class="o">|*|</span><span class="mo">00</span><span class="o">|</span><span class="n">m_eErrorCode</span> <span class="p">[</span><span class="mi">9</span><span class="p">]</span></code></pre></figure>
+
+<p>Doubting the HTTPS certificate on the certificate service, I opened and confirmed that it was still valid and trusted.</p>
+
+<p>The next step was to test an alternate phone and an alternate site. Same issue. This points us back to the issue being lync wide.</p>
+
+<p>Luckily there are a few powershell cmdlets that we can use to test the web ticket service.</p>
+
+<p>Test-CSClientAuth will allow us to test NTLM authentication against the web ticket service. TechNet article <a href="https://technet.microsoft.com/en-us/library/gg398712(v=ocs.14).aspx" target="_blank">here</a></p>
+
+<p>Test-CSPhoneBootsrap will allow us to test PIN/EXT auth against the web ticket service. TechNet article <a href="https://technet.microsoft.com/en-us/library/gg412852.aspx">here</a></p>
+
+<p>When testing these directly from your lync server you will need to fill out -TargetFqdn and -TargetURI to avoid DHCP lookups/failure. You can alternatively install the module on a PC that has DHCP and test from there.</p>
+
+<p>Typical usage and responses for these cmdlets:</p>
+
+<figure class="highlight"><pre><code class="language-vbnet" data-lang="vbnet">PS&gt; Test-CsClientAuth -UserSipAddress USER@SIPDOMAIN -TargetFqdn LYNCSERVER.DOMAIN
+cmdlet Test-CsClientAuthentication at command pipeline position 1
+Supply values for the following parameters:
+UserCredential
+
+
+Target Fqdn : LYNCSERVER.DOMAIN
+Target Uri : https://LYNCSERVER.DOMAIN:443/CertProv/CertProvisioningService.svc
+Result : Success
+Latency : 00:00:00.6313045
+Error Message :
+Diagnosis :
+
+
+PS&gt; Test-CsPhoneBootstrap -UserSipAddress USER@DOMAIN -PhoneOrExt "EXT" -PIN "PIN" -TargetFqdn LYNCSERVER.DOMAIN -TargetUri "https://LYNCSERVER.DOMAIN:443/CertProv/CertProvisioningService.svc"
+
+Target Fqdn : LYNCSERVER.DOMAIN
+Target Uri : https://LYNCSERVER.DOMAIN:443/CertProv/CertProvisioningService.svc
+Result : Failure
+Latency : 00:00:00.0973450
+Error Message : No response received for Web-Ticket service.
+ Inner Exception:The HTTP request is unauthorized with client authentication scheme 'Basic'. The authentication header received from the
+ server was 'Basic realm ="LYNC"'.
+ Inner Exception:The remote server returned an error: (401) Unauthorized.
+
+Diagnosis :
+ Inner Diagnosis:Warning : 120 LYNCSERVER.DOMAIN "InvalidPin"
+ X-Ms-diagnostics : 28003;source="LYNCSERVER.DOMAIN";reason="The pin is invalid.";faultcode="wsse:FailedAuthentication"
+ X-MS-Server-Fqdn : LYNCSERVER.DOMAIN
+ Strict-Transport-Security : max-age=31536000; includeSubDomains
+ X-Content-Type-Options : nosniff
+ Content-Length : 4897
+ Cache-Control : private
+ Content-Type : text/html; charset=utf-8
+ Date : Thu, 02 Feb 2017 01:20:52 GMT
+ Server : Microsoft-IIS/8.0
+ WWW-Authenticate : Basic realm ="LYNC"
+ X-Powered-By : ASP.NET</code></pre></figure>
+
+<p>As you can see above, the reason reported back was invalid pin. In my case I wasn’t getting a response from the web-ticket at all (Above shown as demonstration)</p>
+
+<p>So the issue was with the web service not responding. I restarted the internal web service within IIS and tested again. This resolved the issue and users were able to use ext/pin sign in again.</p>
+
+<p><img src="http://localhost:4000/assets/restart-iis.png" alt="Screenshot" /></p>
+
+
+
+  <small>tags: <em>Skype-for-Business</em> - <em>Lync-2013</em> - <em>Polycom-VVX</em></small>
+
+
+
+      </section>
+      <footer>
+        
+        <p>This project is maintained by <a href="http://github.com/thomassmart">thomassmart</a></p>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+    
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-122173386-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    
+  </body>
+</html>

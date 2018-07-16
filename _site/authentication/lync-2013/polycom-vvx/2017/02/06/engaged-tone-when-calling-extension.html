@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Engaged tone when calling extension | Tom Blogs</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Engaged tone when calling extension" />
+<meta name="author" content="Thomas Smart" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected." />
+<meta property="og:description" content="A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected." />
+<link rel="canonical" href="http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html" />
+<meta property="og:url" content="http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html" />
+<meta property="og:site_name" content="Tom Blogs" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-02-06T14:03:00+11:00" />
+<script type="application/ld+json">
+{"description":"A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.","author":{"@type":"Person","name":"Thomas Smart"},"@type":"BlogPosting","url":"http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"Thomas Smart"},"headline":"Engaged tone when calling extension","dateModified":"2017-02-06T14:03:00+11:00","datePublished":"2017-02-06T14:03:00+11:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=5dee34aabe47e72555356957c960ec02ccb102f0">
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="http://localhost:4000/">Tom Blogs</a></h1>
+        
+        
+          <img src="/assets/img/logo.png" alt="Logo" />
+        
+
+        <p>A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans</p>
+
+        
+        <p class="view"><a href="http://github.com/thomassmart/thomassmart.github.io">View the Project on GitHub <small>thomassmart/thomassmart.github.io</small></a></p>
+        
+
+        
+
+        
+      </header>
+      <section>
+
+      <small>6 February 2017</small>
+<h1>Engaged tone when calling extension</h1>
+
+<p class="view">by Thomas Smart</p>
+
+<p>A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.</p>
+
+<p>Comparing the CS-User to a known working extension showed no differences and there were no extension conflicts.</p>
+
+<p>If you are having this issue, I’d recommend the following</p>
+
+<ol>
+  <li>Open the report server</li>
+  <li>Click the user activity report</li>
+  <li>Search for the user you completed the testing from <img src="http://localhost:4000/assets/engaged-tone/sipdomain.png" alt="Screenshot" /></li>
+  <li>Find the call  <img src="http://localhost:4000/assets/engaged-tone/activity.png" alt="Screenshot" /></li>
+  <li>Open the details of the call, then open the details for the diagnostics of the call</li>
+</ol>
+
+<p>In my instance, I had the error message</p>
+
+<figure class="highlight"><pre><code class="language-vbnet" data-lang="vbnet">The routing rules did not result in a final response and callee is not enabled for Unified Messaging</code></pre></figure>
+
+<p><img src="http://localhost:4000/assets/engaged-tone/detail.png" alt="Screenshot" /></p>
+
+<p><a href="https://greiginsydney.com/polycom-vvx-gives-sip480-cant-be-called/">Greig from greiginsydney has seen this before and reports that it is caused by bad firmware adding an incorrect call forward rule.</a> Following Greig’s steps and re-creating the AD account and Lync account resolved the issue. 
+Also, <a href="https://greiginsydney.com">Greigs blog</a> is beyond wizardy and you should definately check it out.</p>
+
+
+
+
+  <small>tags: <em></em></small>
+
+
+
+      </section>
+      <footer>
+        
+        <p>This project is maintained by <a href="http://github.com/thomassmart">thomassmart</a></p>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+    
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-122173386-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    
+  </body>
+</html>

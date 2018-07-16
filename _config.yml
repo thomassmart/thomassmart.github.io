@@ -10,8 +10,8 @@ url: 'https://thomassmart.github.io'
 baseurl: '/'
 
 # Gems
-gems:
-  - jekyll-paginate
+plugins:
+  - jekyll-feed
 
 #Others
 markdown: kramdown
