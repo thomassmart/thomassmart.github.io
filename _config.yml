@@ -1,5 +1,6 @@
-title: Minimal theme
+
 logo: /assets/img/logo.png
+image: /assets/img/logo.png
 
 timezone: Australia/Sydney
 author: "Thomas Smart"
@@ -7,7 +8,17 @@ google_analytics: UA-122173386-1
 title: Tom Blogs
 description: 'A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans'
 url: 'https://thomassmart.github.io'
-baseurl: '/'
+
+show_downloads: false
+
+# cayman-blog date format
+# refer to http://shopify.github.io/liquid/filters/date/ if you want to customize this
+cayman-blog:
+  date_format: "%b %-d, %Y"
+
+theme: # leave it empty
+twitter:
+  username: TomSmartSyd
 
 # Gems
 plugins:

@@ -9,3 +9,17 @@ I thought I'd start with a test post. *waves* HIYA!
 
 * Example 1
 * Example 2
+* Example 3
+
+> Something.
+
+> Something 2
+
+
+
+~~~~~~~~~~~
+
+CODEY
+
+
+~~~~~~~~~~~~~
