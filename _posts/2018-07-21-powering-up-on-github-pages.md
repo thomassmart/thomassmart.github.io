@@ -11,6 +11,7 @@ I've been recently been working on S2D and have been working on edge cases that 
 * Easy to use/update
 * Secure
 * Fast
+* RSS Feed
 
 Given all these criteria, I was aiming for a Jekyll based blog, hosted by GitHub pages. Jekyll creates static webpages using mark down. This makes it simple to use, fast as the content is static and secure as there is no 'admin' interface. GitHub pages is free, fast and secure.
 
