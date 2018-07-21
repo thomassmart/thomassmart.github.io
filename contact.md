@@ -4,11 +4,25 @@ title: Contact
 tagline: Create a contact form and you are good to go
 ---
 
-Jekyll is a great tool to create static sites but with static site, there's no backend to send your data to: that is why it's hard to put a form on a Jekyll site.
+You want to talk to me?
 
-Here listed some resources which provide  a saas service as a backend for forms (contact forms, hiring forms, etc.) to designers and developers like you:
-1. [Formspree (also open source, free)](https://formspree.io/)
-2. [FormKeep](https://formkeep.com/guides/contact-form-jekyll)
-3. [Simple Form](https://getsimpleform.com/)
+<img src="{{ site.url }}/assets/img/cutnessoverload.png" alt="Cutness Overload" style="width: 350px; display: block; margin-left: auto; margin-right: auto;
+webkit-border-radius: 50em;
+	-moz-border-radius: 50em;
+	border-radius: 50em;"/>
 
-[Go to the Home Page]({{ site.url }}{{ site.baseurl }})
+Not a problem! Would love to hear from your, catch me on [LinkedIn](https://www.linkedin.com/in/thomassmart91/), or use the form below.
+
+<form action="https://formspree.io/tom@mts.id.au"
+      method="POST">
+
+    <input type="text" name="name" placeholder="Your name"><input type="email" name="_replyto" placeholder="Your email">
+
+     <textarea name="message" placeholder="Your message in a bottle"></textarea>
+
+    <input type="text" name="_gotcha" style="display:none" />
+    <input type="hidden" name="_subject" value="Contact from Website" />
+    <input type="hidden" name="_next" value="https://thomassmart.github.io/" />
+    <br>
+    <input type="submit" value="Send">
+</form>
