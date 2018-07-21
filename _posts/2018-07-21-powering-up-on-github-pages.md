@@ -17,3 +17,6 @@ Given all these criteria, I was aiming for a Jekyll based blog, hosted by GitHub
 Its all up and running now, it took a couple of hours. But I'm really happy with the result.
 
 Keep posted for more blogs coming up!
+
+![SSL Performance]({{ site.url }}/assets/img/poweringup/SSLPerformance.jpg)
+![Speed Performance]({{ site.url }}/assets/img/poweringup/SpeedPerformance.jpg)
