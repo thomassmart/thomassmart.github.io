@@ -23,6 +23,7 @@ twitter:
 # Gems
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
 
 #Others
 markdown: kramdown
