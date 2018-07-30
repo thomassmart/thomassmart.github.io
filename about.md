@@ -14,10 +14,18 @@ Hiya! I'm Thomas Smart. Currently I am working at [Daraco IT Services](http://ww
 
 My main areas of focus however are:
 
-* Server and Hyper-Converged Infrastructure - Microsoft Storage Spaces Direct
-* VoIP
+* Server and Hyper-Converged Infrastructure
+	* Microsoft Storage Spaces Direct
+	* HPE SAN and Proliant Servers
+	* Hyper-V
+	* VMWare ESXi and vSphere
+* VoIP and Unified Communications
 	* SIP
 	* On-Premise Phone System Solutions
 	* Hosted Phone System Solutions
-* Data Protection - Veeam Backup and Replication, Veeam Cloud Connect
+	* Skype for Business
+* Data Protection
+	* Veeam Backup and Replication
+	* Veeam Office 365 Backup
+	* Veeam Cloud Connect
 * Powershell

@@ -1,5 +1,5 @@
 
 GEMFILE
 Gemfile.lock
-_site
+_site/*
 .DS_Store
