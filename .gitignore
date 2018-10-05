@@ -1,5 +1,12 @@
-
 GEMFILE
 Gemfile.lock
-_site/*
 .DS_Store
+.sass_cache
+.jekyll-metadata
+_site/
+.sass-cache/
+.jekyll-metadata
+.jekyll-metadata
+_site/about.html
+_site/contact.html
+_site/feed.xml

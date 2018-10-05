@@ -22,7 +22,7 @@ I cranked up the logs on the device and still couldn't see any issues. It was gr
 
 Doubting the HTTPS certificate on the certificate service, I opened and confirmed that it was still valid and trusted.
 
-The next step was to test an alternate phone and an alternate site. Same issue. This points us back to the issue being lync wide.
+The next step was to test an alternate phone and an alternate site. Same issue. This points us back to the issue being Lync wide.
 
 Luckily there are a few powershell cmdlets that we can use to test the web ticket service.
 
