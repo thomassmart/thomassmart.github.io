@@ -13,7 +13,7 @@ Unfortunately, within increasing demand on software through mechanisms such as S
 [Introducing the Cumulative Update May 9th 2018 update](https://support.microsoft.com/en-us/help/4103723/windows-10-update-kb4103723)
 
 If you have this update installed, and are running Storage Spaces Direct.
-*EXCERCISE EXTREME CAUTION WHEN COMPLETING MAINTENANCE*
+> *EXCERCISE EXTREME CAUTION WHEN COMPLETING MAINTENANCE*
 
 [Microsoft have an article on how you can perform update more safely](https://support.microsoft.com/en-us/help/4462487/event-5120-with-status-io-timeout-c00000b5-after-an-s2d-node-restart-o). In my experience this improved resiliency, but didn't resolve (We only had 1 node failure instead of 4, so Yay, I guess?)
 
