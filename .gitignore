@@ -7,3 +7,5 @@ _site/
 .sass-cache/
 .jekyll-metadata
 _site/feed.xml
+_site/feed.xml
+_site/index.html
