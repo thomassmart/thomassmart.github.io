@@ -1,121 +1,182 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-10-06T19:50:37+10:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Tom Blogs</title><subtitle>A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans</subtitle><author><name>Thomas Smart</name></author><entry><title type="html">Windows 10 1809 Removed from WSUS and Windows Update</title><link href="http://localhost:4000/windows-10/windows-update/update/1809/2018/10/06/windows-10-1809.html" rel="alternate" type="text/html" title="Windows 10 1809 Removed from WSUS and Windows Update" /><published>2018-10-06T00:00:00+10:00</published><updated>2018-10-06T00:00:00+10:00</updated><id>http://localhost:4000/windows-10/windows-update/update/1809/2018/10/06/windows-10-1809</id><content type="html" xml:base="http://localhost:4000/windows-10/windows-update/update/1809/2018/10/06/windows-10-1809.html">&lt;p&gt;That’s right, Microsoft have just announced the &lt;a href=&quot;https://support.microsoft.com/en-au/help/4464619&quot;&gt;removal of the 1809 October release of Windows 10.&lt;/a&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-10-07T17:55:32+11:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Tom Blogs</title><subtitle>A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans</subtitle><author><name>Thomas Smart</name></author><entry><title type="html">Hyper-V CPU Scheduler Types</title><link href="http://localhost:4000/hyper-v/cpu-scheduler/2018/10/07/Hyper-V-CPU-Scheduler.html" rel="alternate" type="text/html" title="Hyper-V CPU Scheduler Types" /><published>2018-10-07T00:00:00+11:00</published><updated>2018-10-07T00:00:00+11:00</updated><id>http://localhost:4000/hyper-v/cpu-scheduler/2018/10/07/Hyper-V-CPU-Scheduler</id><content type="html" xml:base="http://localhost:4000/hyper-v/cpu-scheduler/2018/10/07/Hyper-V-CPU-Scheduler.html">&lt;h1 id=&quot;partitions&quot;&gt;Partitions&lt;/h1&gt;
 
-&lt;p&gt;There have been numerous &lt;a href=&quot;https://answers.microsoft.com/en-us/windows/forum/windows_10-update/windows-10-1809-update-deleted-all-files-from/ff608374-2686-4a08-a4c2-caa4caa6d4e1&quot;&gt;articles surfacing where users profiles were reset as part of the upgrade&lt;/a&gt;. If you didn’t have a backup of your PC/Profile, the data was/is gone forever.&lt;/p&gt;
+&lt;p&gt;When Hyper-V is installed in server OS’ the way that Windows handles CPU operations changes significantly. Once installed, workloads a separated into ‘Partitions’ and the CPU operations within these partitions are sent to the hypervisor scheduler. Each virtual machine that is in operation creates a child partition and the Hyper-V machine lives within a parent partition.&lt;/p&gt;
 
-&lt;p&gt;Microsoft’s current recommendations are:&lt;/p&gt;
+&lt;p&gt;This is best described in the image below&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;If you have checked for updates and believe you have an issue, please contact us directly at +1-800-MICROSOFT or find a &lt;a href=&quot;https://support.microsoft.com/en-us/help/4051701/global-customer-service-phone-numbers&quot;&gt;local number in your area&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/Partitions.png&quot; alt=&quot; Child and Parent Partition Hyper-V &quot; /&gt;&lt;/p&gt;
 
-    &lt;p&gt;13 20 58 if your a fair dinkum Australian&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;If you have access to a different PC, &lt;a href=&quot;https://support.microsoft.com/en-au/contactus/&quot;&gt;please contact us&lt;/a&gt;.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;If you have manually downloaded the Windows 10 October 2018 Update installation media, please don’t install it and wait until new media is available.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">That’s right, Microsoft have just announced the removal of the 1809 October release of Windows 10.</summary></entry><entry><title type="html">S2D Cluster Updates - May 2018</title><link href="http://localhost:4000/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates.html" rel="alternate" type="text/html" title="S2D Cluster Updates - May 2018" /><published>2018-10-05T00:00:00+10:00</published><updated>2018-10-05T00:00:00+10:00</updated><id>http://localhost:4000/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates</id><content type="html" xml:base="http://localhost:4000/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates.html">&lt;p&gt;There is nothing more frustrating that doing all possible due diligence, raising the relevant Change Requests, completing testing, just to have a routine Windows Update fail.&lt;/p&gt;
+&lt;p&gt;The root partition is in fact a VM! This root partition has significantly more privileges than that of a standard VM, and also orchestrates management of VM (Through the VM worker processes and VM Management Service).&lt;/p&gt;
 
-&lt;p&gt;Unfortunately, within increasing demand on software through mechanisms such as SDN (Software Defined Networks), SDS (Software Defined Storage) and HCI (Hyper-converged Infrastructure) a failure can have an exponential impact on workloads.&lt;/p&gt;
+&lt;h1 id=&quot;cpu-scheduler&quot;&gt;CPU Scheduler&lt;/h1&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://support.microsoft.com/en-us/help/4103723/windows-10-update-kb4103723&quot;&gt;Introducing the Cumulative Update May 9th 2018 update&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Up until now there has only been a single, ‘fair share’ scheduler. The scheduler takes the CPU operations from partitions - Virtual Processors (VP’s) and distributes them to physical logical processors (LP’s). The scheduler resides within the hypervisor level in the above image.&lt;/p&gt;
 
-&lt;p&gt;If you have this update installed, and are running Storage Spaces Direct.&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;em&gt;EXCERCISE CAUTION WHEN COMPLETING MAINTENANCE&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;The fair share scheduler has served us well for many years, with its round robing sharing mechanism. Unfortunately it relies on assuming that isolation is adhered to at the CPU during operations.&lt;/p&gt;
 
-&lt;p&gt;This update introduced a SMB resiliency mechanism and this mechanism can cause clusters under heavy load to experience node/cluster failures during node reboots. Systems that aren’t under heavy load are unaffected by this current bug and I’ve been able to successfully manage windows updates on numerous clusters.&lt;/p&gt;
+&lt;p&gt;Simultaneous multithreading (SMT), which is also known as Hyper-Threading in Intel World, allows processors to parallelize operations from multiple threads through time division, this results in a an increase in performance.
+&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/hyperthreading.png&quot; alt=&quot; Hyper Threading Hyper-V &quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;However, if you do have a heavily loaded cluster, &lt;a href=&quot;https://support.microsoft.com/en-us/help/4462487/event-5120-with-status-io-timeout-c00000b5-after-an-s2d-node-restart-o&quot;&gt;Microsoft have an article on how you can perform update more safely&lt;/a&gt;. In my experience this improved resiliency during maintenance, but didn’t resolve the issue (We only had 1 node failure instead of 3 - which resulted in the cluster staying alive, so Yay, I guess?)&lt;/p&gt;
-
-&lt;p&gt;This is still unresolved (As of Oct 5th), and my Microsoft Partner case is making very little progress. If you can afford the outage, I’d suggest that you organise complete cluster outages to install updates.&lt;/p&gt;
-
-&lt;p&gt;These high level steps may help you:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Shutdown all VM’s on the Cluster
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VM -ComputerName (Get-ClusterNode) | Stop-VM
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Detach all virtual disks
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Disconnect-VirtualDisk
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Shutdown the Cluster
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Stop-Cluster &amp;lt;&amp;lt;CLUSTERNAME&amp;gt;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Install all updates and reboot nodes&lt;/li&gt;
-  &lt;li&gt;Start the Cluster
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Start-Cluster &amp;lt;&amp;lt;CLUSTERNAME&amp;gt;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Attach all virtual disks
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Connect-VirtualDisk
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Monitor storage jobs - You may also want to invoke storage jobs
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Repair-VirtualDisk -AsJob
-Get-StoragePool S2D* | Optimize-StoragePool
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Once complete power up all your VM’s&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Its worth noting that the update window will be considerably shorter than using SCVMM or Cluster Aware updating as there are no storage rebuilds between node reboots.&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">There is nothing more frustrating that doing all possible due diligence, raising the relevant Change Requests, completing testing, just to have a routine Windows Update fail.</summary></entry><entry><title type="html">S2D Manual Cache Rebind</title><link href="http://localhost:4000/storagespacesdirect/s2d/cache/cluster/hyper-converged/2018/07/30/s2d-manual-cache-rebind.html" rel="alternate" type="text/html" title="S2D Manual Cache Rebind" /><published>2018-07-30T00:00:00+10:00</published><updated>2018-07-30T00:00:00+10:00</updated><id>http://localhost:4000/storagespacesdirect/s2d/cache/cluster/hyper-converged/2018/07/30/s2d-manual-cache-rebind</id><content type="html" xml:base="http://localhost:4000/storagespacesdirect/s2d/cache/cluster/hyper-converged/2018/07/30/s2d-manual-cache-rebind.html">&lt;p&gt;Sometimes things don’t go quite to plan. Whilst deploying a cluster with P3700 Intel drives, we had a situation where we needed to disable the cache as the drives were failing. This is a well documented issue that arose with poor firmware from Intel. &lt;a href=&quot;https://support.microsoft.com/en-au/help/4052341/slow-performance-or-lost-communication-io-error-detached-or-no-redunda&quot;&gt;Microsoft released a support article outlining the symptoms of this issue &lt;/a&gt;. The issue is resolved now and the &lt;a href=&quot;https://downloadcenter.intel.com/download/27517/Datacenter-NVMe-Microsoft-Windows-Drivers-for-Intel-SSDs?product=79625&quot;&gt;latest firmware from intel will resolve the issue aforementioned.&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The issue we experienced, was that once the firmware had been updated, and the cache re-enabled through the following command:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Set-ClusterS2D -CacheState enabled
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;we saw absolutely no performance increase at all.&lt;/p&gt;
-
-&lt;p&gt;Digging deeper we saw that there were no cache drives being used by performance monitor. S2D cache drives work by creating a ‘bind’ between storage drives and cache drives. For example, if you had 8 storage drives and 4 cache drives, 2 disks would bind to each cache drive. This results in a cache bind of 2:1. You could also have 12 capacity drives, to 2 cache drives. This results in a cache bind of 6:1 (Which is what is in this example).&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.darrylvanderpeijl.com/storage-spaces-direct-cache-disk-status/&quot;&gt;Darryl van der Peijl has written an awesome script to get the cache bind status of your drives, node by node.&lt;/a&gt;. It’s an awesome script, that I highly recommend adding to your swiss army knife for S2D!&lt;/p&gt;
-
-&lt;p&gt;Running Darryl’s script we saw the following results.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/CacheError0Drives.png&quot; alt=&quot;CacheDiskStateIneligibleDataPartition CacheDiskStateIneligibleExcludedFromS2D CacheDiskStateIneligibleForS2D CacheDiskStateIneligibleNotEnoughSpace CacheDiskStateIneligibleNotGPT CacheDiskStateIneligibleUnsupportedSystem CacheDiskStateInitialized CacheDiskStateInitializedAndBound CacheDiskStateInStorageMaintenance CacheDiskStateInternalErrorConfiguring CacheDiskStateMarkedBad CacheDiskStateMarkedMissing CacheDiskStateMissing CacheDiskStateNonHybrid CacheDiskStateOrphanedRecovering CacheDiskStateOrphanedWaiting CacheDiskStateRepairing CacheDiskStateReset CacheDiskStateSkippedBindingNoFlash CacheDiskStateUnknown &quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;As you can see in the screenshot, no drives are binding, and only 1 cache drive is being successfully seen. This was caused by the bastardisation of the cache status. On, Off, On, Insn’t a great idea unless absolutely necessary. The root cause of this is the storage pool information stored within the metadata partition isn’t compatible with re-enabling the cache. To resolve this you need to remove each disk. Clean all partitions, and re-add the disks with the cache enabled. I have a script that can do this disk-by-disk, but I’m not publishing it due to its harmful nature. I’ll happily provide you a copy if you reach out to me, using &lt;a href=&quot;{ site.url }}//contact.html&quot;&gt;my contact page&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The best method is to remove a node, clean all its disks, and re-add the node. To do this you will need the following:&lt;/p&gt;
+&lt;p&gt;In recent times SMT has suffered from some serious security vulnerabilities that no longer allows us to assume that workloads are isolated once sent to the CPU.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;If HCI - Enough resources to handle the workload. N+1 (Accounting for 1 node being absent)&lt;/li&gt;
-  &lt;li&gt;Enough fault domains to remove a node.&lt;/li&gt;
-  &lt;li&gt;Enough storage capacity.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.intel.com/content/www/us/en/architecture-and-technology/l1tf.html&quot;&gt;Intel L1 Terminal Fault (L1TF)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://meltdownattack.com/&quot;&gt;Meltdown and Spectre - Which affects many vendors, Intel and AMD included.&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows-server/storage/storage-spaces/remove-servers&quot;&gt;Microsoft has documented the scale back requirements quite well here.&lt;/a&gt; If you match all these and want to continue, read on!&lt;/p&gt;
+&lt;p&gt;Microsoft has worked with Vendors to resolve these issues, with numerous Windows Updates, often containing CPU microcode attempting to resolve the critical vulnerabilities. Regardless of if these issues are resolved, we can no longer assume that the CPU is secure enough to handle sensitive workloads.&lt;/p&gt;
 
-&lt;h1 id=&quot;steps-overview&quot;&gt;Steps Overview&lt;/h1&gt;
+&lt;p&gt;Microsoft has recognised this and has created new CPU schedulers, which are available within Update 2018.07 C on Server 2016 and Server 2019.&lt;/p&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;Enable the Cache&lt;/li&gt;
-  &lt;li&gt;Check the cluster health&lt;/li&gt;
-  &lt;li&gt;Pause a node.&lt;/li&gt;
-  &lt;li&gt;Start the evacuation of a node.&lt;/li&gt;
-  &lt;li&gt;Repair virtual disk to complete evacuation.&lt;/li&gt;
-  &lt;li&gt;Finalise node removal.&lt;/li&gt;
-  &lt;li&gt;Clean the disks on the node.&lt;/li&gt;
-  &lt;li&gt;Re-add the node to the clusters&lt;/li&gt;
-  &lt;li&gt;Verify the cache drive binding&lt;/li&gt;
-  &lt;li&gt;Optimise the storage pools&lt;/li&gt;
-  &lt;li&gt;Repeat for the other nodes.&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;The new schedulers are:&lt;/p&gt;
 
-&lt;p&gt;!Before beginning any of these&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;‘Classic’  - Traditional round robin scheduler that we all know&lt;/li&gt;
+  &lt;li&gt;‘Core’     - Offers stronger boundries through the constraining of VP’s to LP’s. Over subscription isn’t possible&lt;/li&gt;
+  &lt;li&gt;‘Root’      - Default in Windows 10, the scheduling is handled by the root partition, rather than the hypervisor.&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;h2 id=&quot;1-enable-the-cache&quot;&gt;1. Enable the Cache&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;CPU Scheduler Type&lt;/th&gt;
+      &lt;th&gt;Performance&lt;/th&gt;
+      &lt;th&gt;Security&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;‘Classic’&lt;/td&gt;
+      &lt;td&gt;Good, allows for generous over-subscription&lt;/td&gt;
+      &lt;td&gt;Low - SMT is utilised and though workloads are in separated partitions, the partition VP’s can run parallelized on LP’s&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Core Scheduler - Host SMT Enabled&lt;/td&gt;
+      &lt;td&gt;Reduced compared to Classic, due to VP’s being bound to LPs. SMT is exposed to the VM&lt;/td&gt;
+      &lt;td&gt;Stronger as child partitions VP’s are isolated for all other partitions VP’s and are assigned to LP’s&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Core Scheduler - Host SMT Disabled&lt;/td&gt;
+      &lt;td&gt;Reduced even more compared to Classic&lt;/td&gt;
+      &lt;td&gt;Stronger again as operations within the child partition can’t leak across VP’s within the same partition&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Root Scheduler&lt;/td&gt;
+      &lt;td&gt;Reduced&lt;/td&gt;
+      &lt;td&gt;Workloads are exposed to the root partition, however workload can be analysed by Windows Defender Application Guard, so your call on this one.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
 
-&lt;p&gt;Check that the cache is enabled for the clusters&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-ClusterS2D
+&lt;h2 id=&quot;performance-testings&quot;&gt;Performance Testings&lt;/h2&gt;
+&lt;p&gt;Coming soon.&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">Partitions</summary></entry><entry><title type="html">Windows 10 1809 Removed from WSUS and Windows Update</title><link href="http://localhost:4000/windows-10/windows-update/update/1809/2018/10/06/windows-10-1809.html" rel="alternate" type="text/html" title="Windows 10 1809 Removed from WSUS and Windows Update" /><published>2018-10-06T00:00:00+11:00</published><updated>2018-10-06T00:00:00+11:00</updated><id>http://localhost:4000/windows-10/windows-update/update/1809/2018/10/06/windows-10-1809</id><content type="html" xml:base="http://localhost:4000/windows-10/windows-update/update/1809/2018/10/06/windows-10-1809.html">That's right, Microsoft have just announced the [removal of the 1809 October release of Windows 10.](https://support.microsoft.com/en-au/help/4464619)
+
+There have been numerous [articles surfacing where users profiles were reset as part of the upgrade](https://answers.microsoft.com/en-us/windows/forum/windows_10-update/windows-10-1809-update-deleted-all-files-from/ff608374-2686-4a08-a4c2-caa4caa6d4e1
+) and [Lifehackers Post](https://www.lifehacker.com.au/2018/10/back-up-windows-10-before-installing-the-october-update-or-risk-losing-your-files/#comment-2469641). If you didn't have a backup of your PC/Profile, the data was/is gone forever.
+
+Microsoft's current recommendations are:
+
+* If you have checked for updates and believe you have an issue, please contact us directly at +1-800-MICROSOFT or find a [local number in your area](https://support.microsoft.com/en-us/help/4051701/global-customer-service-phone-numbers)
+
+  13 20 58 if your a fair dinkum Australian
+
+* If you have access to a different PC, [please contact us](https://support.microsoft.com/en-au/contactus/).
+
+* If you have manually downloaded the Windows 10 October 2018 Update installation media, please don’t install it and wait until new media is available.</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">That’s right, Microsoft have just announced the removal of the 1809 October release of Windows 10.</summary></entry><entry><title type="html">S2D Cluster Updates - May 2018</title><link href="http://localhost:4000/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates.html" rel="alternate" type="text/html" title="S2D Cluster Updates - May 2018" /><published>2018-10-05T00:00:00+11:00</published><updated>2018-10-05T00:00:00+11:00</updated><id>http://localhost:4000/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates</id><content type="html" xml:base="http://localhost:4000/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates.html">There is nothing more frustrating that doing all possible due diligence, raising the relevant Change Requests, completing testing, just to have a routine Windows Update fail.
+
+Unfortunately, within increasing demand on software through mechanisms such as SDN (Software Defined Networks), SDS (Software Defined Storage) and HCI (Hyper-converged Infrastructure) a failure can have an exponential impact on workloads.
+
+[Introducing the Cumulative Update May 9th 2018 update](https://support.microsoft.com/en-us/help/4103723/windows-10-update-kb4103723)
+
+If you have this update installed, and are running Storage Spaces Direct.
+&gt; *EXCERCISE CAUTION WHEN COMPLETING MAINTENANCE*
+
+This update introduced a SMB resiliency mechanism and this mechanism can cause clusters under heavy load to experience node/cluster failures during node reboots. Systems that aren't under heavy load are unaffected by this current bug and I've been able to successfully manage windows updates on numerous clusters.
+
+However, if you do have a heavily loaded cluster, [Microsoft have an article on how you can perform update more safely](https://support.microsoft.com/en-us/help/4462487/event-5120-with-status-io-timeout-c00000b5-after-an-s2d-node-restart-o). In my experience this improved resiliency during maintenance, but didn't resolve the issue (We only had 1 node failure instead of 3 - which resulted in the cluster staying alive, so Yay, I guess?)
+
+This is still unresolved (As of Oct 5th), and my Microsoft Partner case is making very little progress. If you can afford the outage, I'd suggest that you organise complete cluster outages to install updates.
+
+These high level steps may help you:
+
+1. Shutdown all VM's on the Cluster
+~~~~~~~~~~~
+Get-VM -ComputerName (Get-ClusterNode) | Stop-VM
+~~~~~~~~~~~
+2. Detach all virtual disks
+~~~~~~~~~~~
+Get-VirtualDisk | Disconnect-VirtualDisk
+~~~~~~~~~~~
+3. Shutdown the Cluster
+~~~~~~~~~~~
+Stop-Cluster &lt;&lt;CLUSTERNAME&gt;&gt;
+~~~~~~~~~~~
+4. Install all updates and reboot nodes
+5. Start the Cluster
+~~~~~~~~~~~
+Start-Cluster &lt;&lt;CLUSTERNAME&gt;&gt;
+~~~~~~~~~~~
+6. Attach all virtual disks
+~~~~~~~~~~~
+Get-VirtualDisk | Connect-VirtualDisk
+~~~~~~~~~~~
+7. Monitor storage jobs - You may also want to invoke storage jobs
+~~~~~~~~~~~~~~~~~
+Get-VirtualDisk | Repair-VirtualDisk -AsJob
+Get-StoragePool S2D* | Optimize-StoragePool
+~~~~~~~~~~~~~~~~~
+8. Once complete power up all your VM's
+
+Its worth noting that the update window will be considerably shorter than using SCVMM or Cluster Aware updating as there are no storage rebuilds between node reboots.</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">There is nothing more frustrating that doing all possible due diligence, raising the relevant Change Requests, completing testing, just to have a routine Windows Update fail.</summary></entry><entry><title type="html">S2D Manual Cache Rebind</title><link href="http://localhost:4000/storagespacesdirect/s2d/cache/cluster/hyper-converged/2018/07/30/s2d-manual-cache-rebind.html" rel="alternate" type="text/html" title="S2D Manual Cache Rebind" /><published>2018-07-30T00:00:00+11:00</published><updated>2018-07-30T00:00:00+11:00</updated><id>http://localhost:4000/storagespacesdirect/s2d/cache/cluster/hyper-converged/2018/07/30/s2d-manual-cache-rebind</id><content type="html" xml:base="http://localhost:4000/storagespacesdirect/s2d/cache/cluster/hyper-converged/2018/07/30/s2d-manual-cache-rebind.html">Sometimes things don't go quite to plan. Whilst deploying a cluster with P3700 Intel drives, we had a situation where we needed to disable the cache as the drives were failing. This is a well documented issue that arose with poor firmware from Intel. [Microsoft released a support article outlining the symptoms of this issue ](https://support.microsoft.com/en-au/help/4052341/slow-performance-or-lost-communication-io-error-detached-or-no-redunda). The issue is resolved now and the [latest firmware from intel will resolve the issue aforementioned.](https://downloadcenter.intel.com/download/27517/Datacenter-NVMe-Microsoft-Windows-Drivers-for-Intel-SSDs?product=79625)
+
+The issue we experienced, was that once the firmware had been updated, and the cache re-enabled through the following command:
+
+~~~~~~~
+Set-ClusterS2D -CacheState enabled
+~~~~~~~
+
+we saw absolutely no performance increase at all.
+
+Digging deeper we saw that there were no cache drives being used by performance monitor. S2D cache drives work by creating a 'bind' between storage drives and cache drives. For example, if you had 8 storage drives and 4 cache drives, 2 disks would bind to each cache drive. This results in a cache bind of 2:1. You could also have 12 capacity drives, to 2 cache drives. This results in a cache bind of 6:1 (Which is what is in this example).
+
+
+[Darryl van der Peijl has written an awesome script to get the cache bind status of your drives, node by node.](http://www.darrylvanderpeijl.com/storage-spaces-direct-cache-disk-status/). It's an awesome script, that I highly recommend adding to your swiss army knife for S2D!
+
+Running Darryl's script we saw the following results.
+
+![CacheDiskStateIneligibleDataPartition CacheDiskStateIneligibleExcludedFromS2D CacheDiskStateIneligibleForS2D CacheDiskStateIneligibleNotEnoughSpace CacheDiskStateIneligibleNotGPT CacheDiskStateIneligibleUnsupportedSystem CacheDiskStateInitialized CacheDiskStateInitializedAndBound CacheDiskStateInStorageMaintenance CacheDiskStateInternalErrorConfiguring CacheDiskStateMarkedBad CacheDiskStateMarkedMissing CacheDiskStateMissing CacheDiskStateNonHybrid CacheDiskStateOrphanedRecovering CacheDiskStateOrphanedWaiting CacheDiskStateRepairing CacheDiskStateReset CacheDiskStateSkippedBindingNoFlash CacheDiskStateUnknown ]({{ site.url }}/assets/img/s2derrors/CacheError0Drives.png)
+
+As you can see in the screenshot, no drives are binding, and only 1 cache drive is being successfully seen. This was caused by the bastardisation of the cache status. On, Off, On, Insn't a great idea unless absolutely necessary. The root cause of this is the storage pool information stored within the metadata partition isn't compatible with re-enabling the cache. To resolve this you need to remove each disk. Clean all partitions, and re-add the disks with the cache enabled. I have a script that can do this disk-by-disk, but I'm not publishing it due to its harmful nature. I'll happily provide you a copy if you reach out to me, using [my contact page]({ site.url }}//contact.html).
+
+The best method is to remove a node, clean all its disks, and re-add the node. To do this you will need the following:
+
+* If HCI - Enough resources to handle the workload. N+1 (Accounting for 1 node being absent)
+* Enough fault domains to remove a node.
+* Enough storage capacity.
+
+[Microsoft has documented the scale back requirements quite well here.](https://docs.microsoft.com/en-us/windows-server/storage/storage-spaces/remove-servers) If you match all these and want to continue, read on!
+
+# Steps Overview
+
+1. Enable the Cache
+2. Check the cluster health
+3. Pause a node.
+4. Start the evacuation of a node.
+5. Repair virtual disk to complete evacuation.
+6. Finalise node removal.
+7. Clean the disks on the node.
+8. Re-add the node to the clusters
+9. Verify the cache drive binding
+10. Optimise the storage pools
+10. Repeat for the other nodes.
+
+!Before beginning any of these
+
+## 1. Enable the Cache
+
+Check that the cache is enabled for the clusters
+~~~~
+Get-ClusterS2D
 
 
 CacheMetadataReserveBytes : 34359738368
@@ -124,123 +185,143 @@ CacheModeSSD              : WriteOnly
 CachePageSizeKBytes       : 16
 CacheState                : Enabled
 State                     : Enabled 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
 
-&lt;p&gt;If the cache isn’t enabled at the cluster level enable it:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Set-ClusterS2D -CacheState Enabled 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+If the cache isn't enabled at the cluster level enable it:
+~~~~~
+Set-ClusterS2D -CacheState Enabled 
+~~~~~
 
-&lt;h2 id=&quot;2-check-cluster-health&quot;&gt;2. Check Cluster health&lt;/h2&gt;
-&lt;p&gt;Check the health of key objects, examples below.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk
+## 2. Check Cluster health
+Check the health of key objects, examples below.
+~~~~~
+Get-VirtualDisk
 Get-PhysicalDisk
 Get-StoragePool s2d*
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;You shouldn’t continue if you don’t understand the output from those 3 commands. Its nothing personal, but you are unlikely to be able to complete in-depth troubleshooting if you are unfamiliar with those commands.&lt;/p&gt;
+~~~~~
+You shouldn't continue if you don't understand the output from those 3 commands. Its nothing personal, but you are unlikely to be able to complete in-depth troubleshooting if you are unfamiliar with those commands.
 
-&lt;h2 id=&quot;3-pause-the-first-node&quot;&gt;3. Pause the first node&lt;/h2&gt;
+## 3. Pause the first node
 
-&lt;p&gt;This is a standard process. Using either SCVMM, Failover Cluster Manager or the below powershell cmdlet to pause the node.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Suspend-ClusterNode -Drain
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+This is a standard process. Using either SCVMM, Failover Cluster Manager or the below powershell cmdlet to pause the node.
+~~~~
+Suspend-ClusterNode -Drain
+~~~~
 
-&lt;h2 id=&quot;4-start-evacuation-of-the-node&quot;&gt;4. Start evacuation of the node&lt;/h2&gt;
+## 4. Start evacuation of the node
 
-&lt;ol&gt;
-  &lt;li&gt;RDP to the nodes&lt;/li&gt;
-  &lt;li&gt;Check the hostname of the node you are connected to. Best to be safe!&lt;/li&gt;
-  &lt;li&gt;Run the following command:
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Remove-ClusterNode -CleanUpDisks
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;The command will fail. This is expected as it was unable to remove the disks instantly. The command however has marked all disks as retired and started the physical disk removal.
-&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/removeclusternode.png&quot; alt=&quot;Remove-ClusterNode CleanUpDisks Error 40000. Failed to remove disks from pool The storage pool does not have sufficient capacity to relocate data from the specified physical disks.&quot; /&gt;&lt;/li&gt;
-  &lt;li&gt;Check that the physical disk is marked as retired and removing from pools
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-StorageNode -name &quot;HOSTNAME*&quot; | Get-PhysicalDisk -PhysicallyConnected
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/physicaldisksremoving.png&quot; alt=&quot;physical disks removing&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
+1. RDP to the nodes
+2. Check the hostname of the node you are connected to. Best to be safe!
+3. Run the following command:
+~~~~~~
+Remove-ClusterNode -CleanUpDisks
+~~~~~~
+4. The command will fail. This is expected as it was unable to remove the disks instantly. The command however has marked all disks as retired and started the physical disk removal.
+![Remove-ClusterNode CleanUpDisks Error 40000. Failed to remove disks from pool The storage pool does not have sufficient capacity to relocate data from the specified physical disks.]({{ site.url }}/assets/img/s2derrors/removeclusternode.png)
+5. Check that the physical disk is marked as retired and removing from pools
+~~~~~
+Get-StorageNode -name &quot;HOSTNAME*&quot; | Get-PhysicalDisk -PhysicallyConnected
+~~~~~
+![physical disks removing]({{ site.url }}/assets/img/s2derrors/physicaldisksremoving.png)
 
-&lt;h2 id=&quot;5-repair-virtual-disks&quot;&gt;5. Repair virtual disks&lt;/h2&gt;
+## 5. Repair virtual disks
 
-&lt;p&gt;Repair virtual disks so that their foot print is removed from disks operating on the node.&lt;/p&gt;
+Repair virtual disks so that their foot print is removed from disks operating on the node.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Repair-VirtualDisk -AsJob
+~~~~
+Get-VirtualDisk | Repair-VirtualDisk -AsJob
 Get-StorageJob
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~
 
-&lt;p&gt;This will most likely take a number of hours, keep checking in on the storage job until they are all complete.&lt;/p&gt;
+This will most likely take a number of hours, keep checking in on the storage job until they are all complete.
 
-&lt;h2 id=&quot;6-finalise-node-removal&quot;&gt;6. Finalise node removal&lt;/h2&gt;
-&lt;p&gt;Check that:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;The disks have all been removed (Show as can pool equals true)&lt;/li&gt;
-  &lt;li&gt;and that there are no virtual disk foot prints left.&lt;/li&gt;
-&lt;/ul&gt;
+## 6. Finalise node removal
+Check that:
+* The disks have all been removed (Show as can pool equals true)
+* and that there are no virtual disk foot prints left.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-StorageNode -name &quot;HOSTNAME*&quot; | Get-PhysicalDisk -PhysicallyConnected | ? CanPool -ne True | Get-VirtualDisk
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
+Get-StorageNode -name &quot;HOSTNAME*&quot; | Get-PhysicalDisk -PhysicallyConnected | ? CanPool -ne True | Get-VirtualDisk
+~~~~~
 
-&lt;p&gt;If both fine continue, otherwise head back to step 5 and rerun (Don’t stress, sometime you may need to repeat this a number of times, or ever reboot the node being removed to fully clear the disks)&lt;/p&gt;
+If both fine continue, otherwise head back to step 5 and rerun (Don't stress, sometime you may need to repeat this a number of times, or ever reboot the node being removed to fully clear the disks)
 
-&lt;p&gt;If both are fine, rerun the remove command again, this time it will complete with no errors.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Remove-ClusterNode -CleanUpDisks
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+If both are fine, rerun the remove command again, this time it will complete with no errors.
+~~~~~~
+Remove-ClusterNode -CleanUpDisks
+~~~~~~
 
-&lt;h2 id=&quot;7-clean-the-disks-on-the-node&quot;&gt;7. Clean the disks on the node.&lt;/h2&gt;
-&lt;p&gt;Once the node has been removed, we need to clear all partitions off the disks. Use the following to clear them up. Its an adaption of the script provided by MS as part of their recommended build guide, however its been sanitised to not touch other nodes.&lt;/p&gt;
+## 7. Clean the disks on the node.
+Once the node has been removed, we need to clear all partitions off the disks. Use the following to clear them up. Its an adaption of the script provided by MS as part of their recommended build guide, however its been sanitised to not touch other nodes.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-Disk | ? Number -ne $null | ? IsBoot -ne $true | ? IsSystem -ne $true | ? PartitionStyle -ne RAW | % {
+~~~~~
+Get-Disk | ? Number -ne $null | ? IsBoot -ne $true | ? IsSystem -ne $true | ? PartitionStyle -ne RAW | % {
         $_ | Set-Disk -isoffline:$false
         $_ | Set-Disk -isreadonly:$false
         $_ | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false
         $_ | Set-Disk -isreadonly:$true
         $_ | Set-Disk -isoffline:$true
     }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
 
-&lt;h2 id=&quot;8-re-add-the-node-to-the-clusters&quot;&gt;8. Re-add the node to the clusters&lt;/h2&gt;
-&lt;p&gt;Don’t just go slapping nodes back in. Just because it worked before, is no reason to blindly add the node back in.&lt;/p&gt;
+## 8. Re-add the node to the clusters
+Don't just go slapping nodes back in. Just because it worked before, is no reason to blindly add the node back in.
 
-&lt;p&gt;Run the test cluster cmdlet and read the output to see if there are any errors.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Test-Cluster -Node &amp;lt;ALL NODES HERE&amp;gt; -Include &quot;Storage Spaces Direct&quot;, Inventory, Network, &quot;System Configuration&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+Run the test cluster cmdlet and read the output to see if there are any errors.
+~~~~~
+Test-Cluster -Node &lt;ALL NODES HERE&gt; -Include &quot;Storage Spaces Direct&quot;, Inventory, Network, &quot;System Configuration&quot;
+~~~~~
 
-&lt;p&gt;From an existing cluster node, run the following cmdlet (Or re-add using SCVMM, or Failover Cluster Manager)&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Add-ClusterNode -Name &amp;lt;NODENAME&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+From an existing cluster node, run the following cmdlet (Or re-add using SCVMM, or Failover Cluster Manager)
+~~~~~
+Add-ClusterNode -Name &lt;NODENAME&gt;
+~~~~~
 
-&lt;h2 id=&quot;9-verify-the-cache-drive-binding&quot;&gt;9. Verify the cache drive binding&lt;/h2&gt;
-&lt;p&gt;Once the node has been added back in. Re-run Darryl’s script to check the binding. You should now see an even binding of all drives to a cache drive.&lt;/p&gt;
+## 9. Verify the cache drive binding
+Once the node has been added back in. Re-run Darryl's script to check the binding. You should now see an even binding of all drives to a cache drive.
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/successfulbind.png&quot; alt=&quot;cache drives bound CacheDiskStateIneligibleDataPartition&quot; /&gt;&lt;/p&gt;
+![cache drives bound CacheDiskStateIneligibleDataPartition]({{ site.url }}/assets/img/s2derrors/successfulbind.png)
 
-&lt;h2 id=&quot;10-optimise-the-storage-pools&quot;&gt;10. Optimise the storage pools&lt;/h2&gt;
-&lt;p&gt;Now that the node has been added back in, you need to redistribute blocks back to the node.&lt;/p&gt;
+## 10. Optimise the storage pools
+Now that the node has been added back in, you need to redistribute blocks back to the node.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-StoragePool S2D* | Optimize-StoragePool
+~~~~~
+Get-StoragePool S2D* | Optimize-StoragePool
 Get-StorageJob
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
 
-&lt;p&gt;For this entire process, you may find it intersting to watch the nodes virtualdisk footprint fall. &lt;a href=&quot;https://blogs.technet.microsoft.com/filecab/2016/11/21/deep-dive-pool-in-spaces-direct/&quot;&gt;I’d recommend Cosmos Darwin’s show-prettypool script&lt;/a&gt;&lt;/p&gt;
+For this entire process, you may find it intersting to watch the nodes virtualdisk footprint fall. [I'd recommend Cosmos Darwin's show-prettypool script](https://blogs.technet.microsoft.com/filecab/2016/11/21/deep-dive-pool-in-spaces-direct/)
 
-&lt;h2 id=&quot;11-repeat-for-the-other-nodes&quot;&gt;11. Repeat for the other nodes.&lt;/h2&gt;
-&lt;p&gt;Once the storage jobs have completed, you can safely loop back to step 3 and repeat for all your other nodes. Good luck!&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">Sometimes things don’t go quite to plan. Whilst deploying a cluster with P3700 Intel drives, we had a situation where we needed to disable the cache as the drives were failing. This is a well documented issue that arose with poor firmware from Intel. Microsoft released a support article outlining the symptoms of this issue . The issue is resolved now and the latest firmware from intel will resolve the issue aforementioned.</summary></entry><entry><title type="html">S2D Storage Jobs Failing</title><link href="http://localhost:4000/storagespacesdirect/s2d/2018/07/21/s2d-failed-storagejobs.html" rel="alternate" type="text/html" title="S2D Storage Jobs Failing" /><published>2018-07-21T00:00:00+10:00</published><updated>2018-07-21T00:00:00+10:00</updated><id>http://localhost:4000/storagespacesdirect/s2d/2018/07/21/s2d-failed-storagejobs</id><content type="html" xml:base="http://localhost:4000/storagespacesdirect/s2d/2018/07/21/s2d-failed-storagejobs.html">&lt;p&gt;From time to time, a Storage Spaces Direct (S2D) storage job, whether this is a Virtual Disk Repair, Physical Disk Removal or Storage Pool Rebalance/Optimization, will suspend or fail for some reason. When this happens, we need to understand why this is the case, and resolve if possible. Follow the steps below to sort it out.&lt;/p&gt;
+## 11. Repeat for the other nodes.
+Once the storage jobs have completed, you can safely loop back to step 3 and repeat for all your other nodes. Good luck!</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">Sometimes things don’t go quite to plan. Whilst deploying a cluster with P3700 Intel drives, we had a situation where we needed to disable the cache as the drives were failing. This is a well documented issue that arose with poor firmware from Intel. Microsoft released a support article outlining the symptoms of this issue . The issue is resolved now and the latest firmware from intel will resolve the issue aforementioned.</summary></entry><entry><title type="html">Powering Up on Github Pages</title><link href="http://localhost:4000/jekyll/update/2018/07/21/powering-up-on-github-pages.html" rel="alternate" type="text/html" title="Powering Up on Github Pages" /><published>2018-07-21T00:00:00+11:00</published><updated>2018-07-21T00:00:00+11:00</updated><id>http://localhost:4000/jekyll/update/2018/07/21/powering-up-on-github-pages</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/07/21/powering-up-on-github-pages.html">I've been recently been working on S2D and have been working on edge cases that have no online documentation. Wanting to share this knowledge I knew I had to have another crack at blogging. Thinking on how to make it work this time, I knew that the blog would have to be:
 
-&lt;ol&gt;
-  &lt;li&gt;Ascertain the current storage pool owner either through Failover Cluster Manager, or the below Powershell
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-ClusterGroup | ? Name -like ((get-storagepool s2d*).uniqueid).trim('{}') 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Open event viewer on the storage pool owner and navigate to StorageManagement log.&lt;/li&gt;
-  &lt;li&gt;Review 20XX events and compare them to the error codes below.&lt;/li&gt;
-&lt;/ol&gt;
+* Free - Given the low readership, I don't want to pay anything toward it
+* Easy to use/update
+* Secure
+* Fast
+* RSS Feed
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/eventvwr.jpg&quot; alt=&quot;Storage Spaces Direct S2D Failed Jobs Error Logs Virtual Disk&quot; /&gt;&lt;/p&gt;
+Given all these criteria, I was aiming for a Jekyll based blog, hosted by GitHub pages. Jekyll creates static webpages using mark down. This makes it simple to use, fast as the content is static and secure as there is no 'admin' interface. GitHub pages is free, fast and secure.
 
-&lt;h3 id=&quot;event-log-example&quot;&gt;Event Log Example&lt;/h3&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Log Name:      Microsoft-Windows-StorageManagement/Operational
+Its all up and running now, it took a couple of hours. But I'm really happy with the result.
+
+Keep posted for more blogs coming up!
+
+![SSL Performance]({{ site.url }}/assets/img/poweringup/SSLPerformance.jpg)
+![Speed Performance]({{ site.url }}/assets/img/poweringup/SpeedPerformance.jpg)</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">I’ve been recently been working on S2D and have been working on edge cases that have no online documentation. Wanting to share this knowledge I knew I had to have another crack at blogging. Thinking on how to make it work this time, I knew that the blog would have to be:</summary></entry><entry><title type="html">S2D Storage Jobs Failing</title><link href="http://localhost:4000/storagespacesdirect/s2d/2018/07/21/s2d-failed-storagejobs.html" rel="alternate" type="text/html" title="S2D Storage Jobs Failing" /><published>2018-07-21T00:00:00+11:00</published><updated>2018-07-21T00:00:00+11:00</updated><id>http://localhost:4000/storagespacesdirect/s2d/2018/07/21/s2d-failed-storagejobs</id><content type="html" xml:base="http://localhost:4000/storagespacesdirect/s2d/2018/07/21/s2d-failed-storagejobs.html">From time to time, a Storage Spaces Direct (S2D) storage job, whether this is a Virtual Disk Repair, Physical Disk Removal or Storage Pool Rebalance/Optimization, will suspend or fail for some reason. When this happens, we need to understand why this is the case, and resolve if possible. Follow the steps below to sort it out.
+
+1. Ascertain the current storage pool owner either through Failover Cluster Manager, or the below Powershell
+~~~~
+Get-ClusterGroup | ? Name -like ((get-storagepool s2d*).uniqueid).trim('{}') 
+~~~~~
+2. Open event viewer on the storage pool owner and navigate to StorageManagement log.
+3. Review 20XX events and compare them to the error codes below.
+
+![Storage Spaces Direct S2D Failed Jobs Error Logs Virtual Disk]({{ site.url }}/assets/img/s2derrors/eventvwr.jpg)
+
+### Event Log Example ###
+~~~~~
+Log Name:      Microsoft-Windows-StorageManagement/Operational
 Source:        Microsoft-Windows-StorageManagement-WSP-Spaces
 Event ID:      2005
 Task Category: None
@@ -250,684 +331,216 @@ An error occurred during storage job execution.
 
 Job Name:	Repair
 Error Code:	4
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
 
-&lt;h2 id=&quot;error-code-translations&quot;&gt;Error Code Translations&lt;/h2&gt;
+## Error Code Translations ##
 
-&lt;h3 id=&quot;standard-cim-return-codes&quot;&gt;Standard CIM Return Codes&lt;/h3&gt;
+### Standard CIM Return Codes ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0&lt;/td&gt;
-      &lt;td&gt;Success&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1&lt;/td&gt;
-      &lt;td&gt;Not Supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;2&lt;/td&gt;
-      &lt;td&gt;Unspecified Error&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;3&lt;/td&gt;
-      &lt;td&gt;Timeout&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;Failed&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;5&lt;/td&gt;
-      &lt;td&gt;Invalid Parameter&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;6&lt;/td&gt;
-      &lt;td&gt;In Use / Disk is in use&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;7&lt;/td&gt;
-      &lt;td&gt;This command is not supported on x86 running in x64 environment&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;Object Not Found&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value	| Description |
+| --- | --- |
+| 0 | Success |
+| 1 | Not Supported |
+| 2 |	Unspecified Error |
+| 3	| Timeout |
+| 4	| Failed |
+| 5 |	Invalid Parameter |
+| 6 |	In Use / Disk is in use |
+| 7 |	This command is not supported on x86 running in x64 environment |
+| 8 |	Object Not Found |
 
-&lt;h3 id=&quot;extended-cim-return-codes&quot;&gt;Extended CIM Return Codes&lt;/h3&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4096&lt;/td&gt;
-      &lt;td&gt;Method Parameters Checked - Job Started&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4097&lt;/td&gt;
-      &lt;td&gt;Size not supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4098&lt;/td&gt;
-      &lt;td&gt;Timeout not supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4099&lt;/td&gt;
-      &lt;td&gt;The device is busy&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Extended CIM Return Codes ###
 
-&lt;h3 id=&quot;storage-management-api-return-codes&quot;&gt;Storage Management API Return Codes&lt;/h3&gt;
-&lt;p&gt;Common Errors 40000 - 40999&lt;/p&gt;
+| Error Value	| Description |
+| --- | --- |
+| 4096 |	Method Parameters Checked - Job Started  |
+| 4097 |	Size not supported |
+| 4098 | Timeout not supported |
+| 4099 | The device is busy  |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40000&lt;/td&gt;
-      &lt;td&gt;Not enough available capacity&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40001&lt;/td&gt;
-      &lt;td&gt;Access denied&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40002&lt;/td&gt;
-      &lt;td&gt;There are not enough resources to complete the operation.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40003&lt;/td&gt;
-      &lt;td&gt;Cache out of date&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40004&lt;/td&gt;
-      &lt;td&gt;An unexpected I/O error has occurred&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40005&lt;/td&gt;
-      &lt;td&gt;You must specify a size by using either the Size or the UseMaximumSize parameter. You can specify only one of these parameters at a time.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40006&lt;/td&gt;
-      &lt;td&gt;The object or object type requested does not exist in cache.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40007&lt;/td&gt;
-      &lt;td&gt;The request failed due to a fatal device hardware error.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40018&lt;/td&gt;
-      &lt;td&gt;The specified object is managed by the Microsoft Failover Clustering component. The disk must be in cluster maintenance mode and the cluster resource status must be online to perform this operation.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Storage Management API Return Codes ###
+Common Errors 40000 - 40999
 
-&lt;h3 id=&quot;disk-errors-41000---41999&quot;&gt;Disk Errors 41000 - 41999&lt;/h3&gt;
+| Error Value	| Description |
+| --- | --- |
+|40000|	Not enough available capacity|
+|40001|	Access denied|
+|40002|	There are not enough resources to complete the operation.|
+|40003|	Cache out of date|
+|40004|	An unexpected I/O error has occurred|
+|40005|	You must specify a size by using either the Size or the UseMaximumSize parameter. You can specify only one of these parameters at a time.|
+|40006|	The object or object type requested does not exist in cache.|
+|40007|	The request failed due to a fatal device hardware error.|
+|40018|	The specified object is managed by the Microsoft Failover Clustering component. The disk must be in cluster maintenance mode and the cluster resource status must be online to perform this operation.|
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41000&lt;/td&gt;
-      &lt;td&gt;The disk has not been initialized.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41001&lt;/td&gt;
-      &lt;td&gt;The disk has already been initialized.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41002&lt;/td&gt;
-      &lt;td&gt;The disk is read only.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41003&lt;/td&gt;
-      &lt;td&gt;The disk is offline.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41004&lt;/td&gt;
-      &lt;td&gt;The disk’s partition limit has been reached.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41005&lt;/td&gt;
-      &lt;td&gt;The specified partition alignment is not valid.  It must be a multiple of the disk’s sector size.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41006&lt;/td&gt;
-      &lt;td&gt;A parameter is not valid for this type of partition.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41007&lt;/td&gt;
-      &lt;td&gt;Cannot clear with OEM partitions present.  To clear OEM partitions, use the RemoveOEM flag.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41008&lt;/td&gt;
-      &lt;td&gt;Cannot clear with data partitions present.  To clear data partitions, use the RemoveData flag.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41009&lt;/td&gt;
-      &lt;td&gt;Operation not supported on a critical disk.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41010&lt;/td&gt;
-      &lt;td&gt;The specified partition type is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41011&lt;/td&gt;
-      &lt;td&gt;Only the first 2 TB are usable on MBR disks.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41012&lt;/td&gt;
-      &lt;td&gt;The specified offset is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41013&lt;/td&gt;
-      &lt;td&gt;Cannot convert the style of a disk with data or other known partitions on it.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41014&lt;/td&gt;
-      &lt;td&gt;The disk is not large enough to support a GPT partition style.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Disk Errors 41000 - 41999 ###
 
-&lt;h3 id=&quot;partition-errors-42000---42999&quot;&gt;Partition Errors 42000 - 42999&lt;/h3&gt;
+| Error Value	| Description |
+| --- | --- |
+| 41000|  The disk has not been initialized.|
+| 41001|	The disk has already been initialized.|
+| 41002|	The disk is read only.|
+| 41003|	The disk is offline.|
+| 41004|	The disk's partition limit has been reached. |
+| 41005|	The specified partition alignment is not valid.  It must be a multiple of the disk's sector size. |
+| 41006|	A parameter is not valid for this type of partition. |
+| 41007|	Cannot clear with OEM partitions present.  To clear OEM partitions, use the RemoveOEM flag. |
+| 41008|	Cannot clear with data partitions present.  To clear data partitions, use the RemoveData flag. |
+| 41009|	Operation not supported on a critical disk. |
+| 41010|	The specified partition type is not valid.|
+| 41011|	Only the first 2 TB are usable on MBR disks. |
+| 41012|	The specified offset is not valid. |
+| 41013|	Cannot convert the style of a disk with data or other known partitions on it. |
+| 41014|	The disk is not large enough to support a GPT partition style. |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42000&lt;/td&gt;
-      &lt;td&gt;The partition was deleted, although its access paths were not.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42001&lt;/td&gt;
-      &lt;td&gt;The extended partition still contains other partitions.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42002&lt;/td&gt;
-      &lt;td&gt;The requested access path is already in use.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42004&lt;/td&gt;
-      &lt;td&gt;Cannot assign access paths to hidden partitions.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42005&lt;/td&gt;
-      &lt;td&gt;Cannot remove a volume GUID path.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42006&lt;/td&gt;
-      &lt;td&gt;Cannot remove the drive letter of a boot or paging file partition.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42007&lt;/td&gt;
-      &lt;td&gt;The access path is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42008&lt;/td&gt;
-      &lt;td&gt;Cannot shrink a partition containing a volume with errors.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42009&lt;/td&gt;
-      &lt;td&gt;Cannot resize a partition containing an unknown file system.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42010&lt;/td&gt;
-      &lt;td&gt;The operation is not allowed on a system or critical partition.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42011&lt;/td&gt;
-      &lt;td&gt;This operation is only supported on data partitions.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42012&lt;/td&gt;
-      &lt;td&gt;Cannot assign multiple drive letters to a partition.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42013&lt;/td&gt;
-      &lt;td&gt;Cannot assign drive letter to this type of partition.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
 
-&lt;h3 id=&quot;volume-errors-43000---43999&quot;&gt;Volume Errors 43000 - 43999&lt;/h3&gt;
+### Partition Errors 42000 - 42999 ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43000&lt;/td&gt;
-      &lt;td&gt;The specified cluster size is invalid&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43001&lt;/td&gt;
-      &lt;td&gt;The specified file system is not supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43002&lt;/td&gt;
-      &lt;td&gt;The volume cannot be quick formatted&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43003&lt;/td&gt;
-      &lt;td&gt;The number of clusters exceeds 32 bits&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43004&lt;/td&gt;
-      &lt;td&gt;The specified UDF version is not supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43005&lt;/td&gt;
-      &lt;td&gt;The cluster size must be a multiple of the disk’s physical sector size&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43006&lt;/td&gt;
-      &lt;td&gt;Cannot perform the requested operation when the drive is read only&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43007&lt;/td&gt;
-      &lt;td&gt;The repair failed&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43008&lt;/td&gt;
-      &lt;td&gt;The scan failed&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43009&lt;/td&gt;
-      &lt;td&gt;A snapshot error occured while scanning this drive. You can try again, but if this problem persists, run an offline scan and fix.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43010&lt;/td&gt;
-      &lt;td&gt;A scan is already running on this drive. Chkdsk can not run more than one scan on a drive at a time.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43011&lt;/td&gt;
-      &lt;td&gt;A snapshot error occured while scanning this drive. You can try again, but if this problem persists, run an offline scan and fix.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43012&lt;/td&gt;
-      &lt;td&gt;A snapshot error occured while scanning this drive. Run an offline scan and fix.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43013&lt;/td&gt;
-      &lt;td&gt;Cannot open drive for direct access&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43014&lt;/td&gt;
-      &lt;td&gt;Cannot determine the file system of the drive&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43015&lt;/td&gt;
-      &lt;td&gt;This setting may not be changed due to the group policy setting&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43016&lt;/td&gt;
-      &lt;td&gt;This setting may not be changed due to the global registry setting&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value	| Description |
+| --- | --- |
+|42000|	The partition was deleted, although its access paths were not. |
+|42001 | The extended partition still contains other partitions. |
+|42002 | The requested access path is already in use. |
+|42004 | Cannot assign access paths to hidden partitions. |
+|42005 | Cannot remove a volume GUID path. |
+|42006 | Cannot remove the drive letter of a boot or paging file partition. |
+|42007 | The access path is not valid. |
+|42008 | Cannot shrink a partition containing a volume with errors. |
+|42009 | Cannot resize a partition containing an unknown file system. |
+|42010 | The operation is not allowed on a system or critical partition. |
+|42011 | This operation is only supported on data partitions. |
+|42012 | Cannot assign multiple drive letters to a partition. |
+|42013 | Cannot assign drive letter to this type of partition. |
 
-&lt;h3 id=&quot;storage-provider-errors-46000---46999&quot;&gt;Storage Provider Errors 46000 - 46999&lt;/h3&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46000&lt;/td&gt;
-      &lt;td&gt;The storage provider cannot connect to the storage provider.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46001&lt;/td&gt;
-      &lt;td&gt;The storage provider cannot connect to the storage subsystem.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46002&lt;/td&gt;
-      &lt;td&gt;The storage provider does not support a required profile.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46003&lt;/td&gt;
-      &lt;td&gt;The storage provider does not support a required association.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46004&lt;/td&gt;
-      &lt;td&gt;Cannot register/unregister the storage subsystem on local host.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46005&lt;/td&gt;
-      &lt;td&gt;The storage subsystem is not registered.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46006&lt;/td&gt;
-      &lt;td&gt;This subsystem is already registered.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46007&lt;/td&gt;
-      &lt;td&gt;This subsystem is already registered with another user’s credentials. Use the -Force flag to remove the existing registration and add a new one anyway.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46008&lt;/td&gt;
-      &lt;td&gt;Failover clustering could not be enabled for this storage object.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Volume Errors 43000 - 43999 ###
 
-&lt;h3 id=&quot;storage-subsystem-errors-47000---47999&quot;&gt;Storage Subsystem Errors 47000 - 47999&lt;/h3&gt;
+| Error Value | Description |
+| --- | --- |
+| 43000 | The specified cluster size is invalid |
+| 43001 | The specified file system is not supported |
+| 43002 | The volume cannot be quick formatted |
+| 43003 | The number of clusters exceeds 32 bits |
+| 43004 | The specified UDF version is not supported |
+| 43005 | The cluster size must be a multiple of the disk's physical sector size |
+| 43006 | Cannot perform the requested operation when the drive is read only |
+| 43007 | The repair failed |
+| 43008 | The scan failed |
+| 43009 | A snapshot error occured while scanning this drive. You can try again, but if this problem persists, run an offline scan and fix. |
+| 43010 | A scan is already running on this drive. Chkdsk can not run more than one scan on a drive at a time. |
+| 43011 | A snapshot error occured while scanning this drive. You can try again, but if this problem persists, run an offline scan and fix. |
+| 43012 | A snapshot error occured while scanning this drive. Run an offline scan and fix. |
+| 43013 | Cannot open drive for direct access |
+| 43014 | Cannot determine the file system of the drive |
+| 43015 | This setting may not be changed due to the group policy setting |
+| 43016 | This setting may not be changed due to the global registry setting |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;47000&lt;/td&gt;
-      &lt;td&gt;No storage pools were found that can support this virtual disk configuration.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;47001&lt;/td&gt;
-      &lt;td&gt;This subsystem does not support creation of virtual disks with the specified provisioning type.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
 
-&lt;h3 id=&quot;partition-errors-48000---48999&quot;&gt;Partition Errors 48000 - 48999&lt;/h3&gt;
+### Storage Provider Errors 46000 - 46999 ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48000&lt;/td&gt;
-      &lt;td&gt;This operation is not supported on primordial storage pools.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48001&lt;/td&gt;
-      &lt;td&gt;The storage pool is reserved for special usage only.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48002&lt;/td&gt;
-      &lt;td&gt;The specified resiliency setting is not supported by this storage pool.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48004&lt;/td&gt;
-      &lt;td&gt;There are not enough physical disks in the storage pool to create the specified virtual disk configuration.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48005&lt;/td&gt;
-      &lt;td&gt;The specified storage pool could not be found.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48006&lt;/td&gt;
-      &lt;td&gt;The storage pool could not complete the operation because its health or operational status does not permit it.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48007&lt;/td&gt;
-      &lt;td&gt;The storage pool could not complete the operation because its configuration is read-only.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48008&lt;/td&gt;
-      &lt;td&gt;The storage pool contains virtual disks.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48009&lt;/td&gt;
-      &lt;td&gt;The number of thin provisioning alert thresholds specified exceeds the limit for this storage pool.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48010&lt;/td&gt;
-      &lt;td&gt;You must specify the size info (either the Size or UseMaximumSize parameter) or the tier info (the StorageTiers and StorageTierSizes parameters), but not both size info and tier info.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48011&lt;/td&gt;
-      &lt;td&gt;No auto-allocation drives found in storage pool.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value	| Description |
+| --- | --- |
+| 46000 | The storage provider cannot connect to the storage provider. |
+| 46001 | The storage provider cannot connect to the storage subsystem. |
+| 46002 | The storage provider does not support a required profile. |
+| 46003 | The storage provider does not support a required association. |
+| 46004 | Cannot register/unregister the storage subsystem on local host. |
+| 46005 | The storage subsystem is not registered. |
+| 46006 | This subsystem is already registered. |
+| 46007 | This subsystem is already registered with another user's credentials. Use the -Force flag to remove the existing registration and add a new one anyway. |
+| 46008 | Failover clustering could not be enabled for this storage object. |
 
-&lt;h3 id=&quot;resiliency-settings-errors-49000---49999&quot;&gt;Resiliency Settings Errors 49000 - 49999&lt;/h3&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49000&lt;/td&gt;
-      &lt;td&gt;No resiliency setting with that name exists.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49001&lt;/td&gt;
-      &lt;td&gt;The value for NoSinglePointOfFailure is not supported.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49002&lt;/td&gt;
-      &lt;td&gt;The value for PhysicalDiskRedundancy is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49003&lt;/td&gt;
-      &lt;td&gt;The value for NumberOfDataCopies is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49004&lt;/td&gt;
-      &lt;td&gt;The value for ParityLayout is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49005&lt;/td&gt;
-      &lt;td&gt;The value for Interleave is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49006&lt;/td&gt;
-      &lt;td&gt;The value for NumberOfColumns is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Storage Subsystem Errors 47000 - 47999 ###
 
-&lt;h3 id=&quot;virtual-disk-errors-50000---50999&quot;&gt;Virtual Disk Errors 50000 - 50999&lt;/h3&gt;
+| Error Value	| Description |
+| --- | --- |
+ |47000 | No storage pools were found that can support this virtual disk configuration. |
+ |47001 | This subsystem does not support creation of virtual disks with the specified provisioning type. |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50000&lt;/td&gt;
-      &lt;td&gt;The specified virtual disk could not be found.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50001&lt;/td&gt;
-      &lt;td&gt;Could not repair the virtual disk because too many physical disks failed. Not enough information exists on the remaining physical disks to reconstruct the lost data.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50002&lt;/td&gt;
-      &lt;td&gt;The virtual disk could not complete the operation because another computer controls its configuration.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50003&lt;/td&gt;
-      &lt;td&gt;The virtual disk could not complete the operation because its health or operational status does not permit it.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50004&lt;/td&gt;
-      &lt;td&gt;The virtual disk could not complete the operation because its Manual Attach status does not permit it.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50005&lt;/td&gt;
-      &lt;td&gt;The value for WriteCacheSize is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
 
-&lt;h3 id=&quot;physical-disk-errors-51000---51999&quot;&gt;Physical Disk Errors 51000 - 51999&lt;/h3&gt;
+### Partition Errors 48000 - 48999 ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51000&lt;/td&gt;
-      &lt;td&gt;One of the physical disks specified is not supported by this operation.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51001&lt;/td&gt;
-      &lt;td&gt;Not enough physical disks were specified to successfully complete the operation.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51002&lt;/td&gt;
-      &lt;td&gt;One of the physical disks specified is already in use.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51003&lt;/td&gt;
-      &lt;td&gt;One of the physical disks specified uses a sector size that is not supported by this storage pool.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51004&lt;/td&gt;
-      &lt;td&gt;One of the physical disks specified could not be removed because it is still in use.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51005&lt;/td&gt;
-      &lt;td&gt;One or more physical disks are not connected to the nodes on which the pool is being created.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value | Description |
+| --- | --- |
+| 48000 | This operation is not supported on primordial storage pools. |
+| 48001 | The storage pool is reserved for special usage only. |
+| 48002 | The specified resiliency setting is not supported by this storage pool. |
+| 48004 | There are not enough physical disks in the storage pool to create the specified virtual disk configuration. |
+| 48005 | The specified storage pool could not be found. |
+| 48006 | The storage pool could not complete the operation because its health or operational status does not permit it. |
+| 48007 | The storage pool could not complete the operation because its configuration is read-only. |
+| 48008 | The storage pool contains virtual disks. |
+| 48009 | The number of thin provisioning alert thresholds specified exceeds the limit for this storage pool. |
+| 48010 | You must specify the size info (either the Size or UseMaximumSize parameter) or the tier info (the StorageTiers and StorageTierSizes parameters), but not both size info and tier info. |
+| 48011 | No auto-allocation drives found in storage pool. |
 
-&lt;h3 id=&quot;masking-set-errors-52000---52999&quot;&gt;Masking Set Errors 52000 - 52999&lt;/h3&gt;
+### Resiliency Settings Errors 49000 - 49999 ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;52000&lt;/td&gt;
-      &lt;td&gt;The device number specified is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;52001&lt;/td&gt;
-      &lt;td&gt;The HostType requested is not supported.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;52002&lt;/td&gt;
-      &lt;td&gt;DeviceAccess must be specified for each virtual disk.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value	| Description |
+| --- | --- |
+ |49000 | No resiliency setting with that name exists. |
+ |49001 | The value for NoSinglePointOfFailure is not supported. |
+ |49002 | The value for PhysicalDiskRedundancy is outside of the supported range of values. |
+ |49003 | The value for NumberOfDataCopies is outside of the supported range of values. |
+ |49004 | The value for ParityLayout is outside of the supported range of values. |
+ |49005 | The value for Interleave is outside of the supported range of values. |
+ |49006 | The value for NumberOfColumns is outside of the supported range of values. |
 
-&lt;h3 id=&quot;initiator-id-errors-53000---53999&quot;&gt;Initiator ID Errors 53000 - 53999&lt;/h3&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;53000&lt;/td&gt;
-      &lt;td&gt;The initiator address specified is not valid&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;53001&lt;/td&gt;
-      &lt;td&gt;Only one initiator address is acceptable for this operation.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Virtual Disk Errors 50000 - 50999 ###
 
-&lt;h3 id=&quot;target-port-errors-54000---54999&quot;&gt;Target Port Errors 54000 - 54999&lt;/h3&gt;
+| Error Value	| Description |
+| --- | --- |
+| 50000 | The specified virtual disk could not be found. |
+| 50001 | Could not repair the virtual disk because too many physical disks failed. Not enough information exists on the remaining physical disks to reconstruct the lost data. |
+| 50002 | The virtual disk could not complete the operation because another computer controls its configuration. |
+| 50003 | The virtual disk could not complete the operation because its health or operational status does not permit it. |
+| 50004 | The virtual disk could not complete the operation because its Manual Attach status does not permit it. |
+| 50005 | The value for WriteCacheSize is outside of the supported range of values. |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;54000&lt;/td&gt;
-      &lt;td&gt;The target port address specified is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/en-us/library/windows/desktop/hh974359.aspx&quot;&gt;TechNet Article - Storage Management API Common Return Codes&lt;/a&gt;&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">From time to time, a Storage Spaces Direct (S2D) storage job, whether this is a Virtual Disk Repair, Physical Disk Removal or Storage Pool Rebalance/Optimization, will suspend or fail for some reason. When this happens, we need to understand why this is the case, and resolve if possible. Follow the steps below to sort it out.</summary></entry><entry><title type="html">Powering Up on Github Pages</title><link href="http://localhost:4000/jekyll/update/2018/07/21/powering-up-on-github-pages.html" rel="alternate" type="text/html" title="Powering Up on Github Pages" /><published>2018-07-21T00:00:00+10:00</published><updated>2018-07-21T00:00:00+10:00</updated><id>http://localhost:4000/jekyll/update/2018/07/21/powering-up-on-github-pages</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/07/21/powering-up-on-github-pages.html">&lt;p&gt;I’ve been recently been working on S2D and have been working on edge cases that have no online documentation. Wanting to share this knowledge I knew I had to have another crack at blogging. Thinking on how to make it work this time, I knew that the blog would have to be:&lt;/p&gt;
+### Physical Disk Errors 51000 - 51999 ###
 
-&lt;ul&gt;
-  &lt;li&gt;Free - Given the low readership, I don’t want to pay anything toward it&lt;/li&gt;
-  &lt;li&gt;Easy to use/update&lt;/li&gt;
-  &lt;li&gt;Secure&lt;/li&gt;
-  &lt;li&gt;Fast&lt;/li&gt;
-  &lt;li&gt;RSS Feed&lt;/li&gt;
-&lt;/ul&gt;
+| Error Value	| Description |
+| --- | --- |
+| 51000 | One of the physical disks specified is not supported by this operation. |
+| 51001 | Not enough physical disks were specified to successfully complete the operation. |
+| 51002 | One of the physical disks specified is already in use. |
+| 51003 | One of the physical disks specified uses a sector size that is not supported by this storage pool. |
+| 51004 | One of the physical disks specified could not be removed because it is still in use. |
+| 51005 | One or more physical disks are not connected to the nodes on which the pool is being created. |
 
-&lt;p&gt;Given all these criteria, I was aiming for a Jekyll based blog, hosted by GitHub pages. Jekyll creates static webpages using mark down. This makes it simple to use, fast as the content is static and secure as there is no ‘admin’ interface. GitHub pages is free, fast and secure.&lt;/p&gt;
 
-&lt;p&gt;Its all up and running now, it took a couple of hours. But I’m really happy with the result.&lt;/p&gt;
+### Masking Set Errors 52000 - 52999 ###
 
-&lt;p&gt;Keep posted for more blogs coming up!&lt;/p&gt;
+| Error Value	| Description |
+| --- | --- |
+ |52000 | The device number specified is not valid. |
+ |52001 | The HostType requested is not supported. |
+ |52002 | DeviceAccess must be specified for each virtual disk. |
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/poweringup/SSLPerformance.jpg&quot; alt=&quot;SSL Performance&quot; /&gt;
-&lt;img src=&quot;http://localhost:4000/assets/img/poweringup/SpeedPerformance.jpg&quot; alt=&quot;Speed Performance&quot; /&gt;&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">I’ve been recently been working on S2D and have been working on edge cases that have no online documentation. Wanting to share this knowledge I knew I had to have another crack at blogging. Thinking on how to make it work this time, I knew that the blog would have to be:</summary></entry><entry><title type="html">S4B Room System on Surface Pro 3</title><link href="http://localhost:4000/devices%20and%20endpoints/skype%20for%20business%202015/2017/02/22/s4b-room-system-on-surface-pro-3.html" rel="alternate" type="text/html" title="S4B Room System on Surface Pro 3" /><published>2017-02-22T22:01:00+10:00</published><updated>2017-02-22T22:01:00+10:00</updated><id>http://localhost:4000/devices%20and%20endpoints/skype%20for%20business%202015/2017/02/22/s4b-room-system-on-surface-pro-3</id><content type="html" xml:base="http://localhost:4000/devices%20and%20endpoints/skype%20for%20business%202015/2017/02/22/s4b-room-system-on-surface-pro-3.html">&lt;p&gt;Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (&lt;a href=&quot;https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l&quot;&gt;https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l&lt;/a&gt;)&lt;/p&gt;
 
-&lt;p&gt;The app shows 4 steps to config, I put in all the required details (After setting up a new Room System account in AD/Exch/S4B) and everything was going smoothly until I got to the last page. Please connect to a dock. WHAT?! The tablet is in the dock, whats the problem. The dock was working fine, with all peripherals attached through it.&lt;/p&gt;
+### Initiator ID Errors 53000 - 53999 ###
 
-&lt;p&gt;Lesson here, vendors can mislead through not enough information. After much researching the app will only work with:&lt;/p&gt;
+| Error Value	| Description |
+| --- | --- |
+ |53000 | The initiator address specified is not valid |
+ |53001 | Only one initiator address is acceptable for this operation. |
+
+
+### Target Port Errors 54000 - 54999 ###
+
+| Error Value	| Description |
+| --- | --- |
+|54000 |The target port address specified is not valid.|
+
+[TechNet Article - Storage Management API Common Return Codes](https://msdn.microsoft.com/en-us/library/windows/desktop/hh974359.aspx)</content><author><name>Thomas Smart</name></author><category term="blog" /><summary type="html">From time to time, a Storage Spaces Direct (S2D) storage job, whether this is a Virtual Disk Repair, Physical Disk Removal or Storage Pool Rebalance/Optimization, will suspend or fail for some reason. When this happens, we need to understand why this is the case, and resolve if possible. Follow the steps below to sort it out.</summary></entry><entry><title type="html">S4B Room System on Surface Pro 3</title><link href="http://localhost:4000/devices%20and%20endpoints/skype%20for%20business%202015/2017/02/22/s4b-room-system-on-surface-pro-3.html" rel="alternate" type="text/html" title="S4B Room System on Surface Pro 3" /><published>2017-02-22T22:01:00+11:00</published><updated>2017-02-22T22:01:00+11:00</updated><id>http://localhost:4000/devices%20and%20endpoints/skype%20for%20business%202015/2017/02/22/s4b-room-system-on-surface-pro-3</id><content type="html" xml:base="http://localhost:4000/devices%20and%20endpoints/skype%20for%20business%202015/2017/02/22/s4b-room-system-on-surface-pro-3.html">Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (&lt;a href=&quot;https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l&quot;&gt;https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l&lt;/a&gt;)
+
+The app shows 4 steps to config, I put in all the required details (After setting up a new Room System account in AD/Exch/S4B) and everything was going smoothly until I got to the last page. Please connect to a dock. WHAT?! The tablet is in the dock, whats the problem. The dock was working fine, with all peripherals attached through it.
+
+Lesson here, vendors can mislead through not enough information. After much researching the app will only work with:
 &lt;ul&gt;
 	&lt;li&gt;A Surface Pro 4 i5 (SP4's with other processors aren't supported)&lt;/li&gt;
 	&lt;li&gt;A 'Skype for Business' dock, i.e:
@@ -938,72 +551,75 @@ Error Code:	4
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Its worth noting that most distributors and vendors provide these as a package&lt;/p&gt;
+Its worth noting that most distributors and vendors provide these as a package
 
-&lt;p&gt;Its such a shame that MS have locked down the apps functionality, if you agree, please vote here: &lt;a href=&quot;https://www.skypefeedback.com/forums/299913-generally-available/suggestions/18416881-open-up-s4b-room-system-app-to-more-devices-and-do&quot;&gt;Skype for Business Feedback&lt;/a&gt;&lt;/p&gt;</content><author><name>fatguymemoirs</name></author><summary type="html">Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l)</summary></entry><entry><title type="html">Engaged tone when calling extension</title><link href="http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html" rel="alternate" type="text/html" title="Engaged tone when calling extension" /><published>2017-02-06T14:03:00+10:00</published><updated>2017-02-06T14:03:00+10:00</updated><id>http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension</id><content type="html" xml:base="http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html">&lt;p&gt;A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.&lt;/p&gt;
+Its such a shame that MS have locked down the apps functionality, if you agree, please vote here: &lt;a href=&quot;https://www.skypefeedback.com/forums/299913-generally-available/suggestions/18416881-open-up-s4b-room-system-app-to-more-devices-and-do&quot;&gt;Skype for Business Feedback&lt;/a&gt;</content><author><name>fatguymemoirs</name></author><summary type="html">Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l)</summary></entry><entry><title type="html">Engaged tone when calling extension</title><link href="http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html" rel="alternate" type="text/html" title="Engaged tone when calling extension" /><published>2017-02-06T14:03:00+11:00</published><updated>2017-02-06T14:03:00+11:00</updated><id>http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension</id><content type="html" xml:base="http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html">A client was experiencing a weird issue where an extension could call outbound, but didn't receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn't been configured, disconnected.
 
-&lt;p&gt;Comparing the CS-User to a known working extension showed no differences and there were no extension conflicts.&lt;/p&gt;
+Comparing the CS-User to a known working extension showed no differences and there were no extension conflicts.
 
-&lt;p&gt;If you are having this issue, I’d recommend the following&lt;/p&gt;
+If you are having this issue, I'd recommend the following
 
-&lt;ol&gt;
-  &lt;li&gt;Open the report server&lt;/li&gt;
-  &lt;li&gt;Click the user activity report&lt;/li&gt;
-  &lt;li&gt;Search for the user you completed the testing from &lt;img src=&quot;http://localhost:4000/assets/img/engaged-tone/sipdomain.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/li&gt;
-  &lt;li&gt;Find the call  &lt;img src=&quot;http://localhost:4000/assets/img/engaged-tone/activity.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/li&gt;
-  &lt;li&gt;Open the details of the call, then open the details for the diagnostics of the call&lt;/li&gt;
-&lt;/ol&gt;
+1. Open the report server
+2. Click the user activity report
+3. Search for the user you completed the testing from ![Screenshot]({{ site.url }}/assets/img/engaged-tone/sipdomain.png)
+4. Find the call  ![Screenshot]({{ site.url }}/assets/img/engaged-tone/activity.png)
+5. Open the details of the call, then open the details for the diagnostics of the call
 
-&lt;p&gt;In my instance, I had the error message&lt;/p&gt;
+In my instance, I had the error message
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-vbnet&quot; data-lang=&quot;vbnet&quot;&gt;The routing rules did not result in a final response and callee is not enabled for Unified Messaging&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+{% highlight vbnet %}
+The routing rules did not result in a final response and callee is not enabled for Unified Messaging
+{% endhighlight %}
+![Screenshot]({{ site.url }}/assets/img/engaged-tone/detail.png)
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/engaged-tone/detail.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/p&gt;
+[Greig from greiginsydney has seen this before and reports that it is caused by bad firmware adding an incorrect call forward rule.](https://greiginsydney.com/polycom-vvx-gives-sip480-cant-be-called/) Following Greig's steps and re-creating the AD account and Lync account resolved the issue.
+Also, [Greigs blog](https://greiginsydney.com) is beyond wizardy and you should definately check it out.</content><author><name>Thomas Smart</name></author><summary type="html">A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.</summary></entry><entry><title type="html">Polycom VVX Phone Manager Script</title><link href="http://localhost:4000/skype-for-business/2017/02/03/polycom-vvx-phone-manager-script.html" rel="alternate" type="text/html" title="Polycom VVX Phone Manager Script" /><published>2017-02-03T15:06:00+11:00</published><updated>2017-02-03T15:06:00+11:00</updated><id>http://localhost:4000/skype-for-business/2017/02/03/polycom-vvx-phone-manager-script</id><content type="html" xml:base="http://localhost:4000/skype-for-business/2017/02/03/polycom-vvx-phone-manager-script.html">James Cussen has wrote an excellent script for managing Polycom VVX phones.
 
-&lt;p&gt;&lt;a href=&quot;https://greiginsydney.com/polycom-vvx-gives-sip480-cant-be-called/&quot;&gt;Greig from greiginsydney has seen this before and reports that it is caused by bad firmware adding an incorrect call forward rule.&lt;/a&gt; Following Greig’s steps and re-creating the AD account and Lync account resolved the issue.
-Also, &lt;a href=&quot;https://greiginsydney.com&quot;&gt;Greigs blog&lt;/a&gt; is beyond wizardy and you should definately check it out.&lt;/p&gt;</content><author><name>Thomas Smart</name></author><summary type="html">A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.</summary></entry><entry><title type="html">Polycom VVX Phone Manager Script</title><link href="http://localhost:4000/skype-for-business/2017/02/03/polycom-vvx-phone-manager-script.html" rel="alternate" type="text/html" title="Polycom VVX Phone Manager Script" /><published>2017-02-03T15:06:00+10:00</published><updated>2017-02-03T15:06:00+10:00</updated><id>http://localhost:4000/skype-for-business/2017/02/03/polycom-vvx-phone-manager-script</id><content type="html" xml:base="http://localhost:4000/skype-for-business/2017/02/03/polycom-vvx-phone-manager-script.html">&lt;p&gt;James Cussen has wrote an excellent script for managing Polycom VVX phones.&lt;/p&gt;
+Its really intuitive and assist with management migrations from phone systems where endpoints and their IP addresses were easy to see (Think asterisk sip show peers). You can easily see all VVX phones that are in the monitoring DB as well as search subnets
 
-&lt;p&gt;Its really intuitive and assist with management migrations from phone systems where endpoints and their IP addresses were easy to see (Think asterisk sip show peers). You can easily see all VVX phones that are in the monitoring DB as well as search subnets&lt;/p&gt;
+![Screenshot]({{ site.url }}/assets/img/vvxmanager/VVX-utility.png)
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/vvxmanager/VVX-utility.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/p&gt;
+This tool is absolutely legendary and can be downloaded from technet
+[Here](https://gallery.technet.microsoft.com/Skype-for-Business-Lync-04884260&quot;)
 
-&lt;p&gt;This tool is absolutely legendary and can be downloaded from technet
-&lt;a href=&quot;https://gallery.technet.microsoft.com/Skype-for-Business-Lync-04884260&amp;quot;&quot;&gt;Here&lt;/a&gt;&lt;/p&gt;
+James also has a really good write up [here](http://www.myskypelab.com/2015/10/skype-for-business-lync-polycom-vvx.html&quot;) outlining all the features and usage.</content><author><name>Thomas Smart</name></author><category term="Skype-for-Business" /><category term="Lync-2013" /><category term="Polycom-VVX" /><summary type="html">James Cussen has wrote an excellent script for managing Polycom VVX phones.</summary></entry><entry><title type="html">VVX PIN Authentication Error</title><link href="http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error.html" rel="alternate" type="text/html" title="VVX PIN Authentication Error" /><published>2017-02-02T12:28:00+11:00</published><updated>2017-02-02T12:28:00+11:00</updated><id>http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error</id><content type="html" xml:base="http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error.html">I was having issues with a desk phone (Specifically a Polycom VVX310 running 5.4.0.10182) signing in to Lync 2013 with Ext/Pin. When attempting auth the phone would simply return &quot;Lync Sign in Failed&quot;. Pin Auth had been previously working and no changes to DNS or DHCP had been made and all certificates were valid.
 
-&lt;p&gt;James also has a really good write up &lt;a href=&quot;http://www.myskypelab.com/2015/10/skype-for-business-lync-polycom-vvx.html&amp;quot;&quot;&gt;here&lt;/a&gt; outlining all the features and usage.&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="Skype-for-Business" /><category term="Lync-2013" /><category term="Polycom-VVX" /><summary type="html">James Cussen has wrote an excellent script for managing Polycom VVX phones.</summary></entry><entry><title type="html">VVX PIN Authentication Error</title><link href="http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error.html" rel="alternate" type="text/html" title="VVX PIN Authentication Error" /><published>2017-02-02T12:28:00+10:00</published><updated>2017-02-02T12:28:00+10:00</updated><id>http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error</id><content type="html" xml:base="http://localhost:4000/skype-for-business/2017/02/02/pin-authentication-error.html">&lt;p&gt;I was having issues with a desk phone (Specifically a Polycom VVX310 running 5.4.0.10182) signing in to Lync 2013 with Ext/Pin. When attempting auth the phone would simply return “Lync Sign in Failed”. Pin Auth had been previously working and no changes to DNS or DHCP had been made and all certificates were valid.&lt;/p&gt;
+I cranked up the logs on the device and still couldn't see any issues. It was grabbing the CA on boot and would contact Lync and get a webticket, however the following in the log raised an eyebrow.
 
-&lt;p&gt;I cranked up the logs on the device and still couldn’t see any issues. It was grabbing the CA on boot and would contact Lync and get a webticket, however the following in the log raised an eyebrow.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 0202115811|tickt|*|00|m_validUntil [0]
+~~~~~~~~~~~
+ 0202115811|tickt|*|00|m_validUntil [0]
  0202115811|tickt|*|00|m_validityDuration [0]
  0202115811|tickt|*|00|m_bCertExists [0]
  0202115811|tickt|*|00|m_bCertExpired [1]
  0202115811|tickt|*|00|m_eErrorCode [9]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~~~~~~~~~~
 
-&lt;p&gt;Doubting the HTTPS certificate on the certificate service, I opened and confirmed that it was still valid and trusted.&lt;/p&gt;
+Doubting the HTTPS certificate on the certificate service, I opened and confirmed that it was still valid and trusted.
 
-&lt;p&gt;The next step was to test an alternate phone and an alternate site. Same issue. This points us back to the issue being Lync wide.&lt;/p&gt;
+The next step was to test an alternate phone and an alternate site. Same issue. This points us back to the issue being Lync wide.
 
-&lt;p&gt;Luckily there are a few powershell cmdlets that we can use to test the web ticket service.&lt;/p&gt;
+Luckily there are a few powershell cmdlets that we can use to test the web ticket service.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Test-CSClientAuth
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;will allow us to test NTLM authentication against the web ticket service.
- &lt;a href=&quot;https://technet.microsoft.com/en-us/library/gg398712(v=ocs.14).aspx&quot;&gt; TechNet article &lt;/a&gt;&lt;/p&gt;
+~~~~~~~~
+Test-CSClientAuth
+~~~~~~~~
+ will allow us to test NTLM authentication against the web ticket service.
+ &lt;a href=&quot;https://technet.microsoft.com/en-us/library/gg398712(v=ocs.14).aspx&quot;&gt; TechNet article &lt;/a&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Test-CSPhoneBootsrap
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~~~~
+Test-CSPhoneBootsrap
+~~~~~~~~
 
-&lt;p&gt;will allow us to test PIN/EXT auth against the web ticket service.
- &lt;a href=&quot;https://technet.microsoft.com/en-us/library/gg412852.aspx&quot;&gt;TechNet article &lt;/a&gt;&lt;/p&gt;
+ will allow us to test PIN/EXT auth against the web ticket service.
+ &lt;a href=&quot;https://technet.microsoft.com/en-us/library/gg412852.aspx&quot;&gt;TechNet article &lt;/a&gt;
 
-&lt;p&gt;When testing these directly from your lync server you will need to fill out -TargetFqdn and -TargetURI to avoid DHCP lookups/failure. You can alternatively install the module on a PC that has DHCP and test from there.&lt;/p&gt;
+When testing these directly from your lync server you will need to fill out -TargetFqdn and -TargetURI to avoid DHCP lookups/failure. You can alternatively install the module on a PC that has DHCP and test from there.
 
-&lt;p&gt;Typical usage and responses for these cmdlets:&lt;/p&gt;
+Typical usage and responses for these cmdlets:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-PS&amp;gt; Test-CsClientAuth -UserSipAddress USER@SIPDOMAIN -TargetFqdn LYNCSERVER.DOMAIN
+~~~~~~~~~~~
+
+PS&gt; Test-CsClientAuth -UserSipAddress USER@SIPDOMAIN -TargetFqdn LYNCSERVER.DOMAIN
 cmdlet Test-CsClientAuthentication at command pipeline position 1
 Supply values for the following parameters:
 UserCredential
@@ -1017,7 +633,7 @@ Error Message :
 Diagnosis :
 
 
-PS&amp;gt; Test-CsPhoneBootstrap -UserSipAddress USER@DOMAIN -PhoneOrExt &quot;EXT&quot; -PIN &quot;PIN&quot; -TargetFqdn LYNCSERVER.DOMAIN -TargetUri &quot;https://LYNCSERVER.DOMAIN:443/CertProv/CertProvisioningService.svc&quot;
+PS&gt; Test-CsPhoneBootstrap -UserSipAddress USER@DOMAIN -PhoneOrExt &quot;EXT&quot; -PIN &quot;PIN&quot; -TargetFqdn LYNCSERVER.DOMAIN -TargetUri &quot;https://LYNCSERVER.DOMAIN:443/CertProv/CertProvisioningService.svc&quot;
 
 Target Fqdn : LYNCSERVER.DOMAIN
 Target Uri : https://LYNCSERVER.DOMAIN:443/CertProv/CertProvisioningService.svc
@@ -1042,10 +658,10 @@ Diagnosis :
  WWW-Authenticate : Basic realm =&quot;LYNC&quot;
  X-Powered-By : ASP.NET
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~~~~~~~
 
-&lt;p&gt;As you can see above, the reason reported back was invalid pin. In my case I wasn’t getting a response from the web-ticket at all (Above shown as demonstration)&lt;/p&gt;
+As you can see above, the reason reported back was invalid pin. In my case I wasn't getting a response from the web-ticket at all (Above shown as demonstration)
 
-&lt;p&gt;So the issue was with the web service not responding. I restarted the internal web service within IIS and tested again. This resolved the issue and users were able to use ext/pin sign in again.&lt;/p&gt;
+So the issue was with the web service not responding. I restarted the internal web service within IIS and tested again. This resolved the issue and users were able to use ext/pin sign in again.
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/pinauth/restart-iis.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="Skype-for-Business" /><category term="Lync-2013" /><category term="Polycom-VVX" /><summary type="html">I was having issues with a desk phone (Specifically a Polycom VVX310 running 5.4.0.10182) signing in to Lync 2013 with Ext/Pin. When attempting auth the phone would simply return “Lync Sign in Failed”. Pin Auth had been previously working and no changes to DNS or DHCP had been made and all certificates were valid.</summary></entry></feed>
+![Screenshot]({{ site.url }}/assets/img/pinauth/restart-iis.png)</content><author><name>Thomas Smart</name></author><category term="Skype-for-Business" /><category term="Lync-2013" /><category term="Polycom-VVX" /><summary type="html">I was having issues with a desk phone (Specifically a Polycom VVX310 running 5.4.0.10182) signing in to Lync 2013 with Ext/Pin. When attempting auth the phone would simply return “Lync Sign in Failed”. Pin Auth had been previously working and no changes to DNS or DHCP had been made and all certificates were valid.</summary></entry></feed>
