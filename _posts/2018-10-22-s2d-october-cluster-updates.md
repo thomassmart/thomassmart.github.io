@@ -31,7 +31,7 @@ es may drop out of cluster membership.
 * Addresses an issue that depletes the storage space on a cluster-shared volume (CSV) because of a Hyper-V virtual hard disk (VHDX) expansion. As a result, a Virtual Machine (VM) might continue writing data to its disk until it becomes c
 orrupted or stops working. The VM might also restart and then resume writing data until a corruption occurs.
 
-Wow! Thats a lot of goodies!
+Wow! That's a lot of goodies!
 
 ## Installation
 
