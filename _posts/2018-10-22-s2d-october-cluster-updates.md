@@ -21,7 +21,9 @@ If you are already running Windows Server 2019, you'll have to wait for the next
 The specific fixes are:
 
 * Addresses an issue that occurs when using multiple Windows Server 2016 Hyper-V clusters. The following event appears in the log:
+
 “Cluster Shared Volume 'CSVName' ('CSVName') has entered a paused state because of 'STATUS_USER_SESSION_DELETED(c0000203)'. All I/O will temporarily be queued until a path to the volume is reestablished.”
+
 * Addresses an issue that may cause the creation of a single node cluster or the addition of more nodes to a cluster to fail intermittently.
 * Addresses an issue that occurs when restarting a node after draining the node. Event ID 5120 appears in the log with a “STATUS_IO_TIMEOUT c00000b5” message. This may slow or stop input and output (I/O) to the VMs, and sometimes the nod
 es may drop out of cluster membership.
