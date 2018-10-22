@@ -17,6 +17,7 @@ cayman-blog:
   date_format: "%b %-d, %Y"
 
 theme: # leave it empty
+
 twitter:
   username: TomSmartSyd
 

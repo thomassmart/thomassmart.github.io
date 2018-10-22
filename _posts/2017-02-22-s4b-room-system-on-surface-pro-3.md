@@ -2,9 +2,8 @@
 layout: post
 title: S4B Room System on Surface Pro 3
 date: 2017-02-22 22:01
-author: fatguymemoirs
 comments: true
-categories: [Devices and Endpoints, Skype for Business 2015]
+tags: Skype-For-Business Conference-System
 ---
 Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (<a href="https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l">https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l</a>)
 

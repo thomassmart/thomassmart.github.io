@@ -4,7 +4,7 @@ title: "Engaged tone when calling extension"
 date: 2017-02-06 14:03
 author: "Thomas Smart"
 comments: false
-categories: [Authentication, Lync-2013, Polycom-VVX]
+tags: Skype-For-Business Polycom-VVX
 ---
 A client was experiencing a weird issue where an extension could call outbound, but didn't receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn't been configured, disconnected.
 

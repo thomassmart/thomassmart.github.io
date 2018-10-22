@@ -701,7 +701,7 @@ body {
   color: #606c71; }
 
 a {
-  color: #1e6bb8;
+  color: #f67511;
   text-decoration: none; }
   a:hover {
     text-decoration: underline; }
@@ -756,24 +756,6 @@ a {
   @media screen and (max-width: 42em) {
     .page-header {
       padding: 2rem 1rem; } }
-
-h1.project-name {
-  background-color: rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5); }
-
-h2.project-tagline {
-  background-color: rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5); }
-
-h2.project-date {
-  background-color: rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5); }
 
 .input, textarea {
   font-size: 0.8em;
@@ -853,7 +835,7 @@ h2.project-date {
     margin-top: 0; }
   @media screen and (min-width: 64em) {
     .main-content {
-      max-width: 64rem;
+      max-width: 80rem;
       padding: 3rem 6rem;
       margin: 0 auto;
       font-size: 1.1rem; } }

@@ -2,8 +2,7 @@
 layout: post
 title:  "Hyper-V CPU Scheduler Types"
 date:   2018-10-07
-categories: hyper-v cpu-scheduler
-tags: blog
+tags: hyper-v cpu-scheduler server-2016 server-2019
 published: false
 ---
 

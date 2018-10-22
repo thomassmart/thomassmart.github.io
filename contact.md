@@ -1,10 +1,8 @@
 ---
 layout: page
 title: Contact
-tagline: Create a contact form and you are good to go
+tagline: You want to talk to me?
 ---
-
-You want to talk to me?
 
 <img src="{{ site.url }}/assets/img/cutnessoverload.png" alt="Cutness Overload" style="width: 350px; display: block; margin-left: auto; margin-right: auto;
 webkit-border-radius: 50em;

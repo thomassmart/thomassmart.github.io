@@ -2,8 +2,7 @@
 layout: post
 title:  "Powering Up on Github Pages"
 date:   2018-07-21
-categories: jekyll update
-tags: blog
+tags: jekyll github-pages
 ---
 I've been recently been working on S2D and have been working on edge cases that have no online documentation. Wanting to share this knowledge I knew I had to have another crack at blogging. Thinking on how to make it work this time, I knew that the blog would have to be:
 

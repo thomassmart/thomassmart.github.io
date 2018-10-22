@@ -2,8 +2,7 @@
 layout: post
 title:  "S2D Cluster Updates - May 2018"
 date:   2018-10-05
-categories: storagespacesdirect s2d cluster hyper-converged windows-update
-tags: blog
+tags:  s2d hyper-v failover-cluster server-2016 windows-updates
 ---
 
 There is nothing more frustrating that doing all possible due diligence, raising the relevant Change Requests, completing testing, just to have a routine Windows Update fail.

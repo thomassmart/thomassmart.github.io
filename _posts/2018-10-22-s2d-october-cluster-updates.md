@@ -2,8 +2,7 @@
 layout: post
 title:  "S2D Cluster Updates - October 2018"
 date:   2018-10-22
-categories: storagespacesdirect s2d cluster hyper-converged windows-update
-tags: blog
+tags:  s2d hyper-v failover-cluster server-2016 windows-updates
 ---
 
 
@@ -22,14 +21,15 @@ The specific fixes are:
 
 * Addresses an issue that occurs when using multiple Windows Server 2016 Hyper-V clusters. The following event appears in the log:
 
-“Cluster Shared Volume 'CSVName' ('CSVName') has entered a paused state because of 'STATUS_USER_SESSION_DELETED(c0000203)'. All I/O will temporarily be queued until a path to the volume is reestablished.”
+>  “Cluster Shared Volume 'CSVName' ('CSVName') has entered a paused state because of 'STATUS_USER_SESSION_DELETED(c0000203)'. All I/O will temporarily be queued until a path to the volume is reestablished.”
 
 * Addresses an issue that may cause the creation of a single node cluster or the addition of more nodes to a cluster to fail intermittently.
-* Addresses an issue that occurs when restarting a node after draining the node. Event ID 5120 appears in the log with a “STATUS_IO_TIMEOUT c00000b5” message. This may slow or stop input and output (I/O) to the VMs, and sometimes the nod
-es may drop out of cluster membership.
+
+* Addresses an issue that occurs when restarting a node after draining the node. Event ID 5120 appears in the log with a “STATUS_IO_TIMEOUT c00000b5” message. This may slow or stop input and output (I/O) to the VMs, and sometimes the nodes may drop out of cluster membership.
+
 * Addresses memory leak issues on svchost.exe (netsvcs and IP Helper Service).
-* Addresses an issue that depletes the storage space on a cluster-shared volume (CSV) because of a Hyper-V virtual hard disk (VHDX) expansion. As a result, a Virtual Machine (VM) might continue writing data to its disk until it becomes c
-orrupted or stops working. The VM might also restart and then resume writing data until a corruption occurs.
+
+* Addresses an issue that depletes the storage space on a cluster-shared volume (CSV) because of a Hyper-V virtual hard disk (VHDX) expansion. As a result, a Virtual Machine (VM) might continue writing data to its disk until it becomes corrupted or stops working. The VM might also restart and then resume writing data until a corruption occurs.
 
 Wow! That's a lot of goodies!
 
