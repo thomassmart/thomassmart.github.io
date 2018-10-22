@@ -743,10 +743,8 @@ a {
 .page-header {
   color: #fff;
   text-align: center;
-  background-image: url("/assets/img/cover.jpg");
-  background-size: 100% auto;
-  background-repeat: no-repeat;
-  background-color: #000000; }
+  background-color: #ef7f2a;
+  background-image: linear-gradient(120deg, #b92f2d, #ef7f2a); }
   @media screen and (min-width: 64em) {
     .page-header {
       padding: 5rem 6rem; } }
