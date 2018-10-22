@@ -42,7 +42,7 @@
 <meta itemprop="name" content="Engaged tone when calling extension">
 <meta itemprop="description" content="A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy to...">
 
-  <meta itemprop="image" content="http://localhost:4000/assets/img/logo.png">
+  <meta itemprop="image" content="http://0.0.0.0:80/assets/img/logo.png">
 
 
 <!-- Twitter Card data -->
@@ -57,17 +57,17 @@
 
 <!-- Twitter summary card with large image must be at least 280x150px -->
 
-  <meta name="twitter:image:src" content="http://localhost:4000/assets/img/logo.png">
-  <meta property="twitter:image" content="http://localhost:4000/assets/img/logo.png">
+  <meta name="twitter:image:src" content="http://0.0.0.0:80/assets/img/logo.png">
+  <meta property="twitter:image" content="http://0.0.0.0:80/assets/img/logo.png">
 
-<meta property="twitter:url" content="http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html">
+<meta property="twitter:url" content="http://0.0.0.0:80/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html">
 
 <!-- Open Graph data -->
 <meta property="og:title" content="Engaged tone when calling extension" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html" />
+<meta property="og:url" content="http://0.0.0.0:80/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html" />
 
-  <meta property="og:image" content="http://localhost:4000/assets/img/logo.png" />
+  <meta property="og:image" content="http://0.0.0.0:80/assets/img/logo.png" />
 
 <meta property="og:description" content="A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy to..." />
 <meta property="og:site_name" content="Tom Blogs" />
@@ -106,11 +106,11 @@
 
     
 
-    <link rel="canonical" href="http://localhost:4000/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html">
+    <link rel="canonical" href="http://0.0.0.0/authentication/lync-2013/polycom-vvx/2017/02/06/engaged-tone-when-calling-extension.html">
 
     
 
-    <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+    <link rel="shortcut icon" href="http://0.0.0.0:80/favicon.ico">
     <meta name="robots" content="noarchive">
 
     <!-- <link rel="alternate" media="only screen and (max-width: 640px)" href="">
@@ -239,8 +239,8 @@
 <ol>
   <li>Open the report server</li>
   <li>Click the user activity report</li>
-  <li>Search for the user you completed the testing from <img src="http://localhost:4000/assets/img/engaged-tone/sipdomain.png" alt="Screenshot" /></li>
-  <li>Find the call  <img src="http://localhost:4000/assets/img/engaged-tone/activity.png" alt="Screenshot" /></li>
+  <li>Search for the user you completed the testing from <img src="http://0.0.0.0:80/assets/img/engaged-tone/sipdomain.png" alt="Screenshot" /></li>
+  <li>Find the call  <img src="http://0.0.0.0:80/assets/img/engaged-tone/activity.png" alt="Screenshot" /></li>
   <li>Open the details of the call, then open the details for the diagnostics of the call</li>
 </ol>
 
@@ -248,7 +248,7 @@
 
 <figure class="highlight"><pre><code class="language-vbnet" data-lang="vbnet">The routing rules did not result in a final response and callee is not enabled for Unified Messaging</code></pre></figure>
 
-<p><img src="http://localhost:4000/assets/img/engaged-tone/detail.png" alt="Screenshot" /></p>
+<p><img src="http://0.0.0.0:80/assets/img/engaged-tone/detail.png" alt="Screenshot" /></p>
 
 <p><a href="https://greiginsydney.com/polycom-vvx-gives-sip480-cant-be-called/">Greig from greiginsydney has seen this before and reports that it is caused by bad firmware adding an incorrect call forward rule.</a> Following Greig’s steps and re-creating the AD account and Lync account resolved the issue.
 Also, <a href="https://greiginsydney.com">Greigs blog</a> is beyond wizardy and you should definately check it out.</p>
