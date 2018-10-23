@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Hyper-V CPU Scheduler Types"
-date:   2018-10-07
+date:   2018-10-23
 tags: hyper-v cpu-scheduler server-2016 server-2019
 published: false
 ---
@@ -77,23 +77,83 @@ The OS' base Cinebench score is *764*
 
 The steps in each run process was to:
 1. Start the required number of VM's
+
 2. Login to every console and open Cinebench
+
 3. Click the start on Cinebench in each VM as close as possible.
+
 ![ Hyper-V Starting Cinebench ]({{ site.url }}/assets/img/cpuscheduler/run-shot.png)
+
 4. Wait and record results for each pass
 
 ### Classic scheduler
-The classic scheduler has been the default CPU scheduler since the Hyper-V inception up until Server 2019. The classic scheduler offers the highest performance variability. VP's can be assigned to any LP's. This results in a higher availability for VP's to execute operations when LP's are available.
+The classic scheduler has been the default CPU scheduler since the Hyper-V inception, up until Server 2019. The classic scheduler offers the highest performance variability. VP's can be assigned to any LP's. This results in a higher availability for VP's to execute operations when LP's are available.
 
 #### Results
 
+| CPU Contention Ratio | Number of VM's | Virtual Processors (VP) | Average Cinebench Score | Cumulative Score |
+| ----- | ----- | ----- | ----- | ----- |
+| 0.25:1 | 1 | 4 | 304 | 304 |
+| 0.5:1 | 2 | 8 |302 | 603 |
+| 0.75:1 | 3 | 12 | 215 | 646 |
+| 1:1 | 4 | 16 | 194 | 776 |
+| 1.5:1 | 6 | 24 | 127 | 764 |
+| 2:1 | 8 | 32 | 91 | 731 |
+| 4:1 | 16 | 64 | 40 | 646 |
+
+![ Cinebench Classic Scheduler Results ]({{ site.url }}/assets/img/cpuscheduler/classic-results.png)
 
 ### Core Scheduler - SMT Enabled
+The classic scheduler has been the default CPU scheduler since the Hyper-V inception, up until Server 2019. The classic scheduler offers the highest performance variability. VP's can be assigned to any LP's. This results in a higher availability for VP's to execute operations when LP's are available.
+
+#### Results
+
+| CPU Contention Ratio | Number of VM's | Virtual Processors (VP) | Average Cinebench Score | Cumulative Score |
+| ----- | ----- | ----- | ----- | ----- |
+| 0.25:1 | 1 | 4 | 304 | 304 |
+| 0.5:1 | 2 | 8 |302 | 603 |
+| 0.75:1 | 3 | 12 | 215 | 646 |
+| 1:1 | 4 | 16 | 194 | 776 |
+| 1.5:1 | 6 | 24 | 127 | 764 |
+| 2:1 | 8 | 32 | 91 | 731 |
+| 4:1 | 16 | 64 | 40 | 646 |
+
+![ Cinebench Classic Scheduler Results ]({{ site.url }}/assets/img/cpuscheduler/classic-results.png)
 
 ### Core Scheduler - SMT Disabled
+The classic scheduler has been the default CPU scheduler since the Hyper-V inception, up until Server 2019. The classic scheduler offers the highest performance variability. VP's can be assigned to any LP's. This results in a higher availability for VP's to execute operations when LP's are available.
+
+#### Results
+
+| CPU Contention Ratio | Number of VM's | Virtual Processors (VP) | Average Cinebench Score | Cumulative Score |
+| ----- | ----- | ----- | ----- | ----- |
+| 0.25:1 | 1 | 2 | 153 | 153 |
+| 0.5:1 | 2 | 4 | 151 | 302 |
+| 0.75:1 | 3 | 6 | 151 | 454 |
+| 1:1 | 4 | 8 | 151 | 602 |
+| 1.5:1 | 6 | 12 | 91 | 543 |
+| 2:1 | 8 | 16 | 71 | 570 |
+| 4:1 | 16 | 32 | 30 | 473 |
+
+![ Cinebench Classic Scheduler Results ]({{ site.url }}/assets/img/cpuscheduler/classic-results.png)
 
 ### Comparison
+Key Points:
+* klakdja
+* akljda
+
 
 ## What am I running?
+Want to know what scheduler you are running? Powershell!
+~~~~~
+Get-WinEvent -FilterHashTable @{ProviderName="Microsoft-Windows-Hyper-V-Hypervisor"; ID=2} | select -First 1
+~~~~~
+![Get-WinEvent -FilterHashTable @{ProviderName="Microsoft-Windows-Hyper-V-Hypervisor"; ID=2} | select -First 1]({{ site.url }}/assets/img/cpuscheduler/change-scheduler.png)
 
 ## How do I change scheduler?
+Changing scheduler is currently done through editing boot records via bcdedit.
+
+~~~~~~
+ bcdedit /set hypervisorschedulertype (Classic|Core)
+~~~~~~
+![Get-WinEvent -FilterHashTable @{ProviderName="Microsoft-Windows-Hyper-V-Hypervisor"; ID=2} | select -First 1]({{ site.url }}/assets/img/cpuscheduler/core-change.png)

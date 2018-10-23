@@ -8,5 +8,3 @@ permalink: /tags.html
 # Tags!
 
 {% include tag-cloud.html %}
-
-![tags](http://www.hilariousgifs.com/i/qrLEV.gif)

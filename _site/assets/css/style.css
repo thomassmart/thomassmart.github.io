@@ -833,20 +833,23 @@ a {
     margin-top: 0; }
   @media screen and (min-width: 64em) {
     .main-content {
-      max-width: 80rem;
+      max-width: 90rem;
       padding: 3rem 6rem;
       margin: 0 auto;
-      font-size: 1.1rem; } }
+      font-size: 1rem; } }
   @media screen and (min-width: 42em) and (max-width: 64em) {
     .main-content {
       padding: 3rem 4rem;
-      font-size: 1.1rem; } }
+      font-size: 1rem; } }
   @media screen and (max-width: 42em) {
     .main-content {
       padding: 2rem 1rem;
       font-size: 1rem; } }
   .main-content img {
-    max-width: 100%; }
+    max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; }
   .main-content h1,
   .main-content h2,
   .main-content h3,
