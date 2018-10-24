@@ -4,7 +4,7 @@ layout: post
 title: "Polycom VVX Phone Manager Script"
 author: "Thomas Smart"
 comments: false
-tags: Skype-for-Business  Polycom-VVX
+tags: Skype-For-Business  Polycom-VVX
 ---
 James Cussen has wrote an excellent script for managing Polycom VVX phones.
 

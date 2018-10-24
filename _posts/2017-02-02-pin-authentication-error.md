@@ -4,7 +4,7 @@ title: "VVX PIN Authentication Error"
 date: 2017-02-02 12:28
 author: "Thomas Smart"
 comments: false
-tags: Skype-for-Business Polycom-VVX
+tags: Skype-For-Business Polycom-VVX
 ---
 
 I was having issues with a desk phone (Specifically a Polycom VVX310 running 5.4.0.10182) signing in to Lync 2013 with Ext/Pin. When attempting auth the phone would simply return "Lync Sign in Failed". Pin Auth had been previously working and no changes to DNS or DHCP had been made and all certificates were valid.
