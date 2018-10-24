@@ -6,7 +6,7 @@ author: "Thomas Smart"
 comments: false
 tags: Skype-For-Business Polycom-VVX
 ---
-A client was experiencing a weird issue where an extension could call outbound, but didn't receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn't been configured, disconnected.
+Recently, I encountered a weird issue where an extension could call outbound, but didn't receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn't been configured, disconnected.
 
 Comparing the CS-User to a known working extension showed no differences and there were no extension conflicts.
 

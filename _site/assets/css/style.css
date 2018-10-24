@@ -570,16 +570,16 @@ th {
  * Wrapper
  */
 .wrapper {
-  max-width: -webkit-calc(54em - (30px * 2));
-  max-width: calc(54em - (30px * 2));
+  max-width: -webkit-calc(80em - (30px * 2));
+  max-width: calc(80em - (30px * 2));
   margin-right: auto;
   margin-left: auto;
   padding-right: 30px;
   padding-left: 30px; }
   @media screen and (max-width: 54em) {
     .wrapper {
-      max-width: -webkit-calc(54em - (30px));
-      max-width: calc(54em - (30px));
+      max-width: -webkit-calc(80em - (30px));
+      max-width: calc(80em - (30px));
       padding-right: 15px;
       padding-left: 15px; } }
 

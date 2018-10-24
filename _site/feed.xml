@@ -1,356 +1,136 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-10-23T22:42:09+11:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Tom Blogs</title><subtitle>A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans</subtitle><author><name>Thomas Smart</name></author><entry><title type="html">Hyper-V CPU Scheduler Types</title><link href="http://localhost:4000/2018/10/23/Hyper-V-CPU-Scheduler.html" rel="alternate" type="text/html" title="Hyper-V CPU Scheduler Types" /><published>2018-10-23T00:00:00+11:00</published><updated>2018-10-23T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/23/Hyper-V-CPU-Scheduler</id><content type="html" xml:base="http://localhost:4000/2018/10/23/Hyper-V-CPU-Scheduler.html">&lt;p&gt;Recent security vulnerabilities within CPU’s have resulted in a need to change some fundamental CPU scheduling within Hyper-V so to keep VM’s secure. &lt;a href=&quot;https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/manage/manage-hyper-v-scheduler-types&quot;&gt;Microsoft has an article outlining the different schedulers now available&lt;/a&gt;. This blog article is to help with understanding the schedulers, how they work and perform, as well a briefly explaining how Hyper-V virtualises CPU resources.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-10-24T13:11:29+11:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Tom Blogs</title><subtitle>A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans</subtitle><author><name>Thomas Smart</name></author><entry><title type="html">Hyper-V CPU Scheduler Types</title><link href="http://localhost:4000/2018/10/23/Hyper-V-CPU-Scheduler.html" rel="alternate" type="text/html" title="Hyper-V CPU Scheduler Types" /><published>2018-10-23T00:00:00+11:00</published><updated>2018-10-23T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/23/Hyper-V-CPU-Scheduler</id><content type="html" xml:base="http://localhost:4000/2018/10/23/Hyper-V-CPU-Scheduler.html">Recent security vulnerabilities within CPU's have resulted in a need to change some fundamental CPU scheduling within Hyper-V so to keep VM's secure. [Microsoft has an article outlining the different schedulers now available](https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/manage/manage-hyper-v-scheduler-types). This blog article is to help with understanding the schedulers, how they work and perform, as well a briefly explaining how Hyper-V virtualises CPU resources.
 
-&lt;h1 id=&quot;partitions&quot;&gt;Partitions&lt;/h1&gt;
+# Partitions
 
-&lt;p&gt;When Hyper-V is installed in server OS, the way that Windows handles CPU operations changes significantly. Once the role is installed, workloads a separated into ‘Partitions’ and the CPU operations within these partitions are sent to the hypervisor scheduler. Partitioning allows to keep each VM within their own container, excluding them from being aware of each other. When a VM is powered on, the hypervisor creates a child partition, for that VM. The Hyper-V host is created a root partition by the hypervisor at OS boot.&lt;/p&gt;
+When Hyper-V is installed in server OS, the way that Windows handles CPU operations changes significantly. Once the role is installed, workloads a separated into 'Partitions' and the CPU operations within these partitions are sent to the hypervisor scheduler. Partitioning allows to keep each VM within their own container, excluding them from being aware of each other. When a VM is powered on, the hypervisor creates a child partition, for that VM. The Hyper-V host is created a root partition by the hypervisor at OS boot.
 
-&lt;p&gt;This is best described in the image below&lt;/p&gt;
+This is best described in the image below
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/Partitions.png&quot; alt=&quot; Child and Parent Partition Hyper-V &quot; /&gt;&lt;/p&gt;
+![ Child and Parent Partition Hyper-V ]({{ site.url }}/assets/img/cpuscheduler/Partitions.png)
 
-&lt;p&gt;The Hyper-V Host root partition is in fact a VM! It is worth mentioning, that this root partition has significantly more privileges than that of a standard VM. The root partition  also orchestrates management of VM (Through the VM worker processes and VM Management Service). Partitions are managed by the hypervisor.&lt;/p&gt;
+The Hyper-V Host root partition is in fact a VM! It is worth mentioning, that this root partition has significantly more privileges than that of a standard VM. The root partition  also orchestrates management of VM (Through the VM worker processes and VM Management Service). Partitions are managed by the hypervisor.
 
-&lt;h1 id=&quot;cpu-scheduler&quot;&gt;CPU Scheduler&lt;/h1&gt;
+# CPU Scheduler
 
-&lt;p&gt;Up until now there has only been a single, ‘fair share’ scheduler. The scheduler takes the CPU operations from the partition’s CPU Virtual Processors (VP’s) and distributes them to the host’s physical logical processors (LP’s). The scheduler resides within the hypervisor level in the above image.&lt;/p&gt;
+Up until now there has only been a single, 'fair share' scheduler. The scheduler takes the CPU operations from the partition's CPU Virtual Processors (VP's) and distributes them to the host's physical logical processors (LP's). The scheduler resides within the hypervisor level in the above image.
 
-&lt;p&gt;The fair share scheduler has served us well for many years, with its round robing sharing mechanism. Unfortunately the scheduler relies on assuming that each LP is completely isolated from each other LP.&lt;/p&gt;
+The fair share scheduler has served us well for many years, with its round robing sharing mechanism. Unfortunately the scheduler relies on assuming that each LP is completely isolated from each other LP.
 
-&lt;p&gt;Simultaneous multithreading (SMT), which is also known as Hyper-Threading in Intel World, allows processors to parallelise operations from multiple threads, this results in a an increase in modest performance.&lt;/p&gt;
+Simultaneous multithreading (SMT), which is also known as Hyper-Threading in Intel World, allows processors to parallelise operations from multiple threads, this results in a an increase in modest performance.
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/hyperthreading.png&quot; alt=&quot;Simultaneous multithreading SMT Hyper Threading Hyper-V &quot; /&gt;&lt;/p&gt;
+![Simultaneous multithreading SMT Hyper Threading Hyper-V ]({{ site.url }}/assets/img/cpuscheduler/hyperthreading.png)
 
-&lt;p&gt;In recent times SMT has suffered from some serious security vulnerabilities that no longer allows us to assume that VM’s VP’s are isolated once sent to the Host’s LP’s. Some of the most notable recent vulnerabilities are:&lt;/p&gt;
+ In recent times SMT has suffered from some serious security vulnerabilities that no longer allows us to assume that VM's VP's are isolated once sent to the Host's LP's. Some of the most notable recent vulnerabilities are:
 
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.intel.com/content/www/us/en/architecture-and-technology/l1tf.html&quot;&gt;Intel L1 Terminal Fault (L1TF)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://meltdownattack.com/&quot;&gt;Meltdown and Spectre&lt;/a&gt; - Which affects many vendors, Intel and AMD included.&lt;/li&gt;
-&lt;/ul&gt;
+ * [Intel L1 Terminal Fault (L1TF)](https://www.intel.com/content/www/us/en/architecture-and-technology/l1tf.html)
+ * [Meltdown and Spectre](https://meltdownattack.com/) - Which affects many vendors, Intel and AMD included.
 
-&lt;p&gt;Microsoft has worked with vendors to resolve these issues. Numerous Windows Updates, often containing CPU microcode ,attempting to resolve the critical vulnerabilities have been released. Regardless of if these issues are 100% resolved, we can no longer assume that the CPU is secure enough to handle sensitive workloads when virtualising.&lt;/p&gt;
+Microsoft has worked with vendors to resolve these issues. Numerous Windows Updates, often containing CPU microcode ,attempting to resolve the critical vulnerabilities have been released. Regardless of if these issues are 100% resolved, we can no longer assume that the CPU is secure enough to handle sensitive workloads when virtualising.
 
-&lt;p&gt;Microsoft has recognised this, and has created new CPU schedulers. These new CPU hypervisor schedulers are available within Update 2018.07 C on Server 2016, Server 2019 and Windows 10..&lt;/p&gt;
+Microsoft has recognised this, and has created new CPU schedulers. These new CPU hypervisor schedulers are available within Update 2018.07 C on Server 2016, Server 2019 and Windows 10..
 
-&lt;p&gt;The new schedulers are:&lt;/p&gt;
+The new schedulers are:
 
-&lt;ul&gt;
-  &lt;li&gt;‘Classic’  - Traditional round robin scheduler that we all know&lt;/li&gt;
-  &lt;li&gt;‘Core’     - Offers stronger boundries through the constraining of VP’s to LP’s.&lt;/li&gt;
-  &lt;li&gt;‘Root’      - Default in, and only recommended for, Windows 10. The scheduling is handled by the root partition, rather than the hypervisor. This allows for windows&lt;/li&gt;
-&lt;/ul&gt;
+* 'Classic'  - Traditional round robin scheduler that we all know
+* 'Core'     - Offers stronger boundries through the constraining of VP's to LP's.
+* 'Root'      - Default in, and only recommended for, Windows 10. The scheduling is handled by the root partition, rather than the hypervisor. This allows for windows
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;CPU Scheduler Type&lt;/th&gt;
-      &lt;th&gt;Performance&lt;/th&gt;
-      &lt;th&gt;Security&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;‘Classic’&lt;/td&gt;
-      &lt;td&gt;Good, allows for generous over-subscription and performance&lt;/td&gt;
-      &lt;td&gt;Low - SMT is utilised and though workloads are in separated partitions, the partition VP’s can run parallelized on LP’s. This could result in one partition being privvy to the operations of a different partition&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Core Scheduler - Host SMT Enabled&lt;/td&gt;
-      &lt;td&gt;Reduced compared to Classic, due to VP’s being bound to LPs. SMT is exposed to the VM&lt;/td&gt;
-      &lt;td&gt;Stronger as child partitions VP’s are isolated for all other partitions VP’s and are assigned to LP’s for operations&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Core Scheduler - Host SMT Disabled&lt;/td&gt;
-      &lt;td&gt;Roughly 1/2 compared to that of the classic scheduler.&lt;/td&gt;
-      &lt;td&gt;Stronger again as operations within the child partition can’t leak across VP’s within the same partition&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Root Scheduler&lt;/td&gt;
-      &lt;td&gt;I didn’t benchmark this, however my understanding is that it would be lower than that of either core or classic.&lt;/td&gt;
-      &lt;td&gt;Child partitions are exposed to the root partition,  workload can be analysed by Windows Defender Application Guard, so your call on this one.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| CPU Scheduler Type | Performance | Security |
+| ----- | ----- | ----- |
+| 'Classic' | Good, allows for generous over-subscription and performance  | Low - SMT is utilised and though workloads are in separated partitions, the partition VP's can run parallelized on LP's. This could result in one partition being privvy to the operations of a different partition |
+| Core Scheduler - Host SMT Enabled | Reduced compared to Classic, due to VP's being bound to LPs. SMT is exposed to the VM | Stronger as child partitions VP's are isolated for all other partitions VP's and are assigned to LP's for operations |
+| Core Scheduler - Host SMT Disabled | Roughly 1/2 compared to that of the classic scheduler.  | Stronger again as operations within the child partition can't leak across VP's within the same partition |
+| Root Scheduler | I didn't benchmark this, however my understanding is that it would be lower than that of either core or classic. | Child partitions are exposed to the root partition,  workload can be analysed by Windows Defender Application Guard, so your call on this one. |
 
-&lt;h2 id=&quot;performance-testings&quot;&gt;Performance Testings&lt;/h2&gt;
-&lt;p&gt;Test bench - HPE DL380 G7 (Old, but available)&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;2 x Intel Xeon E5630 - 2.53 Ghz.
-    &lt;ul&gt;
-      &lt;li&gt;Quad core&lt;/li&gt;
-      &lt;li&gt;Hyperthreading capable&lt;/li&gt;
-      &lt;li&gt;Total of 16 Logical Processors (LP’s) when SMT Enabled.&lt;/li&gt;
-      &lt;li&gt;Total of 8 Logical Processors (LP’s) when SMT Disabled.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;112 GB RAM&lt;/li&gt;
-  &lt;li&gt;4 x 10k 120GB HDD’s in RAID 1+0&lt;/li&gt;
-  &lt;li&gt;Windows Server 2016 - 1607&lt;/li&gt;
-  &lt;li&gt;16 Virtual Machines
-    &lt;ul&gt;
-      &lt;li&gt;4 VP’s when host SMT is enabled.&lt;/li&gt;
-      &lt;li&gt;2 VP’s when host SMT is disabled.&lt;/li&gt;
-      &lt;li&gt;4GB RAM&lt;/li&gt;
-      &lt;li&gt;Windows Server 2016 - 1607&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
 
-&lt;p&gt;All test performed by using &lt;a href=&quot;https://www.maxon.net/en/products/cinebench/&quot;&gt;Matrox Cinebench R17&lt;/a&gt; for its simple usage, and single value scoring.&lt;/p&gt;
+# Performance Testings
+Test bench - HPE DL380 G7 (Old, but available)
+* 2 x Intel Xeon E5630 - 2.53 Ghz.
+  * Quad core
+  * Hyperthreading capable
+  * Total of 16 Logical Processors (LP's) when SMT Enabled.
+  * Total of 8 Logical Processors (LP's) when SMT Disabled.
+* 112 GB RAM
+* 4 x 10k 120GB HDD's in RAID 1+0
+* Windows Server 2016 - 1607
+* 16 Virtual Machines
+  * 4 VP's when host SMT is enabled.
+  * 2 VP's when host SMT is disabled.
+  * 4GB RAM
+  * Windows Server 2016 - 1607
 
-&lt;p&gt;Testing is based on VP:LP ratio. This meant that when SMT was disabled, the VP’s presented through to VM’s were halved.&lt;/p&gt;
+All test performed by using [Matrox Cinebench R17](https://www.maxon.net/en/products/cinebench/) for its simple usage, and single value scoring.
 
-&lt;p&gt;The OS’ base Cinebench score is &lt;em&gt;764&lt;/em&gt;&lt;/p&gt;
+Testing is based on VP:LP ratio. This meant that when SMT was disabled, the VP's presented through to VM's were halved.
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/host-score.png&quot; alt=&quot; Cinebench SMT Hyper-V &quot; /&gt;&lt;/p&gt;
+The OS' base Cinebench score is *764*
 
-&lt;p&gt;The steps in each run process was to:&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Start the required number of VM’s&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Login to every console and open Cinebench&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Click the start on Cinebench in each VM as close as possible.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
+![ Cinebench SMT Hyper-V ]({{ site.url }}/assets/img/cpuscheduler/host-score.png)
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/run-shot.png&quot; alt=&quot; Hyper-V Starting Cinebench &quot; /&gt;&lt;/p&gt;
+The steps in each run process was to:
+1. Start the required number of VM's
 
-&lt;ol&gt;
-  &lt;li&gt;Wait and record results for each pass&lt;/li&gt;
-&lt;/ol&gt;
+2. Login to every console and open Cinebench
 
-&lt;h3 id=&quot;classic-scheduler&quot;&gt;Classic scheduler&lt;/h3&gt;
-&lt;p&gt;The classic scheduler has been the default CPU scheduler since the Hyper-V inception, up until Server 2019. The classic scheduler offers the highest performance variability. VP’s can be assigned to any LP’s. This results in a higher availability for VP’s to execute operations when LP’s are available.&lt;/p&gt;
+3. Click the start on Cinebench in each VM as close as possible.
 
-&lt;h4 id=&quot;results&quot;&gt;Results&lt;/h4&gt;
+![ Hyper-V Starting Cinebench ]({{ site.url }}/assets/img/cpuscheduler/run-shot.png)
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;CPU Contention Ratio&lt;/th&gt;
-      &lt;th&gt;Number of VM’s&lt;/th&gt;
-      &lt;th&gt;Virtual Processors (VP)&lt;/th&gt;
-      &lt;th&gt;Average Cinebench Score&lt;/th&gt;
-      &lt;th&gt;Cumulative Score&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.25:1&lt;/td&gt;
-      &lt;td&gt;1&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;304&lt;/td&gt;
-      &lt;td&gt;304&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.5:1&lt;/td&gt;
-      &lt;td&gt;2&lt;/td&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;302&lt;/td&gt;
-      &lt;td&gt;603&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.75:1&lt;/td&gt;
-      &lt;td&gt;3&lt;/td&gt;
-      &lt;td&gt;12&lt;/td&gt;
-      &lt;td&gt;215&lt;/td&gt;
-      &lt;td&gt;646&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1:1&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;16&lt;/td&gt;
-      &lt;td&gt;194&lt;/td&gt;
-      &lt;td&gt;776&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1.5:1&lt;/td&gt;
-      &lt;td&gt;6&lt;/td&gt;
-      &lt;td&gt;24&lt;/td&gt;
-      &lt;td&gt;127&lt;/td&gt;
-      &lt;td&gt;764&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;2:1&lt;/td&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;32&lt;/td&gt;
-      &lt;td&gt;91&lt;/td&gt;
-      &lt;td&gt;731&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4:1&lt;/td&gt;
-      &lt;td&gt;16&lt;/td&gt;
-      &lt;td&gt;64&lt;/td&gt;
-      &lt;td&gt;40&lt;/td&gt;
-      &lt;td&gt;646&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+4. Wait and record results for each pass
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/classic-results.png&quot; alt=&quot; Cinebench Classic Scheduler Results &quot; /&gt;&lt;/p&gt;
+# Classic scheduler
+The classic scheduler has been the default CPU scheduler since the Hyper-V inception, up until Server 2019. The classic scheduler offers the highest performance variability. VP's can be assigned to any LP's. This results in a higher availability for VP's to execute operations when LP's are available.
 
-&lt;h3 id=&quot;core-scheduler---smt-enabled&quot;&gt;Core Scheduler - SMT Enabled&lt;/h3&gt;
-&lt;p&gt;The classic scheduler has been the default CPU scheduler since the Hyper-V inception, up until Server 2019. The classic scheduler offers the highest performance variability. VP’s can be assigned to any LP’s. This results in a higher availability for VP’s to execute operations when LP’s are available.&lt;/p&gt;
+# Core Scheduler - SMT Enabled
 
-&lt;h4 id=&quot;results-1&quot;&gt;Results&lt;/h4&gt;
+# Core Scheduler - SMT Disabled
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;CPU Contention Ratio&lt;/th&gt;
-      &lt;th&gt;Number of VM’s&lt;/th&gt;
-      &lt;th&gt;Virtual Processors (VP)&lt;/th&gt;
-      &lt;th&gt;Average Cinebench Score&lt;/th&gt;
-      &lt;th&gt;Cumulative Score&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.25:1&lt;/td&gt;
-      &lt;td&gt;1&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;304&lt;/td&gt;
-      &lt;td&gt;304&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.5:1&lt;/td&gt;
-      &lt;td&gt;2&lt;/td&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;302&lt;/td&gt;
-      &lt;td&gt;603&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.75:1&lt;/td&gt;
-      &lt;td&gt;3&lt;/td&gt;
-      &lt;td&gt;12&lt;/td&gt;
-      &lt;td&gt;215&lt;/td&gt;
-      &lt;td&gt;646&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1:1&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;16&lt;/td&gt;
-      &lt;td&gt;194&lt;/td&gt;
-      &lt;td&gt;776&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1.5:1&lt;/td&gt;
-      &lt;td&gt;6&lt;/td&gt;
-      &lt;td&gt;24&lt;/td&gt;
-      &lt;td&gt;127&lt;/td&gt;
-      &lt;td&gt;764&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;2:1&lt;/td&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;32&lt;/td&gt;
-      &lt;td&gt;91&lt;/td&gt;
-      &lt;td&gt;731&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4:1&lt;/td&gt;
-      &lt;td&gt;16&lt;/td&gt;
-      &lt;td&gt;64&lt;/td&gt;
-      &lt;td&gt;40&lt;/td&gt;
-      &lt;td&gt;646&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+# Comparison
+Key Points:
+* When running below a 1:1 ratio, performance is significantly higher when using the classic scheduler
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/classic-results.png&quot; alt=&quot; Cinebench Classic Scheduler Results &quot; /&gt;&lt;/p&gt;
+## Average
 
-&lt;h3 id=&quot;core-scheduler---smt-disabled&quot;&gt;Core Scheduler - SMT Disabled&lt;/h3&gt;
-&lt;p&gt;The classic scheduler has been the default CPU scheduler since the Hyper-V inception, up until Server 2019. The classic scheduler offers the highest performance variability. VP’s can be assigned to any LP’s. This results in a higher availability for VP’s to execute operations when LP’s are available.&lt;/p&gt;
+![ Classic Core SMT CineBench ]({{ site.url }}/assets/img/cpuscheduler/CPUPerfAverage.png)
 
-&lt;h4 id=&quot;results-2&quot;&gt;Results&lt;/h4&gt;
+| CPU Contention Ratio | Number of VM's | Classic | Core | Core - SMT Disabled |
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| 0.25:1 | 1 | 304 | 202 | 153 |
+| 0.5:1 | 2 | 302 | 201 | 151 |
+| 0.75:1 | 3 | 215 | 199 | 151 |
+| 1:1 | 4 | 194 | 196 | 151 |
+| 1.5:1 | 6 | 127 | 128 | 91 |
+| 2:1 | 8 | 91 | 93 | 71 |
+| 4:1 | 16 | 40 | 42 | 30 |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;CPU Contention Ratio&lt;/th&gt;
-      &lt;th&gt;Number of VM’s&lt;/th&gt;
-      &lt;th&gt;Virtual Processors (VP)&lt;/th&gt;
-      &lt;th&gt;Average Cinebench Score&lt;/th&gt;
-      &lt;th&gt;Cumulative Score&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.25:1&lt;/td&gt;
-      &lt;td&gt;1&lt;/td&gt;
-      &lt;td&gt;2&lt;/td&gt;
-      &lt;td&gt;153&lt;/td&gt;
-      &lt;td&gt;153&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.5:1&lt;/td&gt;
-      &lt;td&gt;2&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;151&lt;/td&gt;
-      &lt;td&gt;302&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.75:1&lt;/td&gt;
-      &lt;td&gt;3&lt;/td&gt;
-      &lt;td&gt;6&lt;/td&gt;
-      &lt;td&gt;151&lt;/td&gt;
-      &lt;td&gt;454&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1:1&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;151&lt;/td&gt;
-      &lt;td&gt;602&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1.5:1&lt;/td&gt;
-      &lt;td&gt;6&lt;/td&gt;
-      &lt;td&gt;12&lt;/td&gt;
-      &lt;td&gt;91&lt;/td&gt;
-      &lt;td&gt;543&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;2:1&lt;/td&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;16&lt;/td&gt;
-      &lt;td&gt;71&lt;/td&gt;
-      &lt;td&gt;570&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4:1&lt;/td&gt;
-      &lt;td&gt;16&lt;/td&gt;
-      &lt;td&gt;32&lt;/td&gt;
-      &lt;td&gt;30&lt;/td&gt;
-      &lt;td&gt;473&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+## Cumulative
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/classic-results.png&quot; alt=&quot; Cinebench Classic Scheduler Results &quot; /&gt;&lt;/p&gt;
+![ Classic Core SMT CineBench ]({{ site.url }}/assets/img/cpuscheduler/CPUPerfCumulative.png)
 
-&lt;h3 id=&quot;comparison&quot;&gt;Comparison&lt;/h3&gt;
-&lt;p&gt;Key Points:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;klakdja&lt;/li&gt;
-  &lt;li&gt;akljda&lt;/li&gt;
-&lt;/ul&gt;
+| CPU Contention Ratio | Number of VM's | Classic | Core | Core - SMT Disabled |
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| 0.25:1 | 1 | 304 | 202 | 153 |
+| 0.5:1 | 2 | 603 | 402 | 302 |
+| 0.75:1 | 3 | 646 | 597 | 454 |
+| 1:1 | 4 | 776 | 782 | 602 |
+| 1.5:1 | 6 | 764 | 766 | 543 |
+| 2:1 | 8 | 731 | 747 | 570 |
+| 4:1 | 16 | 646 | 674 | 473 |
 
-&lt;h2 id=&quot;what-am-i-running&quot;&gt;What am I running?&lt;/h2&gt;
-&lt;p&gt;Want to know what scheduler you are running? Powershell!&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-WinEvent -FilterHashTable @{ProviderName=&quot;Microsoft-Windows-Hyper-V-Hypervisor&quot;; ID=2} | select -First 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/change-scheduler.png&quot; alt=&quot;Get-WinEvent -FilterHashTable @{ProviderName=&amp;quot;Microsoft-Windows-Hyper-V-Hypervisor&amp;quot;; ID=2} | select -First 1&quot; /&gt;&lt;/p&gt;
+# What am I running?
+Want to know what scheduler you are running? Powershell!
+~~~~~
+Get-WinEvent -FilterHashTable @{ProviderName=&quot;Microsoft-Windows-Hyper-V-Hypervisor&quot;; ID=2} | select -First 1
+~~~~~
+![Get-WinEvent -FilterHashTable @{ProviderName=&quot;Microsoft-Windows-Hyper-V-Hypervisor&quot;; ID=2} | select -First 1]({{ site.url }}/assets/img/cpuscheduler/change-scheduler.png)
 
-&lt;h2 id=&quot;how-do-i-change-scheduler&quot;&gt;How do I change scheduler?&lt;/h2&gt;
-&lt;p&gt;Changing scheduler is currently done through editing boot records via bcdedit.&lt;/p&gt;
+# How do I change scheduler?
+Changing scheduler is currently done through editing boot records via bcdedit.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; bcdedit /set hypervisorschedulertype (Classic|Core)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/core-change.png&quot; alt=&quot;Get-WinEvent -FilterHashTable @{ProviderName=&amp;quot;Microsoft-Windows-Hyper-V-Hypervisor&amp;quot;; ID=2} | select -First 1&quot; /&gt;&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="hyper-v" /><category term="cpu-scheduler" /><category term="server-2016" /><category term="server-2019" /><summary type="html">Recent security vulnerabilities within CPU’s have resulted in a need to change some fundamental CPU scheduling within Hyper-V so to keep VM’s secure. Microsoft has an article outlining the different schedulers now available. This blog article is to help with understanding the schedulers, how they work and perform, as well a briefly explaining how Hyper-V virtualises CPU resources.</summary></entry><entry><title type="html">S2D Cluster Updates - October 2018</title><link href="http://localhost:4000/2018/10/22/s2d-october-cluster-updates.html" rel="alternate" type="text/html" title="S2D Cluster Updates - October 2018" /><published>2018-10-22T00:00:00+11:00</published><updated>2018-10-22T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/22/s2d-october-cluster-updates</id><content type="html" xml:base="http://localhost:4000/2018/10/22/s2d-october-cluster-updates.html">In my [previous blog article](https://thomassmart.github.io/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates.html), I spoke about how [recent updates](https://support.microsoft.com/en-us/help/
+~~~~~~
+ bcdedit /set hypervisorschedulertype (Classic|Core)
+~~~~~~
+![Get-WinEvent -FilterHashTable @{ProviderName=&quot;Microsoft-Windows-Hyper-V-Hypervisor&quot;; ID=2} | select -First 1]({{ site.url }}/assets/img/cpuscheduler/core-change.png)</content><author><name>Thomas Smart</name></author><category term="hyper-v" /><category term="cpu-scheduler" /><category term="server-2016" /><category term="server-2019" /><summary type="html">Recent security vulnerabilities within CPU’s have resulted in a need to change some fundamental CPU scheduling within Hyper-V so to keep VM’s secure. Microsoft has an article outlining the different schedulers now available. This blog article is to help with understanding the schedulers, how they work and perform, as well a briefly explaining how Hyper-V virtualises CPU resources.</summary></entry><entry><title type="html">S2D Cluster Updates - October 2018</title><link href="http://localhost:4000/2018/10/22/s2d-october-cluster-updates.html" rel="alternate" type="text/html" title="S2D Cluster Updates - October 2018" /><published>2018-10-22T00:00:00+11:00</published><updated>2018-10-22T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/22/s2d-october-cluster-updates</id><content type="html" xml:base="http://localhost:4000/2018/10/22/s2d-october-cluster-updates.html">In my [previous blog article](https://thomassmart.github.io/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates.html), I spoke about how [recent updates](https://support.microsoft.com/en-us/help/
 4103723/windows-10-update-kb4103723) had introduced some [serious bugs and reliability issues](https://support.microsoft.com/en-us/help/4462487/event-5120-with-status-io-timeout-c00000b5-after-an-s2d-node-restart-o) for S2D.
 
 
@@ -908,27 +688,28 @@ Lesson here, vendors can mislead through not enough information. After much rese
 &lt;/ul&gt;
 Its worth noting that most distributors and vendors provide these as a package
 
-Its such a shame that MS have locked down the apps functionality, if you agree, please vote here: &lt;a href=&quot;https://www.skypefeedback.com/forums/299913-generally-available/suggestions/18416881-open-up-s4b-room-system-app-to-more-devices-and-do&quot;&gt;Skype for Business Feedback&lt;/a&gt;</content><author><name>Thomas Smart</name></author><category term="Skype-For-Business" /><category term="Conference-System" /><summary type="html">Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l)</summary></entry><entry><title type="html">Engaged tone when calling extension</title><link href="http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension.html" rel="alternate" type="text/html" title="Engaged tone when calling extension" /><published>2017-02-06T14:03:00+11:00</published><updated>2017-02-06T14:03:00+11:00</updated><id>http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension</id><content type="html" xml:base="http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension.html">A client was experiencing a weird issue where an extension could call outbound, but didn't receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn't been configured, disconnected.
+Its such a shame that MS have locked down the apps functionality, if you agree, please vote here: &lt;a href=&quot;https://www.skypefeedback.com/forums/299913-generally-available/suggestions/18416881-open-up-s4b-room-system-app-to-more-devices-and-do&quot;&gt;Skype for Business Feedback&lt;/a&gt;</content><author><name>Thomas Smart</name></author><category term="Skype-For-Business" /><category term="Conference-System" /><summary type="html">Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l)</summary></entry><entry><title type="html">Engaged tone when calling extension</title><link href="http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension.html" rel="alternate" type="text/html" title="Engaged tone when calling extension" /><published>2017-02-06T14:03:00+11:00</published><updated>2017-02-06T14:03:00+11:00</updated><id>http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension</id><content type="html" xml:base="http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension.html">&lt;p&gt;Recently, I encountered a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.&lt;/p&gt;
 
-Comparing the CS-User to a known working extension showed no differences and there were no extension conflicts.
+&lt;p&gt;Comparing the CS-User to a known working extension showed no differences and there were no extension conflicts.&lt;/p&gt;
 
-If you are having this issue, I'd recommend the following
+&lt;p&gt;If you are having this issue, I’d recommend the following&lt;/p&gt;
 
-1. Open the report server
-2. Click the user activity report
-3. Search for the user you completed the testing from ![Screenshot]({{ site.url }}/assets/img/engaged-tone/sipdomain.png)
-4. Find the call  ![Screenshot]({{ site.url }}/assets/img/engaged-tone/activity.png)
-5. Open the details of the call, then open the details for the diagnostics of the call
+&lt;ol&gt;
+  &lt;li&gt;Open the report server&lt;/li&gt;
+  &lt;li&gt;Click the user activity report&lt;/li&gt;
+  &lt;li&gt;Search for the user you completed the testing from &lt;img src=&quot;http://localhost:4000/assets/img/engaged-tone/sipdomain.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Find the call  &lt;img src=&quot;http://localhost:4000/assets/img/engaged-tone/activity.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Open the details of the call, then open the details for the diagnostics of the call&lt;/li&gt;
+&lt;/ol&gt;
 
-In my instance, I had the error message
+&lt;p&gt;In my instance, I had the error message&lt;/p&gt;
 
-{% highlight vbnet %}
-The routing rules did not result in a final response and callee is not enabled for Unified Messaging
-{% endhighlight %}
-![Screenshot]({{ site.url }}/assets/img/engaged-tone/detail.png)
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-vbnet&quot; data-lang=&quot;vbnet&quot;&gt;The routing rules did not result in a final response and callee is not enabled for Unified Messaging&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-[Greig from greiginsydney has seen this before and reports that it is caused by bad firmware adding an incorrect call forward rule.](https://greiginsydney.com/polycom-vvx-gives-sip480-cant-be-called/) Following Greig's steps and re-creating the AD account and Lync account resolved the issue.
-Also, [Greigs blog](https://greiginsydney.com) is beyond wizardy and you should definately check it out.</content><author><name>Thomas Smart</name></author><category term="Skype-For-Business" /><category term="Polycom-VVX" /><summary type="html">A client was experiencing a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.</summary></entry><entry><title type="html">Polycom VVX Phone Manager Script</title><link href="http://localhost:4000/2017/02/03/polycom-vvx-phone-manager-script.html" rel="alternate" type="text/html" title="Polycom VVX Phone Manager Script" /><published>2017-02-03T15:06:00+11:00</published><updated>2017-02-03T15:06:00+11:00</updated><id>http://localhost:4000/2017/02/03/polycom-vvx-phone-manager-script</id><content type="html" xml:base="http://localhost:4000/2017/02/03/polycom-vvx-phone-manager-script.html">James Cussen has wrote an excellent script for managing Polycom VVX phones.
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/engaged-tone/detail.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://greiginsydney.com/polycom-vvx-gives-sip480-cant-be-called/&quot;&gt;Greig from greiginsydney has seen this before and reports that it is caused by bad firmware adding an incorrect call forward rule.&lt;/a&gt; Following Greig’s steps and re-creating the AD account and Lync account resolved the issue.
+Also, &lt;a href=&quot;https://greiginsydney.com&quot;&gt;Greigs blog&lt;/a&gt; is beyond wizardy and you should definately check it out.&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="Skype-For-Business" /><category term="Polycom-VVX" /><summary type="html">Recently, I encountered a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.</summary></entry><entry><title type="html">Polycom VVX Phone Manager Script</title><link href="http://localhost:4000/2017/02/03/polycom-vvx-phone-manager-script.html" rel="alternate" type="text/html" title="Polycom VVX Phone Manager Script" /><published>2017-02-03T15:06:00+11:00</published><updated>2017-02-03T15:06:00+11:00</updated><id>http://localhost:4000/2017/02/03/polycom-vvx-phone-manager-script</id><content type="html" xml:base="http://localhost:4000/2017/02/03/polycom-vvx-phone-manager-script.html">James Cussen has wrote an excellent script for managing Polycom VVX phones.
 
 Its really intuitive and assist with management migrations from phone systems where endpoints and their IP addresses were easy to see (Think asterisk sip show peers). You can easily see all VVX phones that are in the monitoring DB as well as search subnets
 

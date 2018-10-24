@@ -10,7 +10,9 @@ webkit-border-radius: 50em;
 	-moz-border-radius: 50em;
 	border-radius: 50em;"/>
 
-Hiya! I'm Thomas Smart. Currently I am working at [Daraco IT Services](http://www.daraco.com.au) as a Infrastructure and Systems Engineer. I delve into a large amount of systems and have exposure to a large variety of technologies.
+<br>
+
+Hiya! I'm Thomas Smart. I am passionate about Information Technology. I find most areas of technology exciting, and love to learn about it!
 
 My main areas of focus however are:
 
@@ -29,3 +31,7 @@ My main areas of focus however are:
 	* Veeam Office 365 Backup
 	* Veeam Cloud Connect
 * Powershell
+
+My aim for this site is to provide factual, public domain, information and guides for technology that I am passionate about.
+
+I strive to not have an opinion within these blogs (Some of the older articles may present with one), however where present, it is purely my own opinion, and not that of anybody or organisation that I am associated with.
