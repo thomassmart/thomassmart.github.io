@@ -1,532 +1,369 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-10-24T21:48:18+11:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Tom Blogs</title><subtitle>A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans</subtitle><author><name>Thomas Smart</name></author><entry><title type="html">Hyper-V CPU Scheduler Types</title><link href="http://localhost:4000/2018/10/24/Hyper-V-CPU-Scheduler.html" rel="alternate" type="text/html" title="Hyper-V CPU Scheduler Types" /><published>2018-10-24T00:00:00+11:00</published><updated>2018-10-24T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/24/Hyper-V-CPU-Scheduler</id><content type="html" xml:base="http://localhost:4000/2018/10/24/Hyper-V-CPU-Scheduler.html">&lt;p&gt;Recent security vulnerabilities within CPU’s has resulted in a need to change some fundamental CPU scheduling within Hyper-V, so to keep VM’s secure. &lt;a href=&quot;https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/manage/manage-hyper-v-scheduler-types&quot;&gt;Microsoft has an article outlining the different schedulers, that now available&lt;/a&gt;. This blog article is to help with understanding the schedulers, how they work and perform, as well briefly explaining how Hyper-V virtualises CPU resources. To begin, we need to understand partitions.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-11-05T21:38:39+11:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Tom Blogs</title><subtitle>A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans</subtitle><author><name>Thomas Smart</name></author><entry><title type="html">Intel CPU Vulnerability</title><link href="http://localhost:4000/2018/11/05/Intel-CPU-Vulnerability.html" rel="alternate" type="text/html" title="Intel CPU Vulnerability" /><published>2018-11-05T00:00:00+11:00</published><updated>2018-11-05T00:00:00+11:00</updated><id>http://localhost:4000/2018/11/05/Intel-CPU-Vulnerability</id><content type="html" xml:base="http://localhost:4000/2018/11/05/Intel-CPU-Vulnerability.html">&lt;p&gt;A new vulnerability has just landed for Intel CPU’s that are still using Simultaneous Multithreading (SMT). &lt;a href=&quot;https://seclists.org/oss-sec/2018/q4/123&quot;&gt;CVE-2018-5407&lt;/a&gt;, or commonly known as PortSmash.&lt;/p&gt;
 
-&lt;h1 id=&quot;partitions&quot;&gt;Partitions&lt;/h1&gt;
-
-&lt;p&gt;When the Hyper-V role is enabled, the way that Windows Kernel handles CPU operations changes significantly. Workloads are separated into ‘Partitions’ and the CPU operations within these partitions are sent to the hypervisor scheduler. Partitioning allows to keep each VM within their own container, excluding them from being aware of each other. When a VM is powered on, the hypervisor creates a child partition, for that VM. The Hyper-V host is created a root partition by the hypervisor at OS boot.&lt;/p&gt;
-
-&lt;p&gt;This is best described in the image below&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/Partitions.png&quot; alt=&quot; Child and Parent Partition Hyper-V &quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The Hyper-V Host root partition is in fact a VM! It is worth mentioning, that this root partition has significantly more privileges than that of a standard VM. The root partition  also orchestrates management of VM (Through the VM worker processes and VM Management Service). Partitions are managed by the hypervisor. The hypervisor shares the hardware resources with each partition. The CPU hardware is shared through the CPU scheduler.&lt;/p&gt;
-
-&lt;h1 id=&quot;cpu-scheduler&quot;&gt;CPU Scheduler&lt;/h1&gt;
-
-&lt;p&gt;The CPU scheduler takes the CPU operations from the partition’s CPU Virtual Processors (VP’s) and distributes them to the host’s physical logical processors (LP’s). The scheduler resides within the hypervisor level in the above image.&lt;/p&gt;
-
-&lt;p&gt;Up until now there has only been a single, ‘fair share’ scheduler. The fair share scheduler has served us well for many years, with its round robing sharing mechanism. Unfortunately the scheduler relies on assuming that each of the host’s LP are completely isolated from each other LP.&lt;/p&gt;
-
-&lt;p&gt;Simultaneous multithreading (SMT), which is also known as Hyper-Threading in Intel World, allows processors to parallelise operations from multiple threads, this results in a an increase in performance.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/hyperthreading.png&quot; alt=&quot;Simultaneous multithreading SMT Hyper Threading Hyper-V &quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;In recent times SMT has suffered from some serious security vulnerabilities that no longer allows us to assume that data is protected within the processor. Some of the most notable recent vulnerabilities are:&lt;/p&gt;
+&lt;p&gt;PortSmash is joining an ever lengthening list of vulnerabilities for CPU’s using SMT.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.intel.com/content/www/us/en/architecture-and-technology/l1tf.html&quot;&gt;Intel L1 Terminal Fault (L1TF)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://meltdownattack.com/&quot;&gt;Meltdown and Spectre&lt;/a&gt; - Which affects many vendors, Intel and AMD included.&lt;/li&gt;
+  &lt;li&gt;Meltdown&lt;/li&gt;
+  &lt;li&gt;Spectre&lt;/li&gt;
+  &lt;li&gt;TLBleed&lt;/li&gt;
+  &lt;li&gt;Foreshadow&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;These vulnerabilities mean that applications could steal information that is flowing through the CPU. Whilst this is alarming, the seriousness is greatly heightened when you consider virtualisation. Under Hyper-V using the ‘classic fair share’ scheduler, theoretically, its possible for this to occur between completely isolated VM’s. At this time, this isn’t  a documented exploit for virtualized workload attacks.&lt;/p&gt;
+&lt;p&gt;PortSmash works by detecting &lt;a href=&quot;https://dendibakh.github.io/blog/2018/03/21/port-contention&quot;&gt;port contention&lt;/a&gt;. An exploit can then use this contention to construct a &lt;a href=&quot;https://en.wikipedia.org/wiki/Timing_attack&quot;&gt;timing side channel attack&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Microsoft has worked with vendors to resolve these issues. Numerous Windows Updates, often containing CPU microcode, attempting to resolve the critical vulnerabilities have been released. Regardless of if these issues are 100% resolved, we can no longer assume that the CPU is secure enough to handle workloads when virtualising.&lt;/p&gt;
+&lt;p&gt;The reporter, Billy Brumleya and team, have created a proof of concept exploit for this vulnerability already. &lt;a href=&quot;https://github.com/bbbrumley/portsmash&quot;&gt;Their exploit PoC&lt;/a&gt; was able to successfully steal a private key from OpenSSL running on Ubuntu 18.04. They could then use this key to decrypt sensitive data.&lt;/p&gt;
 
-&lt;p&gt;Microsoft, recognising this,  has created new CPU schedulers. These new CPU hypervisor schedulers are available within Update 2018.07 C on Server 2016, Server 2019 and Windows 10…&lt;/p&gt;
+&lt;p&gt;This additional vulnerability continues to highlight the importance of disabling SMT within your environment, as this is the only fix.&lt;/p&gt;
 
-&lt;p&gt;The new schedulers are:&lt;/p&gt;
+&lt;p&gt;I’ve reviewed some further &lt;a href=&quot;https://thomassmart.github.io/2018/10/24/Hyper-V-CPU-Scheduler.html&quot;&gt;Hyper-V CPU Schedulers&lt;/a&gt; that Microsoft have released to aid with these style attacks, for Hyper-V workloads .&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="hyper-v" /><category term="cpu-scheduler" /><category term="server-2016" /><category term="server-2019" /><summary type="html">A new vulnerability has just landed for Intel CPU’s that are still using Simultaneous Multithreading (SMT). CVE-2018-5407, or commonly known as PortSmash.</summary></entry><entry><title type="html">Hyper-V CPU Scheduler Types</title><link href="http://localhost:4000/2018/10/24/Hyper-V-CPU-Scheduler.html" rel="alternate" type="text/html" title="Hyper-V CPU Scheduler Types" /><published>2018-10-24T00:00:00+11:00</published><updated>2018-10-24T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/24/Hyper-V-CPU-Scheduler</id><content type="html" xml:base="http://localhost:4000/2018/10/24/Hyper-V-CPU-Scheduler.html">Recent security vulnerabilities within CPU's has resulted in a need to change some fundamental CPU scheduling within Hyper-V, so to keep VM's secure. [Microsoft has an article outlining the different schedulers, that now available](https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/manage/manage-hyper-v-scheduler-types). This blog article is to help with understanding the schedulers, how they work and perform, as well briefly explaining how Hyper-V virtualises CPU resources. To begin, we need to understand partitions.
 
-&lt;ul&gt;
-  &lt;li&gt;‘Classic’  - Traditional round robin scheduler that we all know&lt;/li&gt;
-  &lt;li&gt;‘Core’     - Offers stronger boundaries through the constraining of VP’s to LP’s. Constraining the VP’s mean that they are only only workload on the LP at that time.&lt;/li&gt;
-  &lt;li&gt;‘Root’      - Default in, and only recommended for, Windows 10. The scheduling is handled by the root partition, rather than the hypervisor. This allows for windows&lt;/li&gt;
-&lt;/ul&gt;
+# Partitions
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;CPU Scheduler Type&lt;/th&gt;
-      &lt;th&gt;Performance&lt;/th&gt;
-      &lt;th&gt;Security&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;‘Classic’&lt;/td&gt;
-      &lt;td&gt;Good, allows for generous over-subscription and performance&lt;/td&gt;
-      &lt;td&gt;Low - SMT is utilised and though workloads are in separated partitions, the partition VP’s can run parallelized on LP’s. This could result in one partition being privvy to the operations of a different partition&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Core Scheduler - Host SMT Enabled&lt;/td&gt;
-      &lt;td&gt;Reduced compared to Classic when under a 1:1 ratio, due to VP’s being bound to LPs. SMT is exposed to the VM. Once overcommitted the performance degrades at the same rate as Classic.&lt;/td&gt;
-      &lt;td&gt;Security is improved as child partitions VP’s are isolated for all other partitions VP’s and are assigned to LP’s for operations.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Core Scheduler - Host SMT Disabled&lt;/td&gt;
-      &lt;td&gt;Similar performance to Core Scheduler - Host SMT Enabled, however the number of LP’s is halved&lt;/td&gt;
-      &lt;td&gt;Stronger again as operations within the child partition can’t leak across VP’s within the same partition&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Root Scheduler&lt;/td&gt;
-      &lt;td&gt;I didn’t benchmark this, however my understanding is that it would be lower than that of either core or classic. This is due to the overhead of it flowing through Root Partition.&lt;/td&gt;
-      &lt;td&gt;Child partitions are exposed to the root partition,  workload can be analysed by Windows Defender Application Guard, so your call on this one.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+When the Hyper-V role is enabled, the way that Windows Kernel handles CPU operations changes significantly. Workloads are separated into 'Partitions' and the CPU operations within these partitions are sent to the hypervisor scheduler. Partitioning allows to keep each VM within their own container, excluding them from being aware of each other. When a VM is powered on, the hypervisor creates a child partition, for that VM. The Hyper-V host is created a root partition by the hypervisor at OS boot.
 
-&lt;h1 id=&quot;performance-testings&quot;&gt;Performance Testings&lt;/h1&gt;
-&lt;p&gt;Test bench - HPE DL380 G7 (Old, but available)&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;2 x Intel Xeon E5630 - 2.53 Ghz.
-    &lt;ul&gt;
-      &lt;li&gt;Quad core&lt;/li&gt;
-      &lt;li&gt;Hyperthreading capable&lt;/li&gt;
-      &lt;li&gt;Total of 16 Logical Processors (LP’s) when SMT Enabled.&lt;/li&gt;
-      &lt;li&gt;Total of 8 Logical Processors (LP’s) when SMT Disabled.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;112 GB RAM&lt;/li&gt;
-  &lt;li&gt;4 x 10k 120GB HDD’s in RAID 1+0&lt;/li&gt;
-  &lt;li&gt;Windows Server 2016 - 1607&lt;/li&gt;
-  &lt;li&gt;16 Virtual Machines
-    &lt;ul&gt;
-      &lt;li&gt;4 VP’s when host SMT is enabled.&lt;/li&gt;
-      &lt;li&gt;2 VP’s when host SMT is disabled.&lt;/li&gt;
-      &lt;li&gt;4GB RAM&lt;/li&gt;
-      &lt;li&gt;Windows Server 2016 - 1607&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+This is best described in the image below
 
-&lt;p&gt;All test performed by using &lt;a href=&quot;https://www.maxon.net/en/products/cinebench/&quot;&gt;Matrox Cinebench R17&lt;/a&gt; for its simple usage, and single value scoring.&lt;/p&gt;
+![ Child and Parent Partition Hyper-V ]({{ site.url }}/assets/img/cpuscheduler/Partitions.png)
 
-&lt;p&gt;Testing is based on VP:LP ratio. This meant that when SMT was disabled, the VP’s presented through to VM’s were halved.&lt;/p&gt;
+The Hyper-V Host root partition is in fact a VM! It is worth mentioning, that this root partition has significantly more privileges than that of a standard VM. The root partition  also orchestrates management of VM (Through the VM worker processes and VM Management Service). Partitions are managed by the hypervisor. The hypervisor shares the hardware resources with each partition. The CPU hardware is shared through the CPU scheduler.
 
-&lt;p&gt;The OS’ base Cinebench score is &lt;strong&gt;764&lt;/strong&gt;&lt;/p&gt;
+# CPU Scheduler
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/host-score.png&quot; alt=&quot; Cinebench SMT Hyper-V &quot; /&gt;&lt;/p&gt;
+The CPU scheduler takes the CPU operations from the partition's CPU Virtual Processors (VP's) and distributes them to the host's physical logical processors (LP's). The scheduler resides within the hypervisor level in the above image.
 
-&lt;p&gt;The steps in each run process was to:&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Start the required number of VM’s&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Login to every console and open Cinebench&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Click the start on Cinebench in each VM as close as possible.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
+Up until now there has only been a single, 'fair share' scheduler. The fair share scheduler has served us well for many years, with its round robing sharing mechanism. Unfortunately the scheduler relies on assuming that each of the host's LP are completely isolated from each other LP.
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/run-shot.png&quot; alt=&quot; Hyper-V Starting Cinebench &quot; /&gt;&lt;/p&gt;
+Simultaneous multithreading (SMT), which is also known as Hyper-Threading in Intel World, allows processors to parallelise operations from multiple threads, this results in a an increase in performance.
 
-&lt;ol&gt;
-  &lt;li&gt;Wait and record results for each pass&lt;/li&gt;
-&lt;/ol&gt;
+![Simultaneous multithreading SMT Hyper Threading Hyper-V ]({{ site.url }}/assets/img/cpuscheduler/hyperthreading.png)
 
-&lt;h1 id=&quot;classic-scheduler&quot;&gt;Classic scheduler&lt;/h1&gt;
-&lt;p&gt;For this round of testing, 4 vCPU’s were presented through to each of the VM’s. This meant that there were 4 processors, with a single thread each for every VM. Belowa 0.5:1 (VP:LP) ratio, performance variability was great. I suspect that this was due to the classic scheduler assigning actual cores (and not SMT) during the heavy load.&lt;/p&gt;
+ In recent times SMT has suffered from some serious security vulnerabilities that no longer allows us to assume that data is protected within the processor. Some of the most notable recent vulnerabilities are:
 
-&lt;h1 id=&quot;core-scheduler---smt-enabled&quot;&gt;Core Scheduler - SMT Enabled&lt;/h1&gt;
-&lt;p&gt;Once all the testing was complete for the classic scheduler. The test bench and VM’s were reconfigured for the Core Scheduler. This meant changing a few things:&lt;/p&gt;
+ * [Intel L1 Terminal Fault (L1TF)](https://www.intel.com/content/www/us/en/architecture-and-technology/l1tf.html)
+ * [Meltdown and Spectre](https://meltdownattack.com/) - Which affects many vendors, Intel and AMD included.
 
-&lt;ol&gt;
-  &lt;li&gt;The scheduler of the hypervisor. &lt;code class=&quot;highlighter-rouge&quot;&gt;bcdedit /set hypervisorschedulertype core&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Change VM’s to 2 processors and expose them to SMT: &lt;code class=&quot;highlighter-rouge&quot;&gt;Get-VM | Set-VMProcessor -Count 2 -HwThreadCountPerCore 2&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
+These vulnerabilities mean that applications could steal information that is flowing through the CPU. Whilst this is alarming, the seriousness is greatly heightened when you consider virtualisation. Under Hyper-V using the 'classic fair share' scheduler, theoretically, its possible for this to occur between completely isolated VM's. At this time, this isn't  a documented exploit for virtualized workload attacks.
 
-&lt;p&gt;This results in 2 cores with a total of 4 threads.&lt;/p&gt;
+Microsoft has worked with vendors to resolve these issues. Numerous Windows Updates, often containing CPU microcode, attempting to resolve the critical vulnerabilities have been released. Regardless of if these issues are 100% resolved, we can no longer assume that the CPU is secure enough to handle workloads when virtualising.
 
-&lt;p&gt;Before over subscription, performance for this scheduler was a little lower, compared to the classic scheduler. This is somewhat anticipated as each thread no longer can get a dedicated core for its operations. 2 cores are locked to the 1 thread. After oversubscription performance decreases at the same rate.&lt;/p&gt;
+Microsoft, recognising this,  has created new CPU schedulers. These new CPU hypervisor schedulers are available within Update 2018.07 C on Server 2016, Server 2019 and Windows 10...
 
-&lt;p&gt;As the LP’s are dedicated to the VP’s for the operation, within the root partition, you can see core’s park as they are ‘locked’ to the other VP’s
-&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/cpu-park.png&quot; alt=&quot; Parked CPU &quot; /&gt;&lt;/p&gt;
+The new schedulers are:
 
-&lt;p&gt;This parking, increases the amount of time threads need to wait for their round of operations. These wait times can be a silent killer. You can have a poorly performing VM with reported CPI load, but too many VP’s assigned. The scheduler then struggles to find time to assign all LP’s so that the VM can execute its operations. For this reason, it makes sense to keep assigned VP’s to a logical number and monitor the &lt;em&gt;“CPU Wait time per dispatch”&lt;/em&gt; performance monitor.
-&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/cpu-wait.png&quot; alt=&quot; CPU Wait Time &quot; /&gt;&lt;/p&gt;
+* 'Classic'  - Traditional round robin scheduler that we all know
+* 'Core'     - Offers stronger boundaries through the constraining of VP's to LP's. Constraining the VP's mean that they are only only workload on the LP at that time.
+* 'Root'      - Default in, and only recommended for, Windows 10. The scheduling is handled by the root partition, rather than the hypervisor. This allows for windows
 
-&lt;h1 id=&quot;core-scheduler---smt-disabled&quot;&gt;Core Scheduler - SMT Disabled&lt;/h1&gt;
+| CPU Scheduler Type | Performance | Security |
+| ----- | ----- | ----- |
+| 'Classic' | Good, allows for generous over-subscription and performance  | Low - SMT is utilised and though workloads are in separated partitions, the partition VP's can run parallelized on LP's. This could result in one partition being privvy to the operations of a different partition |
+| Core Scheduler - Host SMT Enabled | Reduced compared to Classic when under a 1:1 ratio, due to VP's being bound to LPs. SMT is exposed to the VM. Once overcommitted the performance degrades at the same rate as Classic. | Security is improved as child partitions VP's are isolated for all other partitions VP's and are assigned to LP's for operations. |
+| Core Scheduler - Host SMT Disabled | Similar performance to Core Scheduler - Host SMT Enabled, however the number of LP's is halved | Stronger again as operations within the child partition can't leak across VP's within the same partition |
+| Root Scheduler | I didn't benchmark this, however my understanding is that it would be lower than that of either core or classic. This is due to the overhead of it flowing through Root Partition. | Child partitions are exposed to the root partition,  workload can be analysed by Windows Defender Application Guard, so your call on this one. |
 
-&lt;p&gt;Disabling SMT on the host was easy enough through BIOS. Once disabled, the number of threads reported in Windows was halved as expected.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/CPU-bios.png&quot; alt=&quot; CPU Bios &quot; /&gt;&lt;/p&gt;
+# Performance Testings
+Test bench - HPE DL380 G7 (Old, but available)
+* 2 x Intel Xeon E5630 - 2.53 Ghz.
+  * Quad core
+  * Hyperthreading capable
+  * Total of 16 Logical Processors (LP's) when SMT Enabled.
+  * Total of 8 Logical Processors (LP's) when SMT Disabled.
+* 112 GB RAM
+* 4 x 10k 120GB HDD's in RAID 1+0
+* Windows Server 2016 - 1607
+* 16 Virtual Machines
+  * 4 VP's when host SMT is enabled.
+  * 2 VP's when host SMT is disabled.
+  * 4GB RAM
+  * Windows Server 2016 - 1607
 
-&lt;p&gt;With SMT disabled on the host, to keep the ratio fair, the number of VP’s presented to the VM’s was halved. &lt;code class=&quot;highlighter-rouge&quot;&gt;Get-VM | Set-VMProcessor -Count 2 -HwThreadCountPerCore 0&lt;/code&gt;&lt;/p&gt;
+All test performed by using [Matrox Cinebench R17](https://www.maxon.net/en/products/cinebench/) for its simple usage, and single value scoring.
 
-&lt;h1 id=&quot;test-results&quot;&gt;Test Results&lt;/h1&gt;
+Testing is based on VP:LP ratio. This meant that when SMT was disabled, the VP's presented through to VM's were halved.
 
-&lt;h2 id=&quot;averaged-per-vm&quot;&gt;Averaged per VM&lt;/h2&gt;
+The OS' base Cinebench score is **764**
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/CPUPerfAverage.png&quot; alt=&quot; Classic Core SMT CineBench &quot; /&gt;&lt;/p&gt;
+![ Cinebench SMT Hyper-V ]({{ site.url }}/assets/img/cpuscheduler/host-score.png)
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;CPU Contention Ratio&lt;/th&gt;
-      &lt;th&gt;Number of VM’s&lt;/th&gt;
-      &lt;th&gt;Classic&lt;/th&gt;
-      &lt;th&gt;Core&lt;/th&gt;
-      &lt;th&gt;Core - SMT Disabled&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.25:1&lt;/td&gt;
-      &lt;td&gt;1&lt;/td&gt;
-      &lt;td&gt;304&lt;/td&gt;
-      &lt;td&gt;202&lt;/td&gt;
-      &lt;td&gt;153&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.5:1&lt;/td&gt;
-      &lt;td&gt;2&lt;/td&gt;
-      &lt;td&gt;302&lt;/td&gt;
-      &lt;td&gt;201&lt;/td&gt;
-      &lt;td&gt;151&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.75:1&lt;/td&gt;
-      &lt;td&gt;3&lt;/td&gt;
-      &lt;td&gt;215&lt;/td&gt;
-      &lt;td&gt;199&lt;/td&gt;
-      &lt;td&gt;151&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1:1&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;194&lt;/td&gt;
-      &lt;td&gt;196&lt;/td&gt;
-      &lt;td&gt;151&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1.5:1&lt;/td&gt;
-      &lt;td&gt;6&lt;/td&gt;
-      &lt;td&gt;127&lt;/td&gt;
-      &lt;td&gt;128&lt;/td&gt;
-      &lt;td&gt;91&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;2:1&lt;/td&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;91&lt;/td&gt;
-      &lt;td&gt;93&lt;/td&gt;
-      &lt;td&gt;71&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4:1&lt;/td&gt;
-      &lt;td&gt;16&lt;/td&gt;
-      &lt;td&gt;40&lt;/td&gt;
-      &lt;td&gt;42&lt;/td&gt;
-      &lt;td&gt;30&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+The steps in each run process was to:
+1. Start the required number of VM's
 
-&lt;h2 id=&quot;cumulative&quot;&gt;Cumulative&lt;/h2&gt;
+2. Login to every console and open Cinebench
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/CPUPerfCumulative.png&quot; alt=&quot; Classic Core SMT CineBench &quot; /&gt;&lt;/p&gt;
+3. Click the start on Cinebench in each VM as close as possible.
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;CPU Contention Ratio&lt;/th&gt;
-      &lt;th&gt;Number of VM’s&lt;/th&gt;
-      &lt;th&gt;Classic&lt;/th&gt;
-      &lt;th&gt;Core&lt;/th&gt;
-      &lt;th&gt;Core - SMT Disabled&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.25:1&lt;/td&gt;
-      &lt;td&gt;1&lt;/td&gt;
-      &lt;td&gt;304&lt;/td&gt;
-      &lt;td&gt;202&lt;/td&gt;
-      &lt;td&gt;153&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.5:1&lt;/td&gt;
-      &lt;td&gt;2&lt;/td&gt;
-      &lt;td&gt;603&lt;/td&gt;
-      &lt;td&gt;402&lt;/td&gt;
-      &lt;td&gt;302&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0.75:1&lt;/td&gt;
-      &lt;td&gt;3&lt;/td&gt;
-      &lt;td&gt;646&lt;/td&gt;
-      &lt;td&gt;597&lt;/td&gt;
-      &lt;td&gt;454&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1:1&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;776&lt;/td&gt;
-      &lt;td&gt;782&lt;/td&gt;
-      &lt;td&gt;602&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1.5:1&lt;/td&gt;
-      &lt;td&gt;6&lt;/td&gt;
-      &lt;td&gt;764&lt;/td&gt;
-      &lt;td&gt;766&lt;/td&gt;
-      &lt;td&gt;543&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;2:1&lt;/td&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;731&lt;/td&gt;
-      &lt;td&gt;747&lt;/td&gt;
-      &lt;td&gt;570&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4:1&lt;/td&gt;
-      &lt;td&gt;16&lt;/td&gt;
-      &lt;td&gt;646&lt;/td&gt;
-      &lt;td&gt;674&lt;/td&gt;
-      &lt;td&gt;473&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+![ Hyper-V Starting Cinebench ]({{ site.url }}/assets/img/cpuscheduler/run-shot.png)
 
-&lt;h1 id=&quot;what-am-i-running&quot;&gt;What am I running?&lt;/h1&gt;
-&lt;p&gt;Want to know what scheduler you are running? Powershell!&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-WinEvent -FilterHashTable @{ProviderName=&quot;Microsoft-Windows-Hyper-V-Hypervisor&quot;; ID=2} | select -First 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/change-scheduler.png&quot; alt=&quot;Get-WinEvent -FilterHashTable @{ProviderName=&amp;quot;Microsoft-Windows-Hyper-V-Hypervisor&amp;quot;; ID=2} | select -First 1&quot; /&gt;&lt;/p&gt;
+4. Wait and record results for each pass
 
-&lt;h1 id=&quot;how-do-i-change-scheduler&quot;&gt;How do I change scheduler?&lt;/h1&gt;
-&lt;p&gt;Changing scheduler is currently done through editing boot records via bcdedit.&lt;/p&gt;
+# Classic scheduler
+For this round of testing, 4 vCPU's were presented through to each of the VM's. This meant that there were 4 processors, with a single thread each for every VM. Belowa 0.5:1 (VP:LP) ratio, performance variability was great. I suspect that this was due to the classic scheduler assigning actual cores (and not SMT) during the heavy load.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; bcdedit /set hypervisorschedulertype (Classic|Core)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/cpuscheduler/core-change.png&quot; alt=&quot;Get-WinEvent -FilterHashTable @{ProviderName=&amp;quot;Microsoft-Windows-Hyper-V-Hypervisor&amp;quot;; ID=2} | select -First 1&quot; /&gt;&lt;/p&gt;
+# Core Scheduler - SMT Enabled
+Once all the testing was complete for the classic scheduler. The test bench and VM's were reconfigured for the Core Scheduler. This meant changing a few things:
 
-&lt;h1 id=&quot;thoughts&quot;&gt;Thoughts&lt;/h1&gt;
+1. The scheduler of the hypervisor. `bcdedit /set hypervisorschedulertype core`
+2. Change VM's to 2 processors and expose them to SMT: `Get-VM | Set-VMProcessor -Count 2 -HwThreadCountPerCore 2`
 
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Core scheduler offers stronger boundaries for a modest dip in performance.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Additional montioring is required for the core scheduler - Mainly CPU wait times&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Why couldn’t the method for checking/changing the scheduler type be a native powershell commandlet?&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Further testing is required for S2D Performance and other software defined solutions.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Newer hardware may show entirely different Results&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+This results in 2 cores with a total of 4 threads.
 
-&lt;p&gt;Hope that you enjoyed reading this, and please comment below if you have any questions, or &lt;a href=&quot;http://localhost:4000/contact.html&quot;&gt;feel free to reach out to me&lt;/a&gt;&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="hyper-v" /><category term="cpu-scheduler" /><category term="server-2016" /><category term="server-2019" /><summary type="html">Recent security vulnerabilities within CPU’s has resulted in a need to change some fundamental CPU scheduling within Hyper-V, so to keep VM’s secure. Microsoft has an article outlining the different schedulers, that now available. This blog article is to help with understanding the schedulers, how they work and perform, as well briefly explaining how Hyper-V virtualises CPU resources. To begin, we need to understand partitions.</summary></entry><entry><title type="html">S2D Cluster Updates - October 2018</title><link href="http://localhost:4000/2018/10/22/s2d-october-cluster-updates.html" rel="alternate" type="text/html" title="S2D Cluster Updates - October 2018" /><published>2018-10-22T00:00:00+11:00</published><updated>2018-10-22T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/22/s2d-october-cluster-updates</id><content type="html" xml:base="http://localhost:4000/2018/10/22/s2d-october-cluster-updates.html">&lt;p&gt;In my &lt;a href=&quot;https://thomassmart.github.io/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates.html&quot;&gt;previous blog article&lt;/a&gt;, I spoke about how &lt;a href=&quot;https://support.microsoft.com/en-us/help/
-4103723/windows-10-update-kb4103723&quot;&gt;recent updates&lt;/a&gt; had introduced some &lt;a href=&quot;https://support.microsoft.com/en-us/help/4462487/event-5120-with-status-io-timeout-c00000b5-after-an-s2d-node-restart-o&quot;&gt;serious bugs and reliability issues&lt;/a&gt; for S2D.&lt;/p&gt;
+Before over subscription, performance for this scheduler was a little lower, compared to the classic scheduler. This is somewhat anticipated as each thread no longer can get a dedicated core for its operations. 2 cores are locked to the 1 thread. After oversubscription performance decreases at the same rate.
 
-&lt;p&gt;Thankfully, with the &lt;a href=&quot;https://support.microsoft.com/en-us/help/4462928&quot;&gt;latest October updates - KB4462928&lt;/a&gt; these have now been resolved for Windows Server 2016!
-&lt;em&gt;The heavens rejoice&lt;/em&gt;&lt;/p&gt;
+As the LP's are dedicated to the VP's for the operation, within the root partition, you can see core's park as they are 'locked' to the other VP's
+![ Parked CPU ]({{ site.url }}/assets/img/cpuscheduler/cpu-park.png)
 
-&lt;p&gt;If you are already running Windows Server 2019, you’ll have to wait for the next round of updates, and the issues still apply to you.&lt;/p&gt;
+This parking, increases the amount of time threads need to wait for their round of operations. These wait times can be a silent killer. You can have a poorly performing VM with reported CPI load, but too many VP's assigned. The scheduler then struggles to find time to assign all LP's so that the VM can execute its operations. For this reason, it makes sense to keep assigned VP's to a logical number and monitor the *&quot;CPU Wait time per dispatch&quot;* performance monitor.
+![ CPU Wait Time ]({{ site.url }}/assets/img/cpuscheduler/cpu-wait.png)
 
-&lt;h2 id=&quot;fixes&quot;&gt;Fixes&lt;/h2&gt;
+# Core Scheduler - SMT Disabled
 
-&lt;p&gt;The specific fixes are:&lt;/p&gt;
+Disabling SMT on the host was easy enough through BIOS. Once disabled, the number of threads reported in Windows was halved as expected.
 
-&lt;ul&gt;
-  &lt;li&gt;Addresses an issue that occurs when using multiple Windows Server 2016 Hyper-V clusters. The following event appears in the log:&lt;/li&gt;
-&lt;/ul&gt;
+![ CPU Bios ]({{ site.url }}/assets/img/cpuscheduler/CPU-bios.png)
 
-&lt;blockquote&gt;
-  &lt;p&gt;“Cluster Shared Volume ‘CSVName’ (‘CSVName’) has entered a paused state because of ‘STATUS_USER_SESSION_DELETED(c0000203)’. All I/O will temporarily be queued until a path to the volume is reestablished.”&lt;/p&gt;
-&lt;/blockquote&gt;
+With SMT disabled on the host, to keep the ratio fair, the number of VP's presented to the VM's was halved. `Get-VM | Set-VMProcessor -Count 2 -HwThreadCountPerCore 0`
 
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Addresses an issue that may cause the creation of a single node cluster or the addition of more nodes to a cluster to fail intermittently.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Addresses an issue that occurs when restarting a node after draining the node. Event ID 5120 appears in the log with a “STATUS_IO_TIMEOUT c00000b5” message. This may slow or stop input and output (I/O) to the VMs, and sometimes the nodes may drop out of cluster membership.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Addresses memory leak issues on svchost.exe (netsvcs and IP Helper Service).&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Addresses an issue that depletes the storage space on a cluster-shared volume (CSV) because of a Hyper-V virtual hard disk (VHDX) expansion. As a result, a Virtual Machine (VM) might continue writing data to its disk until it becomes corrupted or stops working. The VM might also restart and then resume writing data until a corruption occurs.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+# Test Results
 
-&lt;p&gt;Wow! That’s a lot of goodies!&lt;/p&gt;
+## Averaged per VM
 
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+![ Classic Core SMT CineBench ]({{ site.url }}/assets/img/cpuscheduler/CPUPerfAverage.png)
 
-&lt;p&gt;Microsoft are advocating for aggresive adoption of the October updates. Extreme caution still needs to be exercised, and a full cluster shutdown is my current advise.&lt;/p&gt;
+| CPU Contention Ratio | Number of VM's | Classic | Core | Core - SMT Disabled |
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| 0.25:1 | 1 | 304 | 202 | 153 |
+| 0.5:1 | 2 | 302 | 201 | 151 |
+| 0.75:1 | 3 | 215 | 199 | 151 |
+| 1:1 | 4 | 194 | 196 | 151 |
+| 1.5:1 | 6 | 127 | 128 | 91 |
+| 2:1 | 8 | 91 | 93 | 71 |
+| 4:1 | 16 | 40 | 42 | 30 |
 
-&lt;p&gt;I’d also suggest that you manually download the MSU and install using that.&lt;/p&gt;
+## Cumulative
 
-&lt;p&gt;These are my high level step suggestions&lt;/p&gt;
+![ Classic Core SMT CineBench ]({{ site.url }}/assets/img/cpuscheduler/CPUPerfCumulative.png)
 
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Download the &lt;a href=&quot;http://www.catalog.update.microsoft.com/Search.aspx?q=KB4462928&quot;&gt;October MSU for Server 2016 - KB4462928 from here&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Copy those MSU’s to each of your nodes.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Shutdown all VM’s on the Cluster
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VM -ComputerName (Get-ClusterNode) | Stop-VM
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Detach all virtual disks
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Disconnect-VirtualDisk
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Shutdown the Cluster
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Stop-Cluster &amp;lt;&amp;lt;CLUSTERNAME&amp;gt;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Install all updates and reboot nodes
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wusa PATH/windows10.0-kb4462928-x64_c3c3bd7c809ed0a53afab205ccbc229556f384c7.msu
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;&lt;em&gt;You may need to install service stack updates (SSU) before the October LCU&lt;/em&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Start the Cluster
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Start-Cluster &amp;lt;&amp;lt;CLUSTERNAME&amp;gt;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Attach all virtual disks
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Connect-VirtualDisk
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Monitor storage jobs - You may also want to invoke storage jobs
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-StorageJob
+| CPU Contention Ratio | Number of VM's | Classic | Core | Core - SMT Disabled |
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| 0.25:1 | 1 | 304 | 202 | 153 |
+| 0.5:1 | 2 | 603 | 402 | 302 |
+| 0.75:1 | 3 | 646 | 597 | 454 |
+| 1:1 | 4 | 776 | 782 | 602 |
+| 1.5:1 | 6 | 764 | 766 | 543 |
+| 2:1 | 8 | 731 | 747 | 570 |
+| 4:1 | 16 | 646 | 674 | 473 |
+
+# What am I running?
+Want to know what scheduler you are running? Powershell!
+~~~~~
+Get-WinEvent -FilterHashTable @{ProviderName=&quot;Microsoft-Windows-Hyper-V-Hypervisor&quot;; ID=2} | select -First 1
+~~~~~
+![Get-WinEvent -FilterHashTable @{ProviderName=&quot;Microsoft-Windows-Hyper-V-Hypervisor&quot;; ID=2} | select -First 1]({{ site.url }}/assets/img/cpuscheduler/change-scheduler.png)
+
+# How do I change scheduler?
+Changing scheduler is currently done through editing boot records via bcdedit.
+
+~~~~~~
+ bcdedit /set hypervisorschedulertype (Classic|Core)
+~~~~~~
+![Get-WinEvent -FilterHashTable @{ProviderName=&quot;Microsoft-Windows-Hyper-V-Hypervisor&quot;; ID=2} | select -First 1]({{ site.url }}/assets/img/cpuscheduler/core-change.png)
+
+# Thoughts
+
+* Core scheduler offers stronger boundaries for a modest dip in performance.
+
+* Additional montioring is required for the core scheduler - Mainly CPU wait times
+
+* Why couldn't the method for checking/changing the scheduler type be a native powershell commandlet?
+
+* Further testing is required for S2D Performance and other software defined solutions.
+
+* Newer hardware may show entirely different Results
+
+
+Hope that you enjoyed reading this, and please comment below if you have any questions, or [feel free to reach out to me]({{ site.url }}/contact.html)</content><author><name>Thomas Smart</name></author><category term="hyper-v" /><category term="cpu-scheduler" /><category term="server-2016" /><category term="server-2019" /><summary type="html">Recent security vulnerabilities within CPU’s has resulted in a need to change some fundamental CPU scheduling within Hyper-V, so to keep VM’s secure. Microsoft has an article outlining the different schedulers, that now available. This blog article is to help with understanding the schedulers, how they work and perform, as well briefly explaining how Hyper-V virtualises CPU resources. To begin, we need to understand partitions.</summary></entry><entry><title type="html">S2D Cluster Updates - October 2018</title><link href="http://localhost:4000/2018/10/22/s2d-october-cluster-updates.html" rel="alternate" type="text/html" title="S2D Cluster Updates - October 2018" /><published>2018-10-22T00:00:00+11:00</published><updated>2018-10-22T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/22/s2d-october-cluster-updates</id><content type="html" xml:base="http://localhost:4000/2018/10/22/s2d-october-cluster-updates.html">In my [previous blog article](https://thomassmart.github.io/storagespacesdirect/s2d/cluster/hyper-converged/windows-update/2018/10/05/s2d-cluster-updates.html), I spoke about how [recent updates](https://support.microsoft.com/en-us/help/
+4103723/windows-10-update-kb4103723) had introduced some [serious bugs and reliability issues](https://support.microsoft.com/en-us/help/4462487/event-5120-with-status-io-timeout-c00000b5-after-an-s2d-node-restart-o) for S2D.
+
+
+Thankfully, with the [latest October updates - KB4462928](https://support.microsoft.com/en-us/help/4462928) these have now been resolved for Windows Server 2016!
+*The heavens rejoice*
+
+If you are already running Windows Server 2019, you'll have to wait for the next round of updates, and the issues still apply to you.
+
+## Fixes
+
+The specific fixes are:
+
+* Addresses an issue that occurs when using multiple Windows Server 2016 Hyper-V clusters. The following event appears in the log:
+
+&gt;  “Cluster Shared Volume 'CSVName' ('CSVName') has entered a paused state because of 'STATUS_USER_SESSION_DELETED(c0000203)'. All I/O will temporarily be queued until a path to the volume is reestablished.”
+
+* Addresses an issue that may cause the creation of a single node cluster or the addition of more nodes to a cluster to fail intermittently.
+
+* Addresses an issue that occurs when restarting a node after draining the node. Event ID 5120 appears in the log with a “STATUS_IO_TIMEOUT c00000b5” message. This may slow or stop input and output (I/O) to the VMs, and sometimes the nodes may drop out of cluster membership.
+
+* Addresses memory leak issues on svchost.exe (netsvcs and IP Helper Service).
+
+* Addresses an issue that depletes the storage space on a cluster-shared volume (CSV) because of a Hyper-V virtual hard disk (VHDX) expansion. As a result, a Virtual Machine (VM) might continue writing data to its disk until it becomes corrupted or stops working. The VM might also restart and then resume writing data until a corruption occurs.
+
+Wow! That's a lot of goodies!
+
+## Installation
+
+Microsoft are advocating for aggresive adoption of the October updates. Extreme caution still needs to be exercised, and a full cluster shutdown is my current advise.
+
+I'd also suggest that you manually download the MSU and install using that.
+
+These are my high level step suggestions
+
+1. Download the [October MSU for Server 2016 - KB4462928 from here](http://www.catalog.update.microsoft.com/Search.aspx?q=KB4462928)
+
+2. Copy those MSU's to each of your nodes.
+
+3. Shutdown all VM's on the Cluster
+~~~~~~~~~~~
+Get-VM -ComputerName (Get-ClusterNode) | Stop-VM
+~~~~~~~~~~~
+4. Detach all virtual disks
+~~~~~~~~~~~
+Get-VirtualDisk | Disconnect-VirtualDisk
+~~~~~~~~~~~
+5. Shutdown the Cluster
+~~~~~~~~~~~
+Stop-Cluster &lt;&lt;CLUSTERNAME&gt;&gt;
+~~~~~~~~~~~
+6. Install all updates and reboot nodes
+~~~~~~~~~~~
+wusa PATH/windows10.0-kb4462928-x64_c3c3bd7c809ed0a53afab205ccbc229556f384c7.msu
+~~~~~~~~~~~
+*You may need to install service stack updates (SSU) before the October LCU*
+
+7. Start the Cluster
+~~~~~~~~~~~
+Start-Cluster &lt;&lt;CLUSTERNAME&gt;&gt;
+~~~~~~~~~~~
+8. Attach all virtual disks
+~~~~~~~~~~~
+Get-VirtualDisk | Connect-VirtualDisk
+~~~~~~~~~~~
+9. Monitor storage jobs - You may also want to invoke storage jobs
+~~~~~~~~~~~~~~~~~
+Get-StorageJob
 Get-VirtualDisk | Repair-VirtualDisk -AsJob
 Get-StoragePool S2D* | Optimize-StoragePool
 Get-StorageJob
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Once complete power up all your VM’s&lt;/li&gt;
-&lt;/ol&gt;
+~~~~~~~~~~~~~~~~~
+10. Once complete power up all your VM's
 
-&lt;p&gt;Its worth noting that the update window will be considerably shorter than using SCVMM or Cluster Aware updating as there are no storage rebuilds between node reboots.&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="s2d" /><category term="hyper-v" /><category term="failover-cluster" /><category term="server-2016" /><category term="windows-updates" /><summary type="html">In my previous blog article, I spoke about how recent updates had introduced some serious bugs and reliability issues for S2D.</summary></entry><entry><title type="html">Windows 10 1809 Removed from WSUS and Windows Update</title><link href="http://localhost:4000/2018/10/06/windows-10-1809.html" rel="alternate" type="text/html" title="Windows 10 1809 Removed from WSUS and Windows Update" /><published>2018-10-06T00:00:00+11:00</published><updated>2018-10-06T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/06/windows-10-1809</id><content type="html" xml:base="http://localhost:4000/2018/10/06/windows-10-1809.html">&lt;p&gt;That’s right, Microsoft have just announced the &lt;a href=&quot;https://support.microsoft.com/en-au/help/4464619&quot;&gt;removal of the 1809 October release of Windows 10.&lt;/a&gt;&lt;/p&gt;
+Its worth noting that the update window will be considerably shorter than using SCVMM or Cluster Aware updating as there are no storage rebuilds between node reboots.</content><author><name>Thomas Smart</name></author><category term="s2d" /><category term="hyper-v" /><category term="failover-cluster" /><category term="server-2016" /><category term="windows-updates" /><summary type="html">In my previous blog article, I spoke about how recent updates had introduced some serious bugs and reliability issues for S2D.</summary></entry><entry><title type="html">Windows 10 1809 Removed from WSUS and Windows Update</title><link href="http://localhost:4000/2018/10/06/windows-10-1809.html" rel="alternate" type="text/html" title="Windows 10 1809 Removed from WSUS and Windows Update" /><published>2018-10-06T00:00:00+11:00</published><updated>2018-10-06T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/06/windows-10-1809</id><content type="html" xml:base="http://localhost:4000/2018/10/06/windows-10-1809.html">That's right, Microsoft have just announced the [removal of the 1809 October release of Windows 10.](https://support.microsoft.com/en-au/help/4464619)
 
-&lt;p&gt;There have been numerous &lt;a href=&quot;https://answers.microsoft.com/en-us/windows/forum/windows_10-update/windows-10-1809-update-deleted-all-files-from/ff608374-2686-4a08-a4c2-caa4caa6d4e1&quot;&gt;articles surfacing where users profiles were reset as part of the upgrade&lt;/a&gt; and &lt;a href=&quot;https://www.lifehacker.com.au/2018/10/back-up-windows-10-before-installing-the-october-update-or-risk-losing-your-files/#comment-2469641&quot;&gt;Lifehackers Post&lt;/a&gt;. If you didn’t have a backup of your PC/Profile, the data was/is gone forever.&lt;/p&gt;
+There have been numerous [articles surfacing where users profiles were reset as part of the upgrade](https://answers.microsoft.com/en-us/windows/forum/windows_10-update/windows-10-1809-update-deleted-all-files-from/ff608374-2686-4a08-a4c2-caa4caa6d4e1
+) and [Lifehackers Post](https://www.lifehacker.com.au/2018/10/back-up-windows-10-before-installing-the-october-update-or-risk-losing-your-files/#comment-2469641). If you didn't have a backup of your PC/Profile, the data was/is gone forever.
 
-&lt;p&gt;Microsoft’s current recommendations are:&lt;/p&gt;
+Microsoft's current recommendations are:
 
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;If you have checked for updates and believe you have an issue, please contact us directly at +1-800-MICROSOFT or find a &lt;a href=&quot;https://support.microsoft.com/en-us/help/4051701/global-customer-service-phone-numbers&quot;&gt;local number in your area&lt;/a&gt;&lt;/p&gt;
+* If you have checked for updates and believe you have an issue, please contact us directly at +1-800-MICROSOFT or find a [local number in your area](https://support.microsoft.com/en-us/help/4051701/global-customer-service-phone-numbers)
 
-    &lt;p&gt;13 20 58 if your a fair dinkum Australian&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;If you have access to a different PC, &lt;a href=&quot;https://support.microsoft.com/en-au/contactus/&quot;&gt;please contact us&lt;/a&gt;.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;If you have manually downloaded the Windows 10 October 2018 Update installation media, please don’t install it and wait until new media is available.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Thomas Smart</name></author><category term="windows-10" /><category term="windows-updates" /><summary type="html">That’s right, Microsoft have just announced the removal of the 1809 October release of Windows 10.</summary></entry><entry><title type="html">S2D Cluster Updates - May 2018</title><link href="http://localhost:4000/2018/10/05/s2d-cluster-updates.html" rel="alternate" type="text/html" title="S2D Cluster Updates - May 2018" /><published>2018-10-05T00:00:00+11:00</published><updated>2018-10-05T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/05/s2d-cluster-updates</id><content type="html" xml:base="http://localhost:4000/2018/10/05/s2d-cluster-updates.html">&lt;p&gt;There is nothing more frustrating that doing all possible due diligence, raising the relevant Change Requests, completing testing, just to have a routine Windows Update fail.&lt;/p&gt;
+  13 20 58 if your a fair dinkum Australian
 
-&lt;p&gt;Unfortunately, within increasing demand on software through mechanisms such as SDN (Software Defined Networks), SDS (Software Defined Storage) and HCI (Hyper-converged Infrastructure) a failure can have an exponential impact on workloads.&lt;/p&gt;
+* If you have access to a different PC, [please contact us](https://support.microsoft.com/en-au/contactus/).
 
-&lt;p&gt;&lt;a href=&quot;https://support.microsoft.com/en-us/help/4103723/windows-10-update-kb4103723&quot;&gt;Introducing the Cumulative Update May 9th 2018 update&lt;/a&gt;&lt;/p&gt;
+* If you have manually downloaded the Windows 10 October 2018 Update installation media, please don’t install it and wait until new media is available.</content><author><name>Thomas Smart</name></author><category term="windows-10" /><category term="windows-updates" /><summary type="html">That’s right, Microsoft have just announced the removal of the 1809 October release of Windows 10.</summary></entry><entry><title type="html">S2D Cluster Updates - May 2018</title><link href="http://localhost:4000/2018/10/05/s2d-cluster-updates.html" rel="alternate" type="text/html" title="S2D Cluster Updates - May 2018" /><published>2018-10-05T00:00:00+11:00</published><updated>2018-10-05T00:00:00+11:00</updated><id>http://localhost:4000/2018/10/05/s2d-cluster-updates</id><content type="html" xml:base="http://localhost:4000/2018/10/05/s2d-cluster-updates.html">There is nothing more frustrating that doing all possible due diligence, raising the relevant Change Requests, completing testing, just to have a routine Windows Update fail.
 
-&lt;p&gt;If you have this update installed, and are running Storage Spaces Direct.&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;em&gt;EXCERCISE CAUTION WHEN COMPLETING MAINTENANCE&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+Unfortunately, within increasing demand on software through mechanisms such as SDN (Software Defined Networks), SDS (Software Defined Storage) and HCI (Hyper-converged Infrastructure) a failure can have an exponential impact on workloads.
 
-&lt;p&gt;This update introduced a SMB resiliency mechanism and this mechanism can cause clusters under heavy load to experience node/cluster failures during node reboots. Systems that aren’t under heavy load are unaffected by this current bug and I’ve been able to successfully manage windows updates on numerous clusters.&lt;/p&gt;
+[Introducing the Cumulative Update May 9th 2018 update](https://support.microsoft.com/en-us/help/4103723/windows-10-update-kb4103723)
 
-&lt;p&gt;However, if you do have a heavily loaded cluster, &lt;a href=&quot;https://support.microsoft.com/en-us/help/4462487/event-5120-with-status-io-timeout-c00000b5-after-an-s2d-node-restart-o&quot;&gt;Microsoft have an article on how you can perform update more safely&lt;/a&gt;. In my experience this improved resiliency during maintenance, but didn’t resolve the issue (We only had 1 node failure instead of 3 - which resulted in the cluster staying alive, so Yay, I guess?)&lt;/p&gt;
+If you have this update installed, and are running Storage Spaces Direct.
+&gt; *EXCERCISE CAUTION WHEN COMPLETING MAINTENANCE*
 
-&lt;p&gt;This is still unresolved (As of Oct 5th), and my Microsoft Partner case is making very little progress. If you can afford the outage, I’d suggest that you organise complete cluster outages to install updates.&lt;/p&gt;
+This update introduced a SMB resiliency mechanism and this mechanism can cause clusters under heavy load to experience node/cluster failures during node reboots. Systems that aren't under heavy load are unaffected by this current bug and I've been able to successfully manage windows updates on numerous clusters.
 
-&lt;p&gt;These high level steps may help you:&lt;/p&gt;
+However, if you do have a heavily loaded cluster, [Microsoft have an article on how you can perform update more safely](https://support.microsoft.com/en-us/help/4462487/event-5120-with-status-io-timeout-c00000b5-after-an-s2d-node-restart-o). In my experience this improved resiliency during maintenance, but didn't resolve the issue (We only had 1 node failure instead of 3 - which resulted in the cluster staying alive, so Yay, I guess?)
 
-&lt;ol&gt;
-  &lt;li&gt;Shutdown all VM’s on the Cluster
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VM -ComputerName (Get-ClusterNode) | Stop-VM
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Detach all virtual disks
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Disconnect-VirtualDisk
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Shutdown the Cluster
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Stop-Cluster &amp;lt;&amp;lt;CLUSTERNAME&amp;gt;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Install all updates and reboot nodes&lt;/li&gt;
-  &lt;li&gt;Start the Cluster
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Start-Cluster &amp;lt;&amp;lt;CLUSTERNAME&amp;gt;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Attach all virtual disks
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Connect-VirtualDisk
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Monitor storage jobs - You may also want to invoke storage jobs
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Repair-VirtualDisk -AsJob
+This is still unresolved (As of Oct 5th), and my Microsoft Partner case is making very little progress. If you can afford the outage, I'd suggest that you organise complete cluster outages to install updates.
+
+These high level steps may help you:
+
+1. Shutdown all VM's on the Cluster
+~~~~~~~~~~~
+Get-VM -ComputerName (Get-ClusterNode) | Stop-VM
+~~~~~~~~~~~
+2. Detach all virtual disks
+~~~~~~~~~~~
+Get-VirtualDisk | Disconnect-VirtualDisk
+~~~~~~~~~~~
+3. Shutdown the Cluster
+~~~~~~~~~~~
+Stop-Cluster &lt;&lt;CLUSTERNAME&gt;&gt;
+~~~~~~~~~~~
+4. Install all updates and reboot nodes
+5. Start the Cluster
+~~~~~~~~~~~
+Start-Cluster &lt;&lt;CLUSTERNAME&gt;&gt;
+~~~~~~~~~~~
+6. Attach all virtual disks
+~~~~~~~~~~~
+Get-VirtualDisk | Connect-VirtualDisk
+~~~~~~~~~~~
+7. Monitor storage jobs - You may also want to invoke storage jobs
+~~~~~~~~~~~~~~~~~
+Get-VirtualDisk | Repair-VirtualDisk -AsJob
 Get-StoragePool S2D* | Optimize-StoragePool
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Once complete power up all your VM’s&lt;/li&gt;
-&lt;/ol&gt;
+~~~~~~~~~~~~~~~~~
+8. Once complete power up all your VM's
 
-&lt;p&gt;Its worth noting that the update window will be considerably shorter than using SCVMM or Cluster Aware updating as there are no storage rebuilds between node reboots.&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="s2d" /><category term="hyper-v" /><category term="failover-cluster" /><category term="server-2016" /><category term="windows-updates" /><summary type="html">There is nothing more frustrating that doing all possible due diligence, raising the relevant Change Requests, completing testing, just to have a routine Windows Update fail.</summary></entry><entry><title type="html">S2D Manual Cache Rebind</title><link href="http://localhost:4000/2018/07/30/s2d-manual-cache-rebind.html" rel="alternate" type="text/html" title="S2D Manual Cache Rebind" /><published>2018-07-30T00:00:00+11:00</published><updated>2018-07-30T00:00:00+11:00</updated><id>http://localhost:4000/2018/07/30/s2d-manual-cache-rebind</id><content type="html" xml:base="http://localhost:4000/2018/07/30/s2d-manual-cache-rebind.html">&lt;p&gt;Sometimes things don’t go quite to plan. Whilst deploying a cluster with P3700 Intel drives, we had a situation where we needed to disable the cache as the drives were failing. This is a well documented issue that arose with poor firmware from Intel. &lt;a href=&quot;https://support.microsoft.com/en-au/help/4052341/slow-performance-or-lost-communication-io-error-detached-or-no-redunda&quot;&gt;Microsoft released a support article outlining the symptoms of this issue &lt;/a&gt;. The issue is resolved now and the &lt;a href=&quot;https://downloadcenter.intel.com/download/27517/Datacenter-NVMe-Microsoft-Windows-Drivers-for-Intel-SSDs?product=79625&quot;&gt;latest firmware from intel will resolve the issue aforementioned.&lt;/a&gt;&lt;/p&gt;
+Its worth noting that the update window will be considerably shorter than using SCVMM or Cluster Aware updating as there are no storage rebuilds between node reboots.</content><author><name>Thomas Smart</name></author><category term="s2d" /><category term="hyper-v" /><category term="failover-cluster" /><category term="server-2016" /><category term="windows-updates" /><summary type="html">There is nothing more frustrating that doing all possible due diligence, raising the relevant Change Requests, completing testing, just to have a routine Windows Update fail.</summary></entry><entry><title type="html">S2D Manual Cache Rebind</title><link href="http://localhost:4000/2018/07/30/s2d-manual-cache-rebind.html" rel="alternate" type="text/html" title="S2D Manual Cache Rebind" /><published>2018-07-30T00:00:00+11:00</published><updated>2018-07-30T00:00:00+11:00</updated><id>http://localhost:4000/2018/07/30/s2d-manual-cache-rebind</id><content type="html" xml:base="http://localhost:4000/2018/07/30/s2d-manual-cache-rebind.html">Sometimes things don't go quite to plan. Whilst deploying a cluster with P3700 Intel drives, we had a situation where we needed to disable the cache as the drives were failing. This is a well documented issue that arose with poor firmware from Intel. [Microsoft released a support article outlining the symptoms of this issue ](https://support.microsoft.com/en-au/help/4052341/slow-performance-or-lost-communication-io-error-detached-or-no-redunda). The issue is resolved now and the [latest firmware from intel will resolve the issue aforementioned.](https://downloadcenter.intel.com/download/27517/Datacenter-NVMe-Microsoft-Windows-Drivers-for-Intel-SSDs?product=79625)
 
-&lt;p&gt;The issue we experienced, was that once the firmware had been updated, and the cache re-enabled through the following command:&lt;/p&gt;
+The issue we experienced, was that once the firmware had been updated, and the cache re-enabled through the following command:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Set-ClusterS2D -CacheState enabled
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~~~
+Set-ClusterS2D -CacheState enabled
+~~~~~~~
 
-&lt;p&gt;we saw absolutely no performance increase at all.&lt;/p&gt;
+we saw absolutely no performance increase at all.
 
-&lt;p&gt;Digging deeper we saw that there were no cache drives being used by performance monitor. S2D cache drives work by creating a ‘bind’ between storage drives and cache drives. For example, if you had 8 storage drives and 4 cache drives, 2 disks would bind to each cache drive. This results in a cache bind of 2:1. You could also have 12 capacity drives, to 2 cache drives. This results in a cache bind of 6:1 (Which is what is in this example).&lt;/p&gt;
+Digging deeper we saw that there were no cache drives being used by performance monitor. S2D cache drives work by creating a 'bind' between storage drives and cache drives. For example, if you had 8 storage drives and 4 cache drives, 2 disks would bind to each cache drive. This results in a cache bind of 2:1. You could also have 12 capacity drives, to 2 cache drives. This results in a cache bind of 6:1 (Which is what is in this example).
 
-&lt;p&gt;&lt;a href=&quot;http://www.darrylvanderpeijl.com/storage-spaces-direct-cache-disk-status/&quot;&gt;Darryl van der Peijl has written an awesome script to get the cache bind status of your drives, node by node.&lt;/a&gt;. It’s an awesome script, that I highly recommend adding to your swiss army knife for S2D!&lt;/p&gt;
 
-&lt;p&gt;Running Darryl’s script we saw the following results.&lt;/p&gt;
+[Darryl van der Peijl has written an awesome script to get the cache bind status of your drives, node by node.](http://www.darrylvanderpeijl.com/storage-spaces-direct-cache-disk-status/). It's an awesome script, that I highly recommend adding to your swiss army knife for S2D!
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/CacheError0Drives.png&quot; alt=&quot;CacheDiskStateIneligibleDataPartition CacheDiskStateIneligibleExcludedFromS2D CacheDiskStateIneligibleForS2D CacheDiskStateIneligibleNotEnoughSpace CacheDiskStateIneligibleNotGPT CacheDiskStateIneligibleUnsupportedSystem CacheDiskStateInitialized CacheDiskStateInitializedAndBound CacheDiskStateInStorageMaintenance CacheDiskStateInternalErrorConfiguring CacheDiskStateMarkedBad CacheDiskStateMarkedMissing CacheDiskStateMissing CacheDiskStateNonHybrid CacheDiskStateOrphanedRecovering CacheDiskStateOrphanedWaiting CacheDiskStateRepairing CacheDiskStateReset CacheDiskStateSkippedBindingNoFlash CacheDiskStateUnknown &quot; /&gt;&lt;/p&gt;
+Running Darryl's script we saw the following results.
 
-&lt;p&gt;As you can see in the screenshot, no drives are binding, and only 1 cache drive is being successfully seen. This was caused by the bastardisation of the cache status. On, Off, On, Insn’t a great idea unless absolutely necessary. The root cause of this is the storage pool information stored within the metadata partition isn’t compatible with re-enabling the cache. To resolve this you need to remove each disk. Clean all partitions, and re-add the disks with the cache enabled. I have a script that can do this disk-by-disk, but I’m not publishing it due to its harmful nature. I’ll happily provide you a copy if you reach out to me, using &lt;a href=&quot;{ site.url }}//contact.html&quot;&gt;my contact page&lt;/a&gt;.&lt;/p&gt;
+![CacheDiskStateIneligibleDataPartition CacheDiskStateIneligibleExcludedFromS2D CacheDiskStateIneligibleForS2D CacheDiskStateIneligibleNotEnoughSpace CacheDiskStateIneligibleNotGPT CacheDiskStateIneligibleUnsupportedSystem CacheDiskStateInitialized CacheDiskStateInitializedAndBound CacheDiskStateInStorageMaintenance CacheDiskStateInternalErrorConfiguring CacheDiskStateMarkedBad CacheDiskStateMarkedMissing CacheDiskStateMissing CacheDiskStateNonHybrid CacheDiskStateOrphanedRecovering CacheDiskStateOrphanedWaiting CacheDiskStateRepairing CacheDiskStateReset CacheDiskStateSkippedBindingNoFlash CacheDiskStateUnknown ]({{ site.url }}/assets/img/s2derrors/CacheError0Drives.png)
 
-&lt;p&gt;The best method is to remove a node, clean all its disks, and re-add the node. To do this you will need the following:&lt;/p&gt;
+As you can see in the screenshot, no drives are binding, and only 1 cache drive is being successfully seen. This was caused by the bastardisation of the cache status. On, Off, On, Insn't a great idea unless absolutely necessary. The root cause of this is the storage pool information stored within the metadata partition isn't compatible with re-enabling the cache. To resolve this you need to remove each disk. Clean all partitions, and re-add the disks with the cache enabled. I have a script that can do this disk-by-disk, but I'm not publishing it due to its harmful nature. I'll happily provide you a copy if you reach out to me, using [my contact page]({ site.url }}//contact.html).
 
-&lt;ul&gt;
-  &lt;li&gt;If HCI - Enough resources to handle the workload. N+1 (Accounting for 1 node being absent)&lt;/li&gt;
-  &lt;li&gt;Enough fault domains to remove a node.&lt;/li&gt;
-  &lt;li&gt;Enough storage capacity.&lt;/li&gt;
-&lt;/ul&gt;
+The best method is to remove a node, clean all its disks, and re-add the node. To do this you will need the following:
 
-&lt;p&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows-server/storage/storage-spaces/remove-servers&quot;&gt;Microsoft has documented the scale back requirements quite well here.&lt;/a&gt; If you match all these and want to continue, read on!&lt;/p&gt;
+* If HCI - Enough resources to handle the workload. N+1 (Accounting for 1 node being absent)
+* Enough fault domains to remove a node.
+* Enough storage capacity.
 
-&lt;h1 id=&quot;steps-overview&quot;&gt;Steps Overview&lt;/h1&gt;
+[Microsoft has documented the scale back requirements quite well here.](https://docs.microsoft.com/en-us/windows-server/storage/storage-spaces/remove-servers) If you match all these and want to continue, read on!
 
-&lt;ol&gt;
-  &lt;li&gt;Enable the Cache&lt;/li&gt;
-  &lt;li&gt;Check the cluster health&lt;/li&gt;
-  &lt;li&gt;Pause a node.&lt;/li&gt;
-  &lt;li&gt;Start the evacuation of a node.&lt;/li&gt;
-  &lt;li&gt;Repair virtual disk to complete evacuation.&lt;/li&gt;
-  &lt;li&gt;Finalise node removal.&lt;/li&gt;
-  &lt;li&gt;Clean the disks on the node.&lt;/li&gt;
-  &lt;li&gt;Re-add the node to the clusters&lt;/li&gt;
-  &lt;li&gt;Verify the cache drive binding&lt;/li&gt;
-  &lt;li&gt;Optimise the storage pools&lt;/li&gt;
-  &lt;li&gt;Repeat for the other nodes.&lt;/li&gt;
-&lt;/ol&gt;
+# Steps Overview
 
-&lt;p&gt;!Before beginning any of these&lt;/p&gt;
+1. Enable the Cache
+2. Check the cluster health
+3. Pause a node.
+4. Start the evacuation of a node.
+5. Repair virtual disk to complete evacuation.
+6. Finalise node removal.
+7. Clean the disks on the node.
+8. Re-add the node to the clusters
+9. Verify the cache drive binding
+10. Optimise the storage pools
+10. Repeat for the other nodes.
 
-&lt;h2 id=&quot;1-enable-the-cache&quot;&gt;1. Enable the Cache&lt;/h2&gt;
+!Before beginning any of these
 
-&lt;p&gt;Check that the cache is enabled for the clusters&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-ClusterS2D
+## 1. Enable the Cache
+
+Check that the cache is enabled for the clusters
+~~~~
+Get-ClusterS2D
 
 
 CacheMetadataReserveBytes : 34359738368
@@ -535,123 +372,128 @@ CacheModeSSD              : WriteOnly
 CachePageSizeKBytes       : 16
 CacheState                : Enabled
 State                     : Enabled 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
 
-&lt;p&gt;If the cache isn’t enabled at the cluster level enable it:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Set-ClusterS2D -CacheState Enabled 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+If the cache isn't enabled at the cluster level enable it:
+~~~~~
+Set-ClusterS2D -CacheState Enabled 
+~~~~~
 
-&lt;h2 id=&quot;2-check-cluster-health&quot;&gt;2. Check Cluster health&lt;/h2&gt;
-&lt;p&gt;Check the health of key objects, examples below.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk
+## 2. Check Cluster health
+Check the health of key objects, examples below.
+~~~~~
+Get-VirtualDisk
 Get-PhysicalDisk
 Get-StoragePool s2d*
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;You shouldn’t continue if you don’t understand the output from those 3 commands. Its nothing personal, but you are unlikely to be able to complete in-depth troubleshooting if you are unfamiliar with those commands.&lt;/p&gt;
+~~~~~
+You shouldn't continue if you don't understand the output from those 3 commands. Its nothing personal, but you are unlikely to be able to complete in-depth troubleshooting if you are unfamiliar with those commands.
 
-&lt;h2 id=&quot;3-pause-the-first-node&quot;&gt;3. Pause the first node&lt;/h2&gt;
+## 3. Pause the first node
 
-&lt;p&gt;This is a standard process. Using either SCVMM, Failover Cluster Manager or the below powershell cmdlet to pause the node.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Suspend-ClusterNode -Drain
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+This is a standard process. Using either SCVMM, Failover Cluster Manager or the below powershell cmdlet to pause the node.
+~~~~
+Suspend-ClusterNode -Drain
+~~~~
 
-&lt;h2 id=&quot;4-start-evacuation-of-the-node&quot;&gt;4. Start evacuation of the node&lt;/h2&gt;
+## 4. Start evacuation of the node
 
-&lt;ol&gt;
-  &lt;li&gt;RDP to the nodes&lt;/li&gt;
-  &lt;li&gt;Check the hostname of the node you are connected to. Best to be safe!&lt;/li&gt;
-  &lt;li&gt;Run the following command:
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Remove-ClusterNode -CleanUpDisks
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;The command will fail. This is expected as it was unable to remove the disks instantly. The command however has marked all disks as retired and started the physical disk removal.
-&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/removeclusternode.png&quot; alt=&quot;Remove-ClusterNode CleanUpDisks Error 40000. Failed to remove disks from pool The storage pool does not have sufficient capacity to relocate data from the specified physical disks.&quot; /&gt;&lt;/li&gt;
-  &lt;li&gt;Check that the physical disk is marked as retired and removing from pools
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-StorageNode -name &quot;HOSTNAME*&quot; | Get-PhysicalDisk -PhysicallyConnected
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/physicaldisksremoving.png&quot; alt=&quot;physical disks removing&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
+1. RDP to the nodes
+2. Check the hostname of the node you are connected to. Best to be safe!
+3. Run the following command:
+~~~~~~
+Remove-ClusterNode -CleanUpDisks
+~~~~~~
+4. The command will fail. This is expected as it was unable to remove the disks instantly. The command however has marked all disks as retired and started the physical disk removal.
+![Remove-ClusterNode CleanUpDisks Error 40000. Failed to remove disks from pool The storage pool does not have sufficient capacity to relocate data from the specified physical disks.]({{ site.url }}/assets/img/s2derrors/removeclusternode.png)
+5. Check that the physical disk is marked as retired and removing from pools
+~~~~~
+Get-StorageNode -name &quot;HOSTNAME*&quot; | Get-PhysicalDisk -PhysicallyConnected
+~~~~~
+![physical disks removing]({{ site.url }}/assets/img/s2derrors/physicaldisksremoving.png)
 
-&lt;h2 id=&quot;5-repair-virtual-disks&quot;&gt;5. Repair virtual disks&lt;/h2&gt;
+## 5. Repair virtual disks
 
-&lt;p&gt;Repair virtual disks so that their foot print is removed from disks operating on the node.&lt;/p&gt;
+Repair virtual disks so that their foot print is removed from disks operating on the node.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-VirtualDisk | Repair-VirtualDisk -AsJob
+~~~~
+Get-VirtualDisk | Repair-VirtualDisk -AsJob
 Get-StorageJob
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~
 
-&lt;p&gt;This will most likely take a number of hours, keep checking in on the storage job until they are all complete.&lt;/p&gt;
+This will most likely take a number of hours, keep checking in on the storage job until they are all complete.
 
-&lt;h2 id=&quot;6-finalise-node-removal&quot;&gt;6. Finalise node removal&lt;/h2&gt;
-&lt;p&gt;Check that:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;The disks have all been removed (Show as can pool equals true)&lt;/li&gt;
-  &lt;li&gt;and that there are no virtual disk foot prints left.&lt;/li&gt;
-&lt;/ul&gt;
+## 6. Finalise node removal
+Check that:
+* The disks have all been removed (Show as can pool equals true)
+* and that there are no virtual disk foot prints left.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-StorageNode -name &quot;HOSTNAME*&quot; | Get-PhysicalDisk -PhysicallyConnected | ? CanPool -ne True | Get-VirtualDisk
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
+Get-StorageNode -name &quot;HOSTNAME*&quot; | Get-PhysicalDisk -PhysicallyConnected | ? CanPool -ne True | Get-VirtualDisk
+~~~~~
 
-&lt;p&gt;If both fine continue, otherwise head back to step 5 and rerun (Don’t stress, sometime you may need to repeat this a number of times, or ever reboot the node being removed to fully clear the disks)&lt;/p&gt;
+If both fine continue, otherwise head back to step 5 and rerun (Don't stress, sometime you may need to repeat this a number of times, or ever reboot the node being removed to fully clear the disks)
 
-&lt;p&gt;If both are fine, rerun the remove command again, this time it will complete with no errors.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Remove-ClusterNode -CleanUpDisks
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+If both are fine, rerun the remove command again, this time it will complete with no errors.
+~~~~~~
+Remove-ClusterNode -CleanUpDisks
+~~~~~~
 
-&lt;h2 id=&quot;7-clean-the-disks-on-the-node&quot;&gt;7. Clean the disks on the node.&lt;/h2&gt;
-&lt;p&gt;Once the node has been removed, we need to clear all partitions off the disks. Use the following to clear them up. Its an adaption of the script provided by MS as part of their recommended build guide, however its been sanitised to not touch other nodes.&lt;/p&gt;
+## 7. Clean the disks on the node.
+Once the node has been removed, we need to clear all partitions off the disks. Use the following to clear them up. Its an adaption of the script provided by MS as part of their recommended build guide, however its been sanitised to not touch other nodes.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-Disk | ? Number -ne $null | ? IsBoot -ne $true | ? IsSystem -ne $true | ? PartitionStyle -ne RAW | % {
+~~~~~
+Get-Disk | ? Number -ne $null | ? IsBoot -ne $true | ? IsSystem -ne $true | ? PartitionStyle -ne RAW | % {
         $_ | Set-Disk -isoffline:$false
         $_ | Set-Disk -isreadonly:$false
         $_ | Clear-Disk -RemoveData -RemoveOEM -Confirm:$false
         $_ | Set-Disk -isreadonly:$true
         $_ | Set-Disk -isoffline:$true
     }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
 
-&lt;h2 id=&quot;8-re-add-the-node-to-the-clusters&quot;&gt;8. Re-add the node to the clusters&lt;/h2&gt;
-&lt;p&gt;Don’t just go slapping nodes back in. Just because it worked before, is no reason to blindly add the node back in.&lt;/p&gt;
+## 8. Re-add the node to the clusters
+Don't just go slapping nodes back in. Just because it worked before, is no reason to blindly add the node back in.
 
-&lt;p&gt;Run the test cluster cmdlet and read the output to see if there are any errors.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Test-Cluster -Node &amp;lt;ALL NODES HERE&amp;gt; -Include &quot;Storage Spaces Direct&quot;, Inventory, Network, &quot;System Configuration&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+Run the test cluster cmdlet and read the output to see if there are any errors.
+~~~~~
+Test-Cluster -Node &lt;ALL NODES HERE&gt; -Include &quot;Storage Spaces Direct&quot;, Inventory, Network, &quot;System Configuration&quot;
+~~~~~
 
-&lt;p&gt;From an existing cluster node, run the following cmdlet (Or re-add using SCVMM, or Failover Cluster Manager)&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Add-ClusterNode -Name &amp;lt;NODENAME&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+From an existing cluster node, run the following cmdlet (Or re-add using SCVMM, or Failover Cluster Manager)
+~~~~~
+Add-ClusterNode -Name &lt;NODENAME&gt;
+~~~~~
 
-&lt;h2 id=&quot;9-verify-the-cache-drive-binding&quot;&gt;9. Verify the cache drive binding&lt;/h2&gt;
-&lt;p&gt;Once the node has been added back in. Re-run Darryl’s script to check the binding. You should now see an even binding of all drives to a cache drive.&lt;/p&gt;
+## 9. Verify the cache drive binding
+Once the node has been added back in. Re-run Darryl's script to check the binding. You should now see an even binding of all drives to a cache drive.
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/successfulbind.png&quot; alt=&quot;cache drives bound CacheDiskStateIneligibleDataPartition&quot; /&gt;&lt;/p&gt;
+![cache drives bound CacheDiskStateIneligibleDataPartition]({{ site.url }}/assets/img/s2derrors/successfulbind.png)
 
-&lt;h2 id=&quot;10-optimise-the-storage-pools&quot;&gt;10. Optimise the storage pools&lt;/h2&gt;
-&lt;p&gt;Now that the node has been added back in, you need to redistribute blocks back to the node.&lt;/p&gt;
+## 10. Optimise the storage pools
+Now that the node has been added back in, you need to redistribute blocks back to the node.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-StoragePool S2D* | Optimize-StoragePool
+~~~~~
+Get-StoragePool S2D* | Optimize-StoragePool
 Get-StorageJob
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
 
-&lt;p&gt;For this entire process, you may find it intersting to watch the nodes virtualdisk footprint fall. &lt;a href=&quot;https://blogs.technet.microsoft.com/filecab/2016/11/21/deep-dive-pool-in-spaces-direct/&quot;&gt;I’d recommend Cosmos Darwin’s show-prettypool script&lt;/a&gt;&lt;/p&gt;
+For this entire process, you may find it intersting to watch the nodes virtualdisk footprint fall. [I'd recommend Cosmos Darwin's show-prettypool script](https://blogs.technet.microsoft.com/filecab/2016/11/21/deep-dive-pool-in-spaces-direct/)
 
-&lt;h2 id=&quot;11-repeat-for-the-other-nodes&quot;&gt;11. Repeat for the other nodes.&lt;/h2&gt;
-&lt;p&gt;Once the storage jobs have completed, you can safely loop back to step 3 and repeat for all your other nodes. Good luck!&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="s2d" /><category term="server-2016" /><summary type="html">Sometimes things don’t go quite to plan. Whilst deploying a cluster with P3700 Intel drives, we had a situation where we needed to disable the cache as the drives were failing. This is a well documented issue that arose with poor firmware from Intel. Microsoft released a support article outlining the symptoms of this issue . The issue is resolved now and the latest firmware from intel will resolve the issue aforementioned.</summary></entry><entry><title type="html">S2D Storage Jobs Failing</title><link href="http://localhost:4000/2018/07/21/s2d-failed-storagejobs.html" rel="alternate" type="text/html" title="S2D Storage Jobs Failing" /><published>2018-07-21T00:00:00+11:00</published><updated>2018-07-21T00:00:00+11:00</updated><id>http://localhost:4000/2018/07/21/s2d-failed-storagejobs</id><content type="html" xml:base="http://localhost:4000/2018/07/21/s2d-failed-storagejobs.html">&lt;p&gt;From time to time, a Storage Spaces Direct (S2D) storage job, whether this is a Virtual Disk Repair, Physical Disk Removal or Storage Pool Rebalance/Optimization, will suspend or fail for some reason. When this happens, we need to understand why this is the case, and resolve if possible. Follow the steps below to sort it out.&lt;/p&gt;
+## 11. Repeat for the other nodes.
+Once the storage jobs have completed, you can safely loop back to step 3 and repeat for all your other nodes. Good luck!</content><author><name>Thomas Smart</name></author><category term="s2d" /><category term="server-2016" /><summary type="html">Sometimes things don’t go quite to plan. Whilst deploying a cluster with P3700 Intel drives, we had a situation where we needed to disable the cache as the drives were failing. This is a well documented issue that arose with poor firmware from Intel. Microsoft released a support article outlining the symptoms of this issue . The issue is resolved now and the latest firmware from intel will resolve the issue aforementioned.</summary></entry><entry><title type="html">S2D Storage Jobs Failing</title><link href="http://localhost:4000/2018/07/21/s2d-failed-storagejobs.html" rel="alternate" type="text/html" title="S2D Storage Jobs Failing" /><published>2018-07-21T00:00:00+11:00</published><updated>2018-07-21T00:00:00+11:00</updated><id>http://localhost:4000/2018/07/21/s2d-failed-storagejobs</id><content type="html" xml:base="http://localhost:4000/2018/07/21/s2d-failed-storagejobs.html">From time to time, a Storage Spaces Direct (S2D) storage job, whether this is a Virtual Disk Repair, Physical Disk Removal or Storage Pool Rebalance/Optimization, will suspend or fail for some reason. When this happens, we need to understand why this is the case, and resolve if possible. Follow the steps below to sort it out.
 
-&lt;ol&gt;
-  &lt;li&gt;Ascertain the current storage pool owner either through Failover Cluster Manager, or the below Powershell
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-ClusterGroup | ? Name -like ((get-storagepool s2d*).uniqueid).trim('{}') 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Open event viewer on the storage pool owner and navigate to StorageManagement log.&lt;/li&gt;
-  &lt;li&gt;Review 20XX events and compare them to the error codes below.&lt;/li&gt;
-&lt;/ol&gt;
+1. Ascertain the current storage pool owner either through Failover Cluster Manager, or the below Powershell
+~~~~
+Get-ClusterGroup | ? Name -like ((get-storagepool s2d*).uniqueid).trim('{}') 
+~~~~~
+2. Open event viewer on the storage pool owner and navigate to StorageManagement log.
+3. Review 20XX events and compare them to the error codes below.
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/s2derrors/eventvwr.jpg&quot; alt=&quot;Storage Spaces Direct S2D Failed Jobs Error Logs Virtual Disk&quot; /&gt;&lt;/p&gt;
+![Storage Spaces Direct S2D Failed Jobs Error Logs Virtual Disk]({{ site.url }}/assets/img/s2derrors/eventvwr.jpg)
 
-&lt;h3 id=&quot;event-log-example&quot;&gt;Event Log Example&lt;/h3&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Log Name:      Microsoft-Windows-StorageManagement/Operational
+### Event Log Example ###
+~~~~~
+Log Name:      Microsoft-Windows-StorageManagement/Operational
 Source:        Microsoft-Windows-StorageManagement-WSP-Spaces
 Event ID:      2005
 Task Category: None
@@ -661,684 +503,231 @@ An error occurred during storage job execution.
 
 Job Name:	Repair
 Error Code:	4
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+~~~~~
 
-&lt;h2 id=&quot;error-code-translations&quot;&gt;Error Code Translations&lt;/h2&gt;
+## Error Code Translations ##
 
-&lt;h3 id=&quot;standard-cim-return-codes&quot;&gt;Standard CIM Return Codes&lt;/h3&gt;
+### Standard CIM Return Codes ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0&lt;/td&gt;
-      &lt;td&gt;Success&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1&lt;/td&gt;
-      &lt;td&gt;Not Supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;2&lt;/td&gt;
-      &lt;td&gt;Unspecified Error&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;3&lt;/td&gt;
-      &lt;td&gt;Timeout&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;Failed&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;5&lt;/td&gt;
-      &lt;td&gt;Invalid Parameter&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;6&lt;/td&gt;
-      &lt;td&gt;In Use / Disk is in use&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;7&lt;/td&gt;
-      &lt;td&gt;This command is not supported on x86 running in x64 environment&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;8&lt;/td&gt;
-      &lt;td&gt;Object Not Found&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value	| Description |
+| --- | --- |
+| 0 | Success |
+| 1 | Not Supported |
+| 2 |	Unspecified Error |
+| 3	| Timeout |
+| 4	| Failed |
+| 5 |	Invalid Parameter |
+| 6 |	In Use / Disk is in use |
+| 7 |	This command is not supported on x86 running in x64 environment |
+| 8 |	Object Not Found |
 
-&lt;h3 id=&quot;extended-cim-return-codes&quot;&gt;Extended CIM Return Codes&lt;/h3&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4096&lt;/td&gt;
-      &lt;td&gt;Method Parameters Checked - Job Started&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4097&lt;/td&gt;
-      &lt;td&gt;Size not supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4098&lt;/td&gt;
-      &lt;td&gt;Timeout not supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;4099&lt;/td&gt;
-      &lt;td&gt;The device is busy&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Extended CIM Return Codes ###
 
-&lt;h3 id=&quot;storage-management-api-return-codes&quot;&gt;Storage Management API Return Codes&lt;/h3&gt;
-&lt;p&gt;Common Errors 40000 - 40999&lt;/p&gt;
+| Error Value	| Description |
+| --- | --- |
+| 4096 |	Method Parameters Checked - Job Started  |
+| 4097 |	Size not supported |
+| 4098 | Timeout not supported |
+| 4099 | The device is busy  |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40000&lt;/td&gt;
-      &lt;td&gt;Not enough available capacity&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40001&lt;/td&gt;
-      &lt;td&gt;Access denied&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40002&lt;/td&gt;
-      &lt;td&gt;There are not enough resources to complete the operation.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40003&lt;/td&gt;
-      &lt;td&gt;Cache out of date&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40004&lt;/td&gt;
-      &lt;td&gt;An unexpected I/O error has occurred&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40005&lt;/td&gt;
-      &lt;td&gt;You must specify a size by using either the Size or the UseMaximumSize parameter. You can specify only one of these parameters at a time.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40006&lt;/td&gt;
-      &lt;td&gt;The object or object type requested does not exist in cache.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40007&lt;/td&gt;
-      &lt;td&gt;The request failed due to a fatal device hardware error.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;40018&lt;/td&gt;
-      &lt;td&gt;The specified object is managed by the Microsoft Failover Clustering component. The disk must be in cluster maintenance mode and the cluster resource status must be online to perform this operation.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Storage Management API Return Codes ###
+Common Errors 40000 - 40999
 
-&lt;h3 id=&quot;disk-errors-41000---41999&quot;&gt;Disk Errors 41000 - 41999&lt;/h3&gt;
+| Error Value	| Description |
+| --- | --- |
+|40000|	Not enough available capacity|
+|40001|	Access denied|
+|40002|	There are not enough resources to complete the operation.|
+|40003|	Cache out of date|
+|40004|	An unexpected I/O error has occurred|
+|40005|	You must specify a size by using either the Size or the UseMaximumSize parameter. You can specify only one of these parameters at a time.|
+|40006|	The object or object type requested does not exist in cache.|
+|40007|	The request failed due to a fatal device hardware error.|
+|40018|	The specified object is managed by the Microsoft Failover Clustering component. The disk must be in cluster maintenance mode and the cluster resource status must be online to perform this operation.|
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41000&lt;/td&gt;
-      &lt;td&gt;The disk has not been initialized.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41001&lt;/td&gt;
-      &lt;td&gt;The disk has already been initialized.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41002&lt;/td&gt;
-      &lt;td&gt;The disk is read only.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41003&lt;/td&gt;
-      &lt;td&gt;The disk is offline.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41004&lt;/td&gt;
-      &lt;td&gt;The disk’s partition limit has been reached.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41005&lt;/td&gt;
-      &lt;td&gt;The specified partition alignment is not valid.  It must be a multiple of the disk’s sector size.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41006&lt;/td&gt;
-      &lt;td&gt;A parameter is not valid for this type of partition.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41007&lt;/td&gt;
-      &lt;td&gt;Cannot clear with OEM partitions present.  To clear OEM partitions, use the RemoveOEM flag.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41008&lt;/td&gt;
-      &lt;td&gt;Cannot clear with data partitions present.  To clear data partitions, use the RemoveData flag.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41009&lt;/td&gt;
-      &lt;td&gt;Operation not supported on a critical disk.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41010&lt;/td&gt;
-      &lt;td&gt;The specified partition type is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41011&lt;/td&gt;
-      &lt;td&gt;Only the first 2 TB are usable on MBR disks.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41012&lt;/td&gt;
-      &lt;td&gt;The specified offset is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41013&lt;/td&gt;
-      &lt;td&gt;Cannot convert the style of a disk with data or other known partitions on it.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;41014&lt;/td&gt;
-      &lt;td&gt;The disk is not large enough to support a GPT partition style.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Disk Errors 41000 - 41999 ###
 
-&lt;h3 id=&quot;partition-errors-42000---42999&quot;&gt;Partition Errors 42000 - 42999&lt;/h3&gt;
+| Error Value	| Description |
+| --- | --- |
+| 41000|  The disk has not been initialized.|
+| 41001|	The disk has already been initialized.|
+| 41002|	The disk is read only.|
+| 41003|	The disk is offline.|
+| 41004|	The disk's partition limit has been reached. |
+| 41005|	The specified partition alignment is not valid.  It must be a multiple of the disk's sector size. |
+| 41006|	A parameter is not valid for this type of partition. |
+| 41007|	Cannot clear with OEM partitions present.  To clear OEM partitions, use the RemoveOEM flag. |
+| 41008|	Cannot clear with data partitions present.  To clear data partitions, use the RemoveData flag. |
+| 41009|	Operation not supported on a critical disk. |
+| 41010|	The specified partition type is not valid.|
+| 41011|	Only the first 2 TB are usable on MBR disks. |
+| 41012|	The specified offset is not valid. |
+| 41013|	Cannot convert the style of a disk with data or other known partitions on it. |
+| 41014|	The disk is not large enough to support a GPT partition style. |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42000&lt;/td&gt;
-      &lt;td&gt;The partition was deleted, although its access paths were not.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42001&lt;/td&gt;
-      &lt;td&gt;The extended partition still contains other partitions.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42002&lt;/td&gt;
-      &lt;td&gt;The requested access path is already in use.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42004&lt;/td&gt;
-      &lt;td&gt;Cannot assign access paths to hidden partitions.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42005&lt;/td&gt;
-      &lt;td&gt;Cannot remove a volume GUID path.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42006&lt;/td&gt;
-      &lt;td&gt;Cannot remove the drive letter of a boot or paging file partition.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42007&lt;/td&gt;
-      &lt;td&gt;The access path is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42008&lt;/td&gt;
-      &lt;td&gt;Cannot shrink a partition containing a volume with errors.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42009&lt;/td&gt;
-      &lt;td&gt;Cannot resize a partition containing an unknown file system.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42010&lt;/td&gt;
-      &lt;td&gt;The operation is not allowed on a system or critical partition.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42011&lt;/td&gt;
-      &lt;td&gt;This operation is only supported on data partitions.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42012&lt;/td&gt;
-      &lt;td&gt;Cannot assign multiple drive letters to a partition.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;42013&lt;/td&gt;
-      &lt;td&gt;Cannot assign drive letter to this type of partition.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
 
-&lt;h3 id=&quot;volume-errors-43000---43999&quot;&gt;Volume Errors 43000 - 43999&lt;/h3&gt;
+### Partition Errors 42000 - 42999 ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43000&lt;/td&gt;
-      &lt;td&gt;The specified cluster size is invalid&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43001&lt;/td&gt;
-      &lt;td&gt;The specified file system is not supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43002&lt;/td&gt;
-      &lt;td&gt;The volume cannot be quick formatted&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43003&lt;/td&gt;
-      &lt;td&gt;The number of clusters exceeds 32 bits&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43004&lt;/td&gt;
-      &lt;td&gt;The specified UDF version is not supported&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43005&lt;/td&gt;
-      &lt;td&gt;The cluster size must be a multiple of the disk’s physical sector size&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43006&lt;/td&gt;
-      &lt;td&gt;Cannot perform the requested operation when the drive is read only&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43007&lt;/td&gt;
-      &lt;td&gt;The repair failed&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43008&lt;/td&gt;
-      &lt;td&gt;The scan failed&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43009&lt;/td&gt;
-      &lt;td&gt;A snapshot error occured while scanning this drive. You can try again, but if this problem persists, run an offline scan and fix.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43010&lt;/td&gt;
-      &lt;td&gt;A scan is already running on this drive. Chkdsk can not run more than one scan on a drive at a time.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43011&lt;/td&gt;
-      &lt;td&gt;A snapshot error occured while scanning this drive. You can try again, but if this problem persists, run an offline scan and fix.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43012&lt;/td&gt;
-      &lt;td&gt;A snapshot error occured while scanning this drive. Run an offline scan and fix.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43013&lt;/td&gt;
-      &lt;td&gt;Cannot open drive for direct access&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43014&lt;/td&gt;
-      &lt;td&gt;Cannot determine the file system of the drive&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43015&lt;/td&gt;
-      &lt;td&gt;This setting may not be changed due to the group policy setting&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;43016&lt;/td&gt;
-      &lt;td&gt;This setting may not be changed due to the global registry setting&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value	| Description |
+| --- | --- |
+|42000|	The partition was deleted, although its access paths were not. |
+|42001 | The extended partition still contains other partitions. |
+|42002 | The requested access path is already in use. |
+|42004 | Cannot assign access paths to hidden partitions. |
+|42005 | Cannot remove a volume GUID path. |
+|42006 | Cannot remove the drive letter of a boot or paging file partition. |
+|42007 | The access path is not valid. |
+|42008 | Cannot shrink a partition containing a volume with errors. |
+|42009 | Cannot resize a partition containing an unknown file system. |
+|42010 | The operation is not allowed on a system or critical partition. |
+|42011 | This operation is only supported on data partitions. |
+|42012 | Cannot assign multiple drive letters to a partition. |
+|42013 | Cannot assign drive letter to this type of partition. |
 
-&lt;h3 id=&quot;storage-provider-errors-46000---46999&quot;&gt;Storage Provider Errors 46000 - 46999&lt;/h3&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46000&lt;/td&gt;
-      &lt;td&gt;The storage provider cannot connect to the storage provider.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46001&lt;/td&gt;
-      &lt;td&gt;The storage provider cannot connect to the storage subsystem.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46002&lt;/td&gt;
-      &lt;td&gt;The storage provider does not support a required profile.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46003&lt;/td&gt;
-      &lt;td&gt;The storage provider does not support a required association.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46004&lt;/td&gt;
-      &lt;td&gt;Cannot register/unregister the storage subsystem on local host.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46005&lt;/td&gt;
-      &lt;td&gt;The storage subsystem is not registered.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46006&lt;/td&gt;
-      &lt;td&gt;This subsystem is already registered.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46007&lt;/td&gt;
-      &lt;td&gt;This subsystem is already registered with another user’s credentials. Use the -Force flag to remove the existing registration and add a new one anyway.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;46008&lt;/td&gt;
-      &lt;td&gt;Failover clustering could not be enabled for this storage object.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Volume Errors 43000 - 43999 ###
 
-&lt;h3 id=&quot;storage-subsystem-errors-47000---47999&quot;&gt;Storage Subsystem Errors 47000 - 47999&lt;/h3&gt;
+| Error Value | Description |
+| --- | --- |
+| 43000 | The specified cluster size is invalid |
+| 43001 | The specified file system is not supported |
+| 43002 | The volume cannot be quick formatted |
+| 43003 | The number of clusters exceeds 32 bits |
+| 43004 | The specified UDF version is not supported |
+| 43005 | The cluster size must be a multiple of the disk's physical sector size |
+| 43006 | Cannot perform the requested operation when the drive is read only |
+| 43007 | The repair failed |
+| 43008 | The scan failed |
+| 43009 | A snapshot error occured while scanning this drive. You can try again, but if this problem persists, run an offline scan and fix. |
+| 43010 | A scan is already running on this drive. Chkdsk can not run more than one scan on a drive at a time. |
+| 43011 | A snapshot error occured while scanning this drive. You can try again, but if this problem persists, run an offline scan and fix. |
+| 43012 | A snapshot error occured while scanning this drive. Run an offline scan and fix. |
+| 43013 | Cannot open drive for direct access |
+| 43014 | Cannot determine the file system of the drive |
+| 43015 | This setting may not be changed due to the group policy setting |
+| 43016 | This setting may not be changed due to the global registry setting |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;47000&lt;/td&gt;
-      &lt;td&gt;No storage pools were found that can support this virtual disk configuration.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;47001&lt;/td&gt;
-      &lt;td&gt;This subsystem does not support creation of virtual disks with the specified provisioning type.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
 
-&lt;h3 id=&quot;partition-errors-48000---48999&quot;&gt;Partition Errors 48000 - 48999&lt;/h3&gt;
+### Storage Provider Errors 46000 - 46999 ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48000&lt;/td&gt;
-      &lt;td&gt;This operation is not supported on primordial storage pools.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48001&lt;/td&gt;
-      &lt;td&gt;The storage pool is reserved for special usage only.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48002&lt;/td&gt;
-      &lt;td&gt;The specified resiliency setting is not supported by this storage pool.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48004&lt;/td&gt;
-      &lt;td&gt;There are not enough physical disks in the storage pool to create the specified virtual disk configuration.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48005&lt;/td&gt;
-      &lt;td&gt;The specified storage pool could not be found.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48006&lt;/td&gt;
-      &lt;td&gt;The storage pool could not complete the operation because its health or operational status does not permit it.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48007&lt;/td&gt;
-      &lt;td&gt;The storage pool could not complete the operation because its configuration is read-only.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48008&lt;/td&gt;
-      &lt;td&gt;The storage pool contains virtual disks.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48009&lt;/td&gt;
-      &lt;td&gt;The number of thin provisioning alert thresholds specified exceeds the limit for this storage pool.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48010&lt;/td&gt;
-      &lt;td&gt;You must specify the size info (either the Size or UseMaximumSize parameter) or the tier info (the StorageTiers and StorageTierSizes parameters), but not both size info and tier info.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;48011&lt;/td&gt;
-      &lt;td&gt;No auto-allocation drives found in storage pool.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value	| Description |
+| --- | --- |
+| 46000 | The storage provider cannot connect to the storage provider. |
+| 46001 | The storage provider cannot connect to the storage subsystem. |
+| 46002 | The storage provider does not support a required profile. |
+| 46003 | The storage provider does not support a required association. |
+| 46004 | Cannot register/unregister the storage subsystem on local host. |
+| 46005 | The storage subsystem is not registered. |
+| 46006 | This subsystem is already registered. |
+| 46007 | This subsystem is already registered with another user's credentials. Use the -Force flag to remove the existing registration and add a new one anyway. |
+| 46008 | Failover clustering could not be enabled for this storage object. |
 
-&lt;h3 id=&quot;resiliency-settings-errors-49000---49999&quot;&gt;Resiliency Settings Errors 49000 - 49999&lt;/h3&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49000&lt;/td&gt;
-      &lt;td&gt;No resiliency setting with that name exists.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49001&lt;/td&gt;
-      &lt;td&gt;The value for NoSinglePointOfFailure is not supported.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49002&lt;/td&gt;
-      &lt;td&gt;The value for PhysicalDiskRedundancy is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49003&lt;/td&gt;
-      &lt;td&gt;The value for NumberOfDataCopies is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49004&lt;/td&gt;
-      &lt;td&gt;The value for ParityLayout is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49005&lt;/td&gt;
-      &lt;td&gt;The value for Interleave is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;49006&lt;/td&gt;
-      &lt;td&gt;The value for NumberOfColumns is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Storage Subsystem Errors 47000 - 47999 ###
 
-&lt;h3 id=&quot;virtual-disk-errors-50000---50999&quot;&gt;Virtual Disk Errors 50000 - 50999&lt;/h3&gt;
+| Error Value	| Description |
+| --- | --- |
+ |47000 | No storage pools were found that can support this virtual disk configuration. |
+ |47001 | This subsystem does not support creation of virtual disks with the specified provisioning type. |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50000&lt;/td&gt;
-      &lt;td&gt;The specified virtual disk could not be found.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50001&lt;/td&gt;
-      &lt;td&gt;Could not repair the virtual disk because too many physical disks failed. Not enough information exists on the remaining physical disks to reconstruct the lost data.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50002&lt;/td&gt;
-      &lt;td&gt;The virtual disk could not complete the operation because another computer controls its configuration.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50003&lt;/td&gt;
-      &lt;td&gt;The virtual disk could not complete the operation because its health or operational status does not permit it.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50004&lt;/td&gt;
-      &lt;td&gt;The virtual disk could not complete the operation because its Manual Attach status does not permit it.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;50005&lt;/td&gt;
-      &lt;td&gt;The value for WriteCacheSize is outside of the supported range of values.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
 
-&lt;h3 id=&quot;physical-disk-errors-51000---51999&quot;&gt;Physical Disk Errors 51000 - 51999&lt;/h3&gt;
+### Partition Errors 48000 - 48999 ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51000&lt;/td&gt;
-      &lt;td&gt;One of the physical disks specified is not supported by this operation.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51001&lt;/td&gt;
-      &lt;td&gt;Not enough physical disks were specified to successfully complete the operation.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51002&lt;/td&gt;
-      &lt;td&gt;One of the physical disks specified is already in use.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51003&lt;/td&gt;
-      &lt;td&gt;One of the physical disks specified uses a sector size that is not supported by this storage pool.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51004&lt;/td&gt;
-      &lt;td&gt;One of the physical disks specified could not be removed because it is still in use.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;51005&lt;/td&gt;
-      &lt;td&gt;One or more physical disks are not connected to the nodes on which the pool is being created.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value | Description |
+| --- | --- |
+| 48000 | This operation is not supported on primordial storage pools. |
+| 48001 | The storage pool is reserved for special usage only. |
+| 48002 | The specified resiliency setting is not supported by this storage pool. |
+| 48004 | There are not enough physical disks in the storage pool to create the specified virtual disk configuration. |
+| 48005 | The specified storage pool could not be found. |
+| 48006 | The storage pool could not complete the operation because its health or operational status does not permit it. |
+| 48007 | The storage pool could not complete the operation because its configuration is read-only. |
+| 48008 | The storage pool contains virtual disks. |
+| 48009 | The number of thin provisioning alert thresholds specified exceeds the limit for this storage pool. |
+| 48010 | You must specify the size info (either the Size or UseMaximumSize parameter) or the tier info (the StorageTiers and StorageTierSizes parameters), but not both size info and tier info. |
+| 48011 | No auto-allocation drives found in storage pool. |
 
-&lt;h3 id=&quot;masking-set-errors-52000---52999&quot;&gt;Masking Set Errors 52000 - 52999&lt;/h3&gt;
+### Resiliency Settings Errors 49000 - 49999 ###
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;52000&lt;/td&gt;
-      &lt;td&gt;The device number specified is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;52001&lt;/td&gt;
-      &lt;td&gt;The HostType requested is not supported.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;52002&lt;/td&gt;
-      &lt;td&gt;DeviceAccess must be specified for each virtual disk.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+| Error Value	| Description |
+| --- | --- |
+ |49000 | No resiliency setting with that name exists. |
+ |49001 | The value for NoSinglePointOfFailure is not supported. |
+ |49002 | The value for PhysicalDiskRedundancy is outside of the supported range of values. |
+ |49003 | The value for NumberOfDataCopies is outside of the supported range of values. |
+ |49004 | The value for ParityLayout is outside of the supported range of values. |
+ |49005 | The value for Interleave is outside of the supported range of values. |
+ |49006 | The value for NumberOfColumns is outside of the supported range of values. |
 
-&lt;h3 id=&quot;initiator-id-errors-53000---53999&quot;&gt;Initiator ID Errors 53000 - 53999&lt;/h3&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;53000&lt;/td&gt;
-      &lt;td&gt;The initiator address specified is not valid&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;53001&lt;/td&gt;
-      &lt;td&gt;Only one initiator address is acceptable for this operation.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+### Virtual Disk Errors 50000 - 50999 ###
 
-&lt;h3 id=&quot;target-port-errors-54000---54999&quot;&gt;Target Port Errors 54000 - 54999&lt;/h3&gt;
+| Error Value	| Description |
+| --- | --- |
+| 50000 | The specified virtual disk could not be found. |
+| 50001 | Could not repair the virtual disk because too many physical disks failed. Not enough information exists on the remaining physical disks to reconstruct the lost data. |
+| 50002 | The virtual disk could not complete the operation because another computer controls its configuration. |
+| 50003 | The virtual disk could not complete the operation because its health or operational status does not permit it. |
+| 50004 | The virtual disk could not complete the operation because its Manual Attach status does not permit it. |
+| 50005 | The value for WriteCacheSize is outside of the supported range of values. |
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Error Value&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;54000&lt;/td&gt;
-      &lt;td&gt;The target port address specified is not valid.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/en-us/library/windows/desktop/hh974359.aspx&quot;&gt;TechNet Article - Storage Management API Common Return Codes&lt;/a&gt;&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="s2d" /><category term="server-2016" /><summary type="html">From time to time, a Storage Spaces Direct (S2D) storage job, whether this is a Virtual Disk Repair, Physical Disk Removal or Storage Pool Rebalance/Optimization, will suspend or fail for some reason. When this happens, we need to understand why this is the case, and resolve if possible. Follow the steps below to sort it out.</summary></entry><entry><title type="html">Powering Up on Github Pages</title><link href="http://localhost:4000/2018/07/21/powering-up-on-github-pages.html" rel="alternate" type="text/html" title="Powering Up on Github Pages" /><published>2018-07-21T00:00:00+11:00</published><updated>2018-07-21T00:00:00+11:00</updated><id>http://localhost:4000/2018/07/21/powering-up-on-github-pages</id><content type="html" xml:base="http://localhost:4000/2018/07/21/powering-up-on-github-pages.html">&lt;p&gt;I’ve been recently been working on S2D and have been working on edge cases that have no online documentation. Wanting to share this knowledge I knew I had to have another crack at blogging. Thinking on how to make it work this time, I knew that the blog would have to be:&lt;/p&gt;
+### Physical Disk Errors 51000 - 51999 ###
 
-&lt;ul&gt;
-  &lt;li&gt;Free - Given the low readership, I don’t want to pay anything toward it&lt;/li&gt;
-  &lt;li&gt;Easy to use/update&lt;/li&gt;
-  &lt;li&gt;Secure&lt;/li&gt;
-  &lt;li&gt;Fast&lt;/li&gt;
-  &lt;li&gt;RSS Feed&lt;/li&gt;
-&lt;/ul&gt;
+| Error Value	| Description |
+| --- | --- |
+| 51000 | One of the physical disks specified is not supported by this operation. |
+| 51001 | Not enough physical disks were specified to successfully complete the operation. |
+| 51002 | One of the physical disks specified is already in use. |
+| 51003 | One of the physical disks specified uses a sector size that is not supported by this storage pool. |
+| 51004 | One of the physical disks specified could not be removed because it is still in use. |
+| 51005 | One or more physical disks are not connected to the nodes on which the pool is being created. |
 
-&lt;p&gt;Given all these criteria, I was aiming for a Jekyll based blog, hosted by GitHub pages. Jekyll creates static webpages using mark down. This makes it simple to use, fast as the content is static and secure as there is no ‘admin’ interface. GitHub pages is free, fast and secure.&lt;/p&gt;
 
-&lt;p&gt;Its all up and running now, it took a couple of hours. But I’m really happy with the result.&lt;/p&gt;
+### Masking Set Errors 52000 - 52999 ###
 
-&lt;p&gt;Keep posted for more blogs coming up!&lt;/p&gt;
+| Error Value	| Description |
+| --- | --- |
+ |52000 | The device number specified is not valid. |
+ |52001 | The HostType requested is not supported. |
+ |52002 | DeviceAccess must be specified for each virtual disk. |
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/poweringup/SSLPerformance.jpg&quot; alt=&quot;SSL Performance&quot; /&gt;
-&lt;img src=&quot;http://localhost:4000/assets/img/poweringup/SpeedPerformance.jpg&quot; alt=&quot;Speed Performance&quot; /&gt;&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="jekyll" /><category term="github-pages" /><summary type="html">I’ve been recently been working on S2D and have been working on edge cases that have no online documentation. Wanting to share this knowledge I knew I had to have another crack at blogging. Thinking on how to make it work this time, I knew that the blog would have to be:</summary></entry><entry><title type="html">S4B Room System on Surface Pro 3</title><link href="http://localhost:4000/2017/02/22/s4b-room-system-on-surface-pro-3.html" rel="alternate" type="text/html" title="S4B Room System on Surface Pro 3" /><published>2017-02-22T22:01:00+11:00</published><updated>2017-02-22T22:01:00+11:00</updated><id>http://localhost:4000/2017/02/22/s4b-room-system-on-surface-pro-3</id><content type="html" xml:base="http://localhost:4000/2017/02/22/s4b-room-system-on-surface-pro-3.html">&lt;p&gt;Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (&lt;a href=&quot;https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l&quot;&gt;https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l&lt;/a&gt;)&lt;/p&gt;
 
-&lt;p&gt;The app shows 4 steps to config, I put in all the required details (After setting up a new Room System account in AD/Exch/S4B) and everything was going smoothly until I got to the last page. Please connect to a dock. WHAT?! The tablet is in the dock, whats the problem. The dock was working fine, with all peripherals attached through it.&lt;/p&gt;
+### Initiator ID Errors 53000 - 53999 ###
 
-&lt;p&gt;Lesson here, vendors can mislead through not enough information. After much researching the app will only work with:&lt;/p&gt;
+| Error Value	| Description |
+| --- | --- |
+ |53000 | The initiator address specified is not valid |
+ |53001 | Only one initiator address is acceptable for this operation. |
+
+
+### Target Port Errors 54000 - 54999 ###
+
+| Error Value	| Description |
+| --- | --- |
+|54000 |The target port address specified is not valid.|
+
+[TechNet Article - Storage Management API Common Return Codes](https://msdn.microsoft.com/en-us/library/windows/desktop/hh974359.aspx)</content><author><name>Thomas Smart</name></author><category term="s2d" /><category term="server-2016" /><summary type="html">From time to time, a Storage Spaces Direct (S2D) storage job, whether this is a Virtual Disk Repair, Physical Disk Removal or Storage Pool Rebalance/Optimization, will suspend or fail for some reason. When this happens, we need to understand why this is the case, and resolve if possible. Follow the steps below to sort it out.</summary></entry><entry><title type="html">Powering Up on Github Pages</title><link href="http://localhost:4000/2018/07/21/powering-up-on-github-pages.html" rel="alternate" type="text/html" title="Powering Up on Github Pages" /><published>2018-07-21T00:00:00+11:00</published><updated>2018-07-21T00:00:00+11:00</updated><id>http://localhost:4000/2018/07/21/powering-up-on-github-pages</id><content type="html" xml:base="http://localhost:4000/2018/07/21/powering-up-on-github-pages.html">I've been recently been working on S2D and have been working on edge cases that have no online documentation. Wanting to share this knowledge I knew I had to have another crack at blogging. Thinking on how to make it work this time, I knew that the blog would have to be:
+
+* Free - Given the low readership, I don't want to pay anything toward it
+* Easy to use/update
+* Secure
+* Fast
+* RSS Feed
+
+Given all these criteria, I was aiming for a Jekyll based blog, hosted by GitHub pages. Jekyll creates static webpages using mark down. This makes it simple to use, fast as the content is static and secure as there is no 'admin' interface. GitHub pages is free, fast and secure.
+
+Its all up and running now, it took a couple of hours. But I'm really happy with the result.
+
+Keep posted for more blogs coming up!
+
+![SSL Performance]({{ site.url }}/assets/img/poweringup/SSLPerformance.jpg)
+![Speed Performance]({{ site.url }}/assets/img/poweringup/SpeedPerformance.jpg)</content><author><name>Thomas Smart</name></author><category term="jekyll" /><category term="github-pages" /><summary type="html">I’ve been recently been working on S2D and have been working on edge cases that have no online documentation. Wanting to share this knowledge I knew I had to have another crack at blogging. Thinking on how to make it work this time, I knew that the blog would have to be:</summary></entry><entry><title type="html">S4B Room System on Surface Pro 3</title><link href="http://localhost:4000/2017/02/22/s4b-room-system-on-surface-pro-3.html" rel="alternate" type="text/html" title="S4B Room System on Surface Pro 3" /><published>2017-02-22T22:01:00+11:00</published><updated>2017-02-22T22:01:00+11:00</updated><id>http://localhost:4000/2017/02/22/s4b-room-system-on-surface-pro-3</id><content type="html" xml:base="http://localhost:4000/2017/02/22/s4b-room-system-on-surface-pro-3.html">Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (&lt;a href=&quot;https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l&quot;&gt;https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l&lt;/a&gt;)
+
+The app shows 4 steps to config, I put in all the required details (After setting up a new Room System account in AD/Exch/S4B) and everything was going smoothly until I got to the last page. Please connect to a dock. WHAT?! The tablet is in the dock, whats the problem. The dock was working fine, with all peripherals attached through it.
+
+Lesson here, vendors can mislead through not enough information. After much researching the app will only work with:
 &lt;ul&gt;
 	&lt;li&gt;A Surface Pro 4 i5 (SP4's with other processors aren't supported)&lt;/li&gt;
 	&lt;li&gt;A 'Skype for Business' dock, i.e:
@@ -1349,36 +738,26 @@ Error Code:	4
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Its worth noting that most distributors and vendors provide these as a package&lt;/p&gt;
+Its worth noting that most distributors and vendors provide these as a package
 
-&lt;p&gt;Its such a shame that MS have locked down the apps functionality, if you agree, please vote here: &lt;a href=&quot;https://www.skypefeedback.com/forums/299913-generally-available/suggestions/18416881-open-up-s4b-room-system-app-to-more-devices-and-do&quot;&gt;Skype for Business Feedback&lt;/a&gt;&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="Skype-For-Business" /><category term="Conference-System" /><summary type="html">Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l)</summary></entry><entry><title type="html">Engaged tone when calling extension</title><link href="http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension.html" rel="alternate" type="text/html" title="Engaged tone when calling extension" /><published>2017-02-06T14:03:00+11:00</published><updated>2017-02-06T14:03:00+11:00</updated><id>http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension</id><content type="html" xml:base="http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension.html">&lt;p&gt;Recently, I encountered a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.&lt;/p&gt;
+Its such a shame that MS have locked down the apps functionality, if you agree, please vote here: &lt;a href=&quot;https://www.skypefeedback.com/forums/299913-generally-available/suggestions/18416881-open-up-s4b-room-system-app-to-more-devices-and-do&quot;&gt;Skype for Business Feedback&lt;/a&gt;</content><author><name>Thomas Smart</name></author><category term="Skype-For-Business" /><category term="Conference-System" /><summary type="html">Recently MS have released the Skype for Business Room system app on the windows store. Seeing that it has been made to work on a surface pro in a dock, I dusted off an old SP3 found a dock and though, lets give this a crack. After much dicking around and installing windows 10 I installed the app from the store (https://www.microsoft.com/en-us/store/p/skype-room-system/9nblggh5799l)</summary></entry><entry><title type="html">Engaged tone when calling extension</title><link href="http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension.html" rel="alternate" type="text/html" title="Engaged tone when calling extension" /><published>2017-02-06T14:03:00+11:00</published><updated>2017-02-06T14:03:00+11:00</updated><id>http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension</id><content type="html" xml:base="http://localhost:4000/2017/02/06/engaged-tone-when-calling-extension.html">Recently, I encountered a weird issue where an extension could call outbound, but didn't receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn't been configured, disconnected.
 
-&lt;p&gt;Comparing the CS-User to a known working extension showed no differences and there were no extension conflicts.&lt;/p&gt;
+Comparing the CS-User to a known working extension showed no differences and there were no extension conflicts.
 
-&lt;p&gt;If you are having this issue, I’d recommend the following&lt;/p&gt;
+If you are having this issue, I'd recommend the following
 
-&lt;ol&gt;
-  &lt;li&gt;Open the report server&lt;/li&gt;
-  &lt;li&gt;Click the user activity report&lt;/li&gt;
-  &lt;li&gt;Search for the user you completed the testing from &lt;img src=&quot;http://localhost:4000/assets/img/engaged-tone/sipdomain.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/li&gt;
-  &lt;li&gt;Find the call  &lt;img src=&quot;http://localhost:4000/assets/img/engaged-tone/activity.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/li&gt;
-  &lt;li&gt;Open the details of the call, then open the details for the diagnostics of the call&lt;/li&gt;
-&lt;/ol&gt;
+1. Open the report server
+2. Click the user activity report
+3. Search for the user you completed the testing from ![Screenshot]({{ site.url }}/assets/img/engaged-tone/sipdomain.png)
+4. Find the call  ![Screenshot]({{ site.url }}/assets/img/engaged-tone/activity.png)
+5. Open the details of the call, then open the details for the diagnostics of the call
 
-&lt;p&gt;In my instance, I had the error message&lt;/p&gt;
+In my instance, I had the error message
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-vbnet&quot; data-lang=&quot;vbnet&quot;&gt;The routing rules did not result in a final response and callee is not enabled for Unified Messaging&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+{% highlight vbnet %}
+The routing rules did not result in a final response and callee is not enabled for Unified Messaging
+{% endhighlight %}
+![Screenshot]({{ site.url }}/assets/img/engaged-tone/detail.png)
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/engaged-tone/detail.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://greiginsydney.com/polycom-vvx-gives-sip480-cant-be-called/&quot;&gt;Greig from greiginsydney has seen this before and reports that it is caused by bad firmware adding an incorrect call forward rule.&lt;/a&gt; Following Greig’s steps and re-creating the AD account and Lync account resolved the issue.
-Also, &lt;a href=&quot;https://greiginsydney.com&quot;&gt;Greigs blog&lt;/a&gt; is beyond wizardy and you should definately check it out.&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="Skype-For-Business" /><category term="Polycom-VVX" /><summary type="html">Recently, I encountered a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.</summary></entry><entry><title type="html">Polycom VVX Phone Manager Script</title><link href="http://localhost:4000/2017/02/03/polycom-vvx-phone-manager-script.html" rel="alternate" type="text/html" title="Polycom VVX Phone Manager Script" /><published>2017-02-03T15:06:00+11:00</published><updated>2017-02-03T15:06:00+11:00</updated><id>http://localhost:4000/2017/02/03/polycom-vvx-phone-manager-script</id><content type="html" xml:base="http://localhost:4000/2017/02/03/polycom-vvx-phone-manager-script.html">&lt;p&gt;James Cussen has wrote an excellent script for managing Polycom VVX phones.&lt;/p&gt;
-
-&lt;p&gt;Its really intuitive and assist with management migrations from phone systems where endpoints and their IP addresses were easy to see (Think asterisk sip show peers). You can easily see all VVX phones that are in the monitoring DB as well as search subnets&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/vvxmanager/VVX-utility.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This tool is absolutely legendary and can be downloaded from technet
-&lt;a href=&quot;https://gallery.technet.microsoft.com/Skype-for-Business-Lync-04884260&amp;quot;&quot;&gt;Here&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;James also has a really good write up &lt;a href=&quot;http://www.myskypelab.com/2015/10/skype-for-business-lync-polycom-vvx.html&amp;quot;&quot;&gt;here&lt;/a&gt; outlining all the features and usage.&lt;/p&gt;</content><author><name>Thomas Smart</name></author><category term="Skype-For-Business" /><category term="Polycom-VVX" /><summary type="html">James Cussen has wrote an excellent script for managing Polycom VVX phones.</summary></entry></feed>
+[Greig from greiginsydney has seen this before and reports that it is caused by bad firmware adding an incorrect call forward rule.](https://greiginsydney.com/polycom-vvx-gives-sip480-cant-be-called/) Following Greig's steps and re-creating the AD account and Lync account resolved the issue.
+Also, [Greigs blog](https://greiginsydney.com) is beyond wizardy and you should definately check it out.</content><author><name>Thomas Smart</name></author><category term="Skype-For-Business" /><category term="Polycom-VVX" /><summary type="html">Recently, I encountered a weird issue where an extension could call outbound, but didn’t receive any incoming calls. Callers would hear the busy tone, and if exchange um hadn’t been configured, disconnected.</summary></entry></feed>
