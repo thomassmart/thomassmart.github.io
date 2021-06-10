@@ -6,7 +6,7 @@ timezone: Australia/Sydney
 author: "Thomas Smart"
 google_analytics: UA-122173386-1
 title: Tom Blogs
-description: 'A space for writings about Storage Spaces Direct (S2D), Infrastructure, Data Protection and other IT Shenanigans'
+description: 'A space for writings about IT Shenanigans'
 url: 'https://thomassmart.github.io'
 
 show_downloads: false
