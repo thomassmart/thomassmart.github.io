@@ -6,4 +6,8 @@ Gemfile.lock
 _site/
 .sass-cache/
 .jekyll-cache/
+<<<<<<< HEAD
 .jekyll-metadata
+=======
+.jekyll-metadata
+>>>>>>> 513359429f30eb0b4faff39430cef66051615222
