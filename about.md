@@ -12,25 +12,35 @@ webkit-border-radius: 50em;
 
 <br>
 
-Hiya! I'm Thomas Smart. I am passionate about Information Technology. I find most areas of technology exciting, and love to learn about it!
+Hiya! I'm Tom Smart. I am passionate about making real world improvements using technology. Technology is a part of a solution, not the entire solution! I get great satisfaction when I see problems solved, and users happy with new solutions!
 
-My main areas of focus however are:
+My main areas of focus are:
 
+* Powershell
+* Modern Workplace Solutions
+	* Intune
+	* SharePoint Online
+	* OneDrive
+	* AzureAD
+	* M365 Compliance and Security
+	* Teams
 * Server and Hyper-Converged Infrastructure
 	* Microsoft Storage Spaces Direct
 	* HPE SAN and Proliant Servers
 	* Hyper-V
 	* VMWare ESXi and vSphere
 * VoIP and Unified Communications
+	* Teams Cloud Phone System
+	* Meeting Room Solutions
 	* SIP
 	* On-Premise Phone System Solutions
 	* Hosted Phone System Solutions
-	* Skype for Business
 * Data Protection
 	* Veeam Backup and Replication
 	* Veeam Office 365 Backup
+	* AFI.AI
 	* Veeam Cloud Connect
-* Powershell
+
 
 My aim for this site is to provide factual, public domain, information and guides for technology that I am passionate about.
 
