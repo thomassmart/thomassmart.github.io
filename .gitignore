@@ -5,8 +5,5 @@ Gemfile.lock
 .jekyll-metadata
 _site/
 .sass-cache/
+.jekyll-cache/
 .jekyll-metadata
-_site/feed.xml
-_site/feed.xml
-_site/index.html
-_site/feed.xml
