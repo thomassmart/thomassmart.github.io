@@ -16,9 +16,11 @@
 	"forwardPorts": [4000],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "gem install jekyll-feed jekyll-sitemap jekyll-seo-tag",
+	"postCreateCommand": "sudo gem install jekyll-feed jekyll-sitemap jekyll-seo-tag",
 
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode"
-
+	"remoteUser": "vscode",
+	
+	// Serve Jekyll once started
+	"postStartCommand": "jekyll server --future --draft"
 }
