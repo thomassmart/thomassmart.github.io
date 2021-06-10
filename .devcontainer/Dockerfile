@@ -13,11 +13,12 @@ RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
     #
-    # Install vim, git, process tools, lsb-release
+    # Install vim, git, process tools, lsb-release and python
     && apt-get install -y \
         git \
         openssh-client \
         less \
+        python \
     #
     # Install ruby
     && apt-get install -y \
