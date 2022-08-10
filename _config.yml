@@ -3,11 +3,10 @@ logo: /assets/img/logo.png
 image: /assets/img/logo.png
 
 timezone: Australia/Sydney
-author: "Thomas Smart"
-google_analytics: UA-122173386-1
-title: Tom Blogs
+author: "Tom Smart"
+title: Tom Smart Blogs
 description: 'A space for writings about IT Shenanigans'
-url: 'https://thomassmart.github.io'
+url: 'https://tomsmart.au'
 
 show_downloads: false
 
