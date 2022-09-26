@@ -25,5 +25,5 @@
 	"remoteUser": "vscode",
 	
 	// Serve Jekyll once started
-	"postStartCommand": "jekyll server --future --draft"
+	"postStartCommand": "bundle exec jekyll serve --future --draft"
 }
