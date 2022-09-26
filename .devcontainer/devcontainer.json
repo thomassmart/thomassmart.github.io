@@ -8,7 +8,10 @@
 	"settings": { 
 		"terminal.integrated.shell.linux": "/bin/bash"
 	},
-
+	
+	"workspaceMount": "source=/home/tsmart/blog,target=/workspace,type=bind,consistency=cached"
+	"workspaceFolder": "/workspace",	
+	
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [],
 
