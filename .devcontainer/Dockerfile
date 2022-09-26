@@ -28,6 +28,7 @@ RUN apt-get update \
         ruby-dev \
     #
     # Install jekyll
+    && gem install public_suffix -v 4.0.7
     && gem install \
         bundler \
         jekyll \
